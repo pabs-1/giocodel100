@@ -21,6 +21,7 @@ FILES=(
   index.html
   rules.html
   style.css
+  i18n.js
   logic.js
   game.js
   sw.js

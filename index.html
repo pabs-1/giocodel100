@@ -25,37 +25,37 @@
         <h1 class="title">Gioco del <span class="title-num">100</span></h1>
         <p class="dedica">Dedicato alla 5C dello Spalla</p>
       </div>
-      <a class="btn btn-icon" href="rules.html" aria-label="Regole del gioco" title="Regole">?</a>
+      <a class="btn btn-icon" href="rules.html" aria-label="Regole del gioco" title="Regole" data-i18n-attr="aria-label:rulesLink;title:rulesTitle">?</a>
       <dl class="stats">
         <div class="stat">
-          <dt>Numero</dt>
+          <dt data-i18n="statCurrent">Numero</dt>
           <dd id="stat-current">0</dd>
         </div>
         <div class="stat">
-          <dt>Rimaste</dt>
+          <dt data-i18n="statRemaining">Rimaste</dt>
           <dd id="stat-remaining">100</dd>
         </div>
         <div class="stat">
-          <dt>Record</dt>
+          <dt data-i18n="statBest">Record</dt>
           <dd id="stat-best">0</dd>
         </div>
       </dl>
     </header>
 
     <main class="board-area">
-      <div id="board" class="board" role="grid" aria-label="Griglia 10 per 10" aria-describedby="status"></div>
+      <div id="board" class="board" role="grid" aria-label="Griglia 10 per 10" data-i18n-attr="aria-label:boardLabel" aria-describedby="status"></div>
     </main>
 
     <p id="status" class="status" aria-live="polite">Tocca una cella qualsiasi per scrivere l’1.</p>
 
-    <nav class="controls" aria-label="Comandi di gioco">
+    <nav class="controls" aria-label="Comandi di gioco" data-i18n-attr="aria-label:controlsLabel">
       <button id="btn-undo" class="btn" type="button" disabled>
-        <span aria-hidden="true">↶</span> Annulla
+        <span aria-hidden="true">↶</span> <span data-i18n="undo">Annulla</span>
       </button>
       <button id="btn-hints" class="btn btn-toggle" type="button" aria-pressed="true">
-        <span class="switch" aria-hidden="true"></span> Mosse
+        <span class="switch" aria-hidden="true"></span> <span data-i18n="hints">Mosse</span>
       </button>
-      <button id="btn-new" class="btn" type="button">Nuova<span class="opt"> partita</span></button>
+      <button id="btn-new" class="btn" type="button"><span data-i18n="newShort">Nuova</span><span class="opt" data-i18n="newRest"> partita</span></button>
     </nav>
   </div>
 
@@ -65,14 +65,15 @@
       <h2 id="overlay-title"></h2>
       <p id="overlay-text"></p>
       <div class="dialog-actions">
-        <button id="overlay-undo" class="btn" type="button">Annulla ultima mossa</button>
-        <button id="overlay-new" class="btn btn-primary" type="button">Nuova partita</button>
-        <button id="overlay-close" class="btn btn-quiet" type="button">Guarda la griglia</button>
+        <button id="overlay-undo" class="btn" type="button" data-i18n="overlayUndo">Annulla ultima mossa</button>
+        <button id="overlay-new" class="btn btn-primary" type="button" data-i18n="overlayNew">Nuova partita</button>
+        <button id="overlay-close" class="btn btn-quiet" type="button" data-i18n="overlayClose">Guarda la griglia</button>
       </div>
     </div>
   </div>
 
   <noscript><p class="noscript">Per giocare serve JavaScript.</p></noscript>
+  <script src="i18n.js"></script>
   <script src="logic.js"></script>
   <script src="game.js"></script>
 </body>

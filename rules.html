@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-  <title>Regole — Gioco del 100</title>
+  <title data-i18n="pageTitle">Regole — Gioco del 100</title>
   <meta name="theme-color" content="#f6f1e7" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1b1a17" media="(prefers-color-scheme: dark)">
   <link rel="manifest" href="manifest.json">
@@ -13,21 +13,27 @@
 </head>
 <body>
   <main class="rules">
-    <a class="btn back" href="./">← Torna al gioco</a>
+    <div class="rules-top">
+      <a class="btn back" href="./" data-i18n="back">← Torna al gioco</a>
+      <label class="lang-picker">
+        <span data-i18n="language">Lingua</span>
+        <select id="lang-select" class="btn"></select>
+      </label>
+    </div>
 
-    <h1>Come si gioca</h1>
-    <p>Scrivi i numeri da <strong>1 a 100</strong> sulla griglia 10×10, uno per cella.</p>
+    <h1 data-i18n="rulesH1">Come si gioca</h1>
+    <p data-i18n-html="rulesIntro">Scrivi i numeri da <strong>1 a 100</strong> sulla griglia 10×10, uno per cella.</p>
 
     <ul>
-      <li>L’<strong>1</strong> va dove vuoi: tocca una cella qualsiasi.</li>
-      <li>Ogni numero successivo parte dalla cella dell’ultimo numero scritto.</li>
-      <li><strong>In orizzontale o verticale</strong> salti 2 celle e atterri sulla 3ª.</li>
-      <li><strong>In diagonale</strong> salti 1 cella e atterri sulla 2ª.</li>
-      <li>Non puoi usare una cella già occupata né uscire dalla griglia.</li>
-      <li>Se resti senza mosse prima del 100 hai perso; se arrivi a 100 hai vinto.</li>
+      <li data-i18n-html="rule1">L’<strong>1</strong> va dove vuoi: tocca una cella qualsiasi.</li>
+      <li data-i18n-html="rule2">Ogni numero successivo parte dalla cella dell’ultimo numero scritto.</li>
+      <li data-i18n-html="rule3"><strong>In orizzontale o verticale</strong> salti 2 celle e atterri sulla 3ª.</li>
+      <li data-i18n-html="rule4"><strong>In diagonale</strong> salti 1 cella e atterri sulla 2ª.</li>
+      <li data-i18n-html="rule5">Non puoi usare una cella già occupata né uscire dalla griglia.</li>
+      <li data-i18n-html="rule6">Se resti senza mosse prima del 100 hai perso; se arrivi a 100 hai vinto.</li>
     </ul>
 
-    <p>Dalla cella arancione puoi saltare sulle 8 celle verdi:</p>
+    <p data-i18n="diagram">Dalla cella arancione puoi saltare sulle 8 celle verdi:</p>
     <div class="move-diagram" aria-hidden="true">
       <span></span><span></span><span></span><span class="to"></span><span></span><span></span><span></span>
       <span></span><span class="to"></span><span></span><span></span><span></span><span class="to"></span><span></span>
@@ -38,24 +44,28 @@
       <span></span><span></span><span></span><span class="to"></span><span></span><span></span><span></span>
     </div>
 
-    <h2>Comandi</h2>
+    <h2 data-i18n="commandsH">Comandi</h2>
     <ul>
-      <li><strong>Mosse</strong>: mostra o nasconde le celle su cui puoi saltare.</li>
-      <li><strong>Annulla</strong>: toglie l’ultimo numero; puoi annullare quante volte vuoi.</li>
-      <li><strong>Nuova partita</strong>: ricomincia da zero (a partita in corso chiede conferma).</li>
-      <li>La partita si salva da sola: chiudi e riapri, riprendi da dove eri.</li>
+      <li data-i18n-html="command1"><strong>Mosse</strong>: mostra o nasconde le celle su cui puoi saltare.</li>
+      <li data-i18n-html="command2"><strong>Annulla</strong>: toglie l’ultimo numero; puoi annullare quante volte vuoi.</li>
+      <li data-i18n-html="command3"><strong>Nuova partita</strong>: ricomincia da zero (a partita in corso chiede conferma).</li>
+      <li data-i18n-html="command4">La partita si salva da sola: chiudi e riapri, riprendi da dove eri.</li>
     </ul>
 
-    <h2>Tastiera</h2>
+    <h2 data-i18n="keyboardH">Tastiera</h2>
     <ul>
-      <li><kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd> per spostarti sulla griglia, <kbd>Invio</kbd> o <kbd>Spazio</kbd> per scrivere il numero.</li>
-      <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> o <kbd>U</kbd> per annullare, <kbd>M</kbd> per mostrare/nascondere le mosse.</li>
+      <li data-i18n-html="key1"><kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd> per spostarti sulla griglia, <kbd>Invio</kbd> o <kbd>Spazio</kbd> per scrivere il numero.</li>
+      <li data-i18n-html="key2"><kbd>Ctrl</kbd>+<kbd>Z</kbd> o <kbd>U</kbd> per annullare, <kbd>M</kbd> per mostrare/nascondere le mosse.</li>
     </ul>
 
-    <h2>Si può sempre vincere?</h2>
-    <p>Sì: da qualunque cella parta l’1 esiste almeno un percorso che arriva a 100. Trovarlo è un’altra storia.</p>
+    <h2 data-i18n="winH">Si può sempre vincere?</h2>
+    <p data-i18n="win">Sì: da qualunque cella parta l’1 esiste almeno un percorso che arriva a 100. Trovarlo è un’altra storia.</p>
+
+    <h2 data-i18n="privacyH">Privacy</h2>
+    <p data-i18n="privacy">Nessun cookie, nessun tracciamento, nessun servizio esterno. La partita, il record e la lingua scelta restano solo in questo browser. La lingua viene scelta dalle impostazioni del browser, sul tuo dispositivo: non viene inviato nulla.</p>
 
     <p class="dedica">Dedicato alla 5C dello Spalla</p>
   </main>
+  <script src="i18n.js"></script>
 </body>
 </html>

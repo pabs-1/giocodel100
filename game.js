@@ -8,6 +8,7 @@
   'use strict';
 
   var L = window.GameLogic;
+  var T = window.I18N.strings;
   var SIZE = L.SIZE;
   var TOTAL = L.TOTAL;
 
@@ -121,11 +122,7 @@
 
   function position(index) {
     var rc = L.toRowCol(index);
-    return 'riga ' + (rc.row + 1) + ', colonna ' + (rc.col + 1);
-  }
-
-  function plural(n, one, many) {
-    return n + ' ' + (n === 1 ? one : many);
+    return T.position(rc.row + 1, rc.col + 1);
   }
 
   // ---------------------------------------------------------------------
@@ -146,11 +143,11 @@
     for (var i = 0; i < TOTAL; i++) {
       var cell = cells[i];
       var n = board[i];
-      var label = position(i) + ': ';
+      var label = position(i) + T.colon;
       if (n) {
-        label += String(n) + (i === last ? ', ultimo numero' : '');
+        label += String(n) + (i === last ? T.comma + T.cellLast : '');
       } else {
-        label += 'vuota' + (legal[i] && hints && st === 'playing' ? ', mossa possibile' : '');
+        label += T.cellEmpty + (legal[i] && hints && st === 'playing' ? T.comma + T.cellLegal : '');
       }
       var text = n ? String(n) : '';
       if (cell.textContent !== text) cell.textContent = text;
@@ -182,11 +179,10 @@
   function statusMessage() {
     var st = L.status(state);
     var n = L.currentNumber(state);
-    if (st === 'ready') return 'Tocca una cella qualsiasi per scrivere l’1.';
-    if (st === 'won') return 'Hai completato la griglia: 100 su 100!';
-    if (st === 'lost') return 'Nessuna mossa per il ' + (n + 1) + '. Annulla o inizia una nuova partita.';
-    var k = L.legalMoves(state).length;
-    return 'Scrivi il ' + (n + 1) + ' — ' + plural(k, 'mossa possibile', 'mosse possibili') + '.';
+    if (st === 'ready') return T.statusReady;
+    if (st === 'won') return T.statusWon;
+    if (st === 'lost') return T.statusLost(n + 1);
+    return T.statusPlaying(n + 1, L.legalMoves(state).length);
   }
 
   function announce(prefix) {
@@ -217,8 +213,7 @@
       if (navigator.vibrate) {
         try { navigator.vibrate(30); } catch (e) { /* ignorato */ }
       }
-      statusEl.textContent = 'Non puoi scrivere il ' + (L.currentNumber(state) + 1) +
-        ' in ' + position(index) + '. ' + statusMessage();
+      statusEl.textContent = T.invalid(L.currentNumber(state) + 1, position(index)) + ' ' + statusMessage();
       return;
     }
     state = next;
@@ -232,7 +227,7 @@
     saveState();
     render(true);
     flash(cells[index], 'placed', 240);
-    announce(state.path.length + ' in ' + position(index) + '.');
+    announce(T.placed(state.path.length, position(index)));
   }
 
   function undoMove() {
@@ -244,7 +239,7 @@
     overlayDismissed = false;
     saveState();
     render();
-    announce('Annullato il ' + n + '.');
+    announce(T.undone(n));
   }
 
   function newGame() {
@@ -254,7 +249,7 @@
     newRecordThisGame = false;
     saveState();
     render();
-    announce('Nuova partita.');
+    announce(T.newGame);
   }
 
   function requestNewGame() {
@@ -265,7 +260,7 @@
       return;
     }
     btnNew.classList.add('confirm');
-    btnNew.textContent = 'Conferma?';
+    btnNew.textContent = T.confirm;
     confirmTimer = setTimeout(resetConfirm, 3000);
   }
 
@@ -288,15 +283,13 @@
     var n = L.currentNumber(state);
     if (kind === 'won') {
       overlayBadge.textContent = '100';
-      overlayTitle.textContent = 'Hai vinto!';
-      overlayText.textContent = 'Hai scritto tutti i numeri da 1 a 100.';
+      overlayTitle.textContent = T.wonTitle;
+      overlayText.textContent = T.wonText;
       overlayUndo.hidden = true;
     } else {
       overlayBadge.textContent = String(n);
-      overlayTitle.textContent = 'Nessuna mossa possibile';
-      overlayText.textContent = 'Sei arrivato a ' + n + ': ' +
-        (TOTAL - n === 1 ? 'manca solo 1 numero' : 'mancano ' + (TOTAL - n) + ' numeri') + '. ' +
-        (newRecordThisGame && n === best ? 'Nuovo record!' : 'Record: ' + best + '.');
+      overlayTitle.textContent = T.lostTitle;
+      overlayText.textContent = T.lostText(n, TOTAL - n, best, newRecordThisGame && n === best);
       overlayUndo.hidden = false;
     }
     if (overlay.hidden) {
@@ -500,7 +493,7 @@
   // ---------------------------------------------------------------------
   if (best > loadBest()) storage.set(KEYS.best, String(best));
   render();
-  announce(state.path.length ? 'Partita ripresa.' : '');
+  announce(state.path.length ? T.resumed : '');
 
   // Service worker: gioco disponibile offline (solo su https o localhost).
   if ('serviceWorker' in navigator &&

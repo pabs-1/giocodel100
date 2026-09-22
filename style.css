@@ -477,6 +477,16 @@ body {
   transform: translateX(12px);
 }
 
+/* Telefoni molto stretti (320px): interruttore e testo un po' più piccoli,
+   così anche "Jugadas"/"Jogadas" stanno nel pulsante. */
+@media (max-width: 340px) {
+  .controls { gap: 6px; }
+  .controls .btn { font-size: 0.84rem; gap: 4px; padding: 0 6px; }
+  .switch { width: 24px; height: 14px; }
+  .switch::after { width: 10px; height: 10px; }
+  .btn-toggle[aria-pressed="true"] .switch::after { transform: translateX(10px); }
+}
+
 /* ----- Overlay vittoria / sconfitta ----- */
 
 .overlay {
@@ -638,8 +648,28 @@ body {
   font-size: 0.9em;
 }
 
-.rules .back {
+.rules-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
   margin-bottom: 8px;
+}
+
+.lang-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.lang-picker select {
+  max-width: 60vw;
+  padding-right: 10px;
+  font-weight: 500;
+  color: var(--ink);
 }
 
 .move-diagram {
