@@ -456,6 +456,92 @@ function assertFits(rep) {
     await c.close();
   });
 
+  console.log('Pagine con la lingua nell’indirizzo (SEO)');
+  await test('/fr/ resta in francese anche con il browser in italiano, e si gioca', async () => {
+    const c = await newContext({ ...narrow, locale: 'it-IT' });
+    const p = await c.newPage();
+    const errs = watchConsole(p);
+    await p.goto(base + 'fr/');
+    const T = I.STRINGS.fr;
+    assert.equal(await p.getAttribute('html', 'lang'), 'fr');
+    assert.equal(await p.title(), T.title);
+    assert.equal(await p.textContent('#status'), T.statusReady);
+    assertFits(await layoutReport(p)); // stile e script caricati da ../
+    const pt = await cellCenter(p, 44);
+    await p.touchscreen.tap(pt.x, pt.y);
+    assert.equal(await p.textContent('#stat-current'), '1');
+    assert.equal(await p.textContent('#status'), T.placed(1, T.position(5, 5)) + ' ' + T.statusPlaying(2, 8));
+    assert.deepEqual(errs, []);
+    await c.close();
+  });
+
+  await test('la partita è la stessa in tutte le lingue (stesso salvataggio)', async () => {
+    const c = await newContext({ locale: 'it-IT' });
+    const p = await c.newPage();
+    await p.goto(base + 'de/');
+    await p.click('.cell >> nth=0');
+    await p.click('.cell >> nth=3');
+    await p.goto(base + 'ja/');
+    assert.equal(await p.textContent('#stat-current'), '2');
+    await p.goto(base);
+    assert.equal(await p.textContent('#stat-current'), '2');
+    await c.close();
+  });
+
+  await test('dal selettore in /fr/rules.html si passa a /de/rules.html; "Automatica" torna alla radice', async () => {
+    const c = await newContext({ locale: 'it-IT' });
+    const p = await c.newPage();
+    const errs = watchConsole(p);
+    await p.goto(base + 'fr/rules.html');
+    assert.equal(await p.inputValue('#lang-select'), 'fr');
+    assert.equal(await p.getAttribute('.lang-links a[aria-current="page"]', 'hreflang'), 'fr');
+    await Promise.all([p.waitForURL(base + 'de/rules.html'), p.selectOption('#lang-select', 'de')]);
+    assert.equal(await p.textContent('h1'), I.STRINGS.de.rulesH1);
+    await p.click('.back');
+    await p.waitForURL(base + 'de/');
+    assert.equal(await p.textContent('[data-i18n="undo"]'), I.STRINGS.de.undo);
+    // La scelta vale anche per la radice.
+    await p.goto(base);
+    assert.equal(await p.getAttribute('html', 'lang'), 'de');
+    await p.goto(base + 'de/rules.html');
+    await Promise.all([p.waitForURL(base + 'rules.html'), p.selectOption('#lang-select', '')]);
+    assert.equal(await p.getAttribute('html', 'lang'), 'it');
+    // I link "altre lingue" sono veri link, seguibili dai crawler.
+    await p.click('.lang-links a[hreflang="ko"]');
+    await p.waitForURL(base + 'ko/rules.html');
+    assert.equal(await p.textContent('h1'), I.STRINGS.ko.rulesH1);
+    assert.deepEqual(errs, []);
+    await c.close();
+  });
+
+  await test('service worker registrato da /es/ con scope sulla radice; /es/ funziona offline', async () => {
+    const c = await newContext({ locale: 'it-IT' });
+    const p = await c.newPage();
+    const errs = watchConsole(p);
+    await p.goto(localhost + 'es/');
+    const scope = await p.evaluate(async () => (await navigator.serviceWorker.ready).scope);
+    assert.equal(scope, localhost);
+    await p.reload();
+    await c.setOffline(true);
+    await p.reload();
+    assert.equal(await p.getAttribute('html', 'lang'), 'es');
+    assert.equal(await p.locator('[role=gridcell]').count(), 100);
+    await c.setOffline(false);
+    assert.deepEqual(errs, []);
+    await c.close();
+  });
+
+  await test('pagina 404: tradotta, con link al gioco', async () => {
+    const c = await newContext({ locale: 'pl-PL' });
+    const p = await c.newPage();
+    const errs = watchConsole(p);
+    await p.goto(base + 'not_found.html');
+    assert.equal(await p.textContent('h1'), I.STRINGS.pl.title);
+    assert.equal(await p.getAttribute('a.btn', 'href'), '/');
+    assert.deepEqual(errs, []);
+    await c.close();
+  });
+
   console.log('Privacy');
   await test('zero richieste esterne, zero cookie, localStorage solo con chiavi del gioco', async () => {
     const c = await newContext({ locale: 'de-DE' });

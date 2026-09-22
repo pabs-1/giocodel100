@@ -5,8 +5,8 @@
 #   ./deploy.sh
 #
 # Lo stesso script gira nella GitHub Action (.github/workflows/deploy.yml).
-# Vengono caricati SOLO i file elencati in FILES: .git, .github, README,
-# test, tools e questo script restano fuori.
+# Vengono caricati SOLO i file elencati in FILES (più le cartelle delle
+# lingue): .git, .github, README, test, tools e questo script restano fuori.
 set -euo pipefail
 
 if [ -z "${NEOCITIES_API_KEY:-}" ]; then
@@ -31,7 +31,16 @@ FILES=(
   icons/icon-512.png
   icons/icon-maskable-512.png
   icons/apple-touch-icon.png
+  og-image.png
+  robots.txt
+  sitemap.xml
+  not_found.html
 )
+
+# Pagine tradotte generate da tools/build-pages.js: /it/, /en/, /fr/…
+for page in */index.html */rules.html; do
+  [ -f "$page" ] && FILES+=("$page")
+done
 
 for f in "${FILES[@]}"; do
   [ -f "$f" ] || { echo "Errore: manca $f" >&2; exit 1; }

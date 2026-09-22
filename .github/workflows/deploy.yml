@@ -24,6 +24,12 @@ jobs:
       - name: Test delle traduzioni
         run: node tests/i18n.test.js
 
+      - name: Pagine per lingua e sitemap aggiornate
+        run: node tools/build-pages.js --check
+
+      - name: Test SEO
+        run: node tests/seo.test.js
+
       - name: Upload su Neocities
         env:
           NEOCITIES_API_KEY: ${{ secrets.NEOCITIES_API_KEY }}
