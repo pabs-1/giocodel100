@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Gioco del 100</title>
+  <meta name="description" content="Scrivi i numeri da 1 a 100 su una griglia 10×10 saltando di 3 in orizzontale/verticale o di 2 in diagonale.">
+  <meta name="theme-color" content="#f6f1e7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1b1a17" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Gioco del 100">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="icon" href="icons/icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <h1 class="title">100</h1>
+      <dl class="stats">
+        <div class="stat">
+          <dt>Numero</dt>
+          <dd id="stat-current">0</dd>
+        </div>
+        <div class="stat">
+          <dt>Rimaste</dt>
+          <dd id="stat-remaining">100</dd>
+        </div>
+        <div class="stat">
+          <dt>Record</dt>
+          <dd id="stat-best">0</dd>
+        </div>
+      </dl>
+      <a class="btn btn-icon" href="rules.html" aria-label="Regole del gioco" title="Regole">?</a>
+    </header>
+
+    <main class="board-area">
+      <div id="board" class="board" role="grid" aria-label="Griglia 10 per 10" aria-describedby="status"></div>
+    </main>
+
+    <p id="status" class="status" aria-live="polite">Tocca una cella qualsiasi per scrivere l’1.</p>
+
+    <nav class="controls" aria-label="Comandi di gioco">
+      <button id="btn-undo" class="btn" type="button" disabled>
+        <span aria-hidden="true">↶</span> Annulla
+      </button>
+      <button id="btn-hints" class="btn btn-toggle" type="button" aria-pressed="true">
+        <span class="switch" aria-hidden="true"></span> Mosse
+      </button>
+      <button id="btn-new" class="btn" type="button">Nuova<span class="opt"> partita</span></button>
+    </nav>
+  </div>
+
+  <div id="overlay" class="overlay" hidden>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="overlay-title" aria-describedby="overlay-text">
+      <p class="dialog-badge" id="overlay-badge" aria-hidden="true"></p>
+      <h2 id="overlay-title"></h2>
+      <p id="overlay-text"></p>
+      <div class="dialog-actions">
+        <button id="overlay-undo" class="btn" type="button">Annulla ultima mossa</button>
+        <button id="overlay-new" class="btn btn-primary" type="button">Nuova partita</button>
+        <button id="overlay-close" class="btn btn-quiet" type="button">Guarda la griglia</button>
+      </div>
+    </div>
+  </div>
+
+  <noscript><p class="noscript">Per giocare serve JavaScript.</p></noscript>
+  <script src="logic.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

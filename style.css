@@ -1,0 +1,644 @@
+/* ===== Gioco del 100 ===== */
+
+:root {
+  --bg: #f6f1e7;
+  --surface: #fffdf8;
+  --ink: #2a2620;
+  --ink-soft: #6d6557;
+  --line: #e2d9c7;
+  --cell: #fbf7ef;
+  --cell-press: #efe6d3;
+  --accent: #d9572b;
+  --accent-ink: #ffffff;
+  --legal: #2f7d6d;
+  --legal-bg: #e1f0ea;
+  --bad: #c62f2f;
+  --filled-s: 55%;
+  --filled-l: 86%;
+  --focus: #1f5fd1;
+  --shadow: 0 1px 2px rgb(60 45 20 / 0.08), 0 6px 20px rgb(60 45 20 / 0.08);
+
+  --gutter: 12px;
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+
+  /* Altezza reale del viewport: 100vh come fallback, 100dvh dove esiste
+     (iOS Safari 15.4+, Chrome 108+, Firefox 101+) così le barre del browser
+     non coprono la griglia. */
+  --vh: 100vh;
+  color-scheme: light;
+}
+
+@supports (height: 100dvh) {
+  :root { --vh: 100dvh; }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1b1a17;
+    --surface: #26241f;
+    --ink: #f1ebdf;
+    --ink-soft: #aaa192;
+    --line: #3a372f;
+    --cell: #2b2923;
+    --cell-press: #3a372f;
+    --accent: #f07a4a;
+    --accent-ink: #1b1a17;
+    --legal: #6fcdb6;
+    --legal-bg: #1f3a33;
+    --bad: #ff6b6b;
+    --filled-s: 30%;
+    --filled-l: 27%;
+    --focus: #8ab4ff;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 6px 20px rgb(0 0 0 / 0.3);
+    color-scheme: dark;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overscroll-behavior: none;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.4;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* ----- Layout ----- */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 760px;
+  height: 100vh;
+  height: var(--vh);
+  margin: 0 auto;
+  padding:
+    calc(var(--safe-t) + 8px)
+    calc(var(--safe-r) + var(--gutter))
+    calc(var(--safe-b) + 10px)
+    calc(var(--safe-l) + var(--gutter));
+  overflow: hidden;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  flex: none;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.stats {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  gap: clamp(10px, 4vw, 28px);
+  margin: 0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 3.2em;
+}
+
+.stat dt {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+.stat dd {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+/* L'area della griglia prende tutto lo spazio rimasto; la griglia è il
+   quadrato più grande che ci sta dentro. */
+.board-area {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board {
+  /* Fallback senza container query: lato = min(larghezza, altezza) del
+     viewport meno gutter, safe area e barre (≈ 200px di intestazione e comandi). */
+  width: min(
+    100vw - 2 * var(--gutter) - var(--safe-l) - var(--safe-r),
+    var(--vh) - 200px - var(--safe-t) - var(--safe-b),
+    720px
+  );
+  min-width: 240px;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  grid-template-rows: repeat(10, 1fr);
+  gap: 2px;
+  padding: 2px;
+  background: var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  container-type: inline-size;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+@supports (width: 1cqmin) {
+  .board-area { container-type: size; }
+  .board { width: min(100cqw, 100cqh, 720px); }
+}
+
+/* Browser senza aspect-ratio (Safari < 15): altezza esplicita uguale alla larghezza. */
+@supports not (aspect-ratio: 1 / 1) {
+  .board { height: min(100vw - 2 * var(--gutter), 100vh - 200px, 720px); }
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 2px;
+  min-height: 0;
+}
+
+.cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 5px;
+  background: var(--cell);
+  color: var(--ink);
+  font-size: clamp(10px, 3.6vmin, 26px);
+  font-size: 4.1cqi;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  cursor: default;
+  outline: none;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.15s ease, transform 0.08s ease;
+}
+
+.cell.filled {
+  /* Il colore scorre dall'ambra al verde man mano che si avanza. */
+  background: hsl(calc(38 + var(--p, 0) * 110) var(--filled-s) var(--filled-l));
+}
+
+.cell.last {
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: 0 0 0 2px var(--accent);
+  z-index: 1;
+}
+
+.board.ready .cell,
+.cell.legal {
+  cursor: pointer;
+}
+
+/* Evidenziazione delle mosse legali (toggle "Mosse"). */
+.board.hints .cell.legal {
+  background: var(--legal-bg);
+  box-shadow: inset 0 0 0 2px var(--legal);
+}
+
+.board.hints .cell.legal::after {
+  content: "";
+  width: 22%;
+  height: 22%;
+  border-radius: 50%;
+  background: var(--legal);
+  opacity: 0.75;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .board.ready .cell:hover,
+  .cell.legal:hover {
+    background: var(--cell-press);
+  }
+  .board.hints .cell.legal:hover {
+    background: var(--legal);
+  }
+}
+
+/* Feedback al tocco: non affidarsi a :hover. */
+.cell.pressed,
+.cell:active {
+  transform: scale(0.9);
+}
+
+.cell.placed {
+  animation: pop 0.22s ease-out;
+}
+
+.cell.invalid {
+  animation: shake 0.3s ease;
+  box-shadow: inset 0 0 0 2px var(--bad);
+}
+
+.cell:focus-visible,
+.cell.kbd-focus {
+  outline: 3px solid var(--focus);
+  outline-offset: 1px;
+  z-index: 2;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.6); }
+  70% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+.board.over .cell {
+  cursor: default;
+}
+
+.status {
+  flex: none;
+  margin: 0;
+  min-height: 1.4em;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+/* ----- Pulsanti ----- */
+
+.controls {
+  display: flex;
+  flex: none;
+  gap: 8px;
+  width: 100%;
+  max-width: 520px;
+}
+
+.controls .btn {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0 8px;
+}
+
+/* Su schermi stretti "Nuova partita" diventa "Nuova" a video, ma resta
+   completo per i lettori di schermo. */
+@media (max-width: 400px) {
+  .controls .btn { font-size: 0.9rem; gap: 5px; }
+  .controls .opt {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.15s ease, transform 0.08s ease;
+}
+
+.btn:active,
+.btn.pressed {
+  transform: scale(0.96);
+  background: var(--cell-press);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+  transform: none;
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn:not(:disabled):hover {
+    background: var(--cell-press);
+  }
+}
+
+.btn-icon {
+  flex: none;
+  width: 44px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:not(:disabled):hover {
+    background: var(--accent);
+    filter: brightness(1.08);
+  }
+}
+
+.btn-primary:active {
+  background: var(--accent);
+  filter: brightness(0.95);
+}
+
+.btn-quiet {
+  border-color: transparent;
+  background: transparent;
+  color: var(--ink-soft);
+}
+
+.btn.confirm {
+  border-color: var(--bad);
+  color: var(--bad);
+}
+
+.switch {
+  position: relative;
+  flex: none;
+  width: 30px;
+  height: 18px;
+  border-radius: 9px;
+  background: var(--line);
+  transition: background-color 0.15s ease;
+}
+
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+  transition: transform 0.15s ease;
+}
+
+.btn-toggle[aria-pressed="true"] .switch {
+  background: var(--legal);
+}
+
+.btn-toggle[aria-pressed="true"] .switch::after {
+  transform: translateX(12px);
+}
+
+/* ----- Overlay vittoria / sconfitta ----- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding:
+    calc(var(--safe-t) + 16px)
+    calc(var(--safe-r) + 16px)
+    calc(var(--safe-b) + 16px)
+    calc(var(--safe-l) + 16px);
+  background: rgb(20 16 10 / 0.45);
+  animation: fade 0.2s ease-out;
+}
+
+.overlay[hidden] {
+  display: none;
+}
+
+.dialog {
+  width: 100%;
+  max-width: 360px;
+  max-height: 100%;
+  overflow: auto;
+  padding: 24px 20px 16px;
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 20px 60px rgb(0 0 0 / 0.3);
+  text-align: center;
+  animation: rise 0.25s ease-out;
+}
+
+.dialog .dialog-badge {
+  margin: 0 auto 8px;
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.dialog h2 {
+  margin: 0 0 6px;
+  font-size: 1.4rem;
+}
+
+.dialog p {
+  margin: 0 0 18px;
+  color: var(--ink-soft);
+}
+
+.dialog-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dialog-actions .btn[hidden] {
+  display: none;
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+}
+
+@keyframes rise {
+  from { transform: translateY(16px) scale(0.97); opacity: 0; }
+}
+
+.noscript {
+  position: fixed;
+  inset: auto 16px 16px;
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--surface);
+  text-align: center;
+}
+
+/* ----- Schermi bassi (telefono in orizzontale) ----- */
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .app {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr auto auto;
+    column-gap: 16px;
+    max-width: none;
+  }
+  .topbar { grid-column: 2; grid-row: 1; flex-wrap: wrap; justify-content: center; }
+  .stats { flex-basis: 100%; order: 3; }
+  .board-area { grid-column: 1; grid-row: 1 / -1; height: 100%; }
+  .status { grid-column: 2; grid-row: 3; max-width: 240px; }
+  .controls { grid-column: 2; grid-row: 4; flex-direction: column; width: 220px; }
+  .board {
+    width: min(100vw - 280px, var(--vh) - 24px - var(--safe-t) - var(--safe-b), 720px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ----- Pagina regole ----- */
+
+.rules {
+  max-width: 640px;
+  margin: 0 auto;
+  padding:
+    calc(var(--safe-t) + 16px)
+    calc(var(--safe-r) + 20px)
+    calc(var(--safe-b) + 32px)
+    calc(var(--safe-l) + 20px);
+}
+
+.rules h1 {
+  margin: 8px 0 4px;
+  font-size: 1.8rem;
+}
+
+.rules h2 {
+  margin: 28px 0 8px;
+  font-size: 1.15rem;
+}
+
+.rules p,
+.rules li {
+  color: var(--ink);
+}
+
+.rules ul {
+  padding-left: 1.2em;
+}
+
+.rules li + li {
+  margin-top: 6px;
+}
+
+.rules kbd {
+  padding: 1px 6px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--surface);
+  font: inherit;
+  font-size: 0.9em;
+}
+
+.rules .back {
+  margin-bottom: 8px;
+}
+
+.move-diagram {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  width: min(100%, 280px);
+  margin: 12px 0;
+}
+
+.move-diagram span {
+  aspect-ratio: 1 / 1;
+  border-radius: 4px;
+  background: var(--cell);
+  border: 1px solid var(--line);
+}
+
+.move-diagram .from {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.move-diagram .to {
+  background: var(--legal-bg);
+  border: 2px solid var(--legal);
+}
