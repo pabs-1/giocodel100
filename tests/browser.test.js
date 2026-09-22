@@ -78,7 +78,7 @@ async function layoutReport(page) {
       scrollH: document.documentElement.scrollHeight,
       board: { top: b.top, left: b.left, right: b.right, bottom: b.bottom, w: b.width, h: b.height },
       cell: c.width,
-      overflowing: [...document.querySelectorAll('.btn')]
+      overflowing: [...document.querySelectorAll('.btn, .title, .dedica')]
         .filter((el) => el.offsetWidth > 0 && el.scrollWidth > el.clientWidth + 1)
         .map((el) => el.id || el.textContent.trim()),
       minButton: Math.min(...buttons.map((r) => Math.min(r.width, r.height)))
@@ -362,7 +362,10 @@ function assertFits(rep) {
   });
 
   console.log('Lingue (scelte solo dalle preferenze del browser)');
-  const LOCALES = { it: 'it-IT', en: 'en-US', fr: 'fr-FR', es: 'es-ES', de: 'de-DE', pt: 'pt-BR', zh: 'zh-CN', ja: 'ja-JP' };
+  const LOCALES = {
+    it: 'it-IT', en: 'en-US', fr: 'fr-FR', es: 'es-ES', de: 'de-DE', pt: 'pt-BR', nl: 'nl-NL', pl: 'pl-PL',
+    tr: 'tr-TR', id: 'id-ID', ru: 'ru-RU', zh: 'zh-CN', 'zh-Hant': 'zh-TW', ja: 'ja-JP', ko: 'ko-KR'
+  };
   const narrow = { viewport: { width: 320, height: 568 }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 };
   const dead = (() => {
     let s = L.applyMove(L.createState(), 0);
@@ -378,6 +381,10 @@ function assertFits(rep) {
       const errs = watchConsole(p);
       await p.goto(base);
       assert.equal(await p.getAttribute('html', 'lang'), T.htmlLang);
+      assert.equal(await p.title(), T.title);
+      assert.equal(await p.textContent('h1.title'), T.title);
+      assert.equal(await p.textContent('h1.title .title-num'), '100');
+      assert.equal(await p.textContent('.dedica'), T.dedication);
       assert.equal(await p.textContent('[data-i18n="undo"]'), T.undo);
       assert.equal(await p.textContent('#status'), T.statusReady);
       assertFits(await layoutReport(p));
@@ -406,7 +413,9 @@ function assertFits(rep) {
       await p.goto(base + 'rules.html');
       assert.equal(await p.title(), T.pageTitle);
       assert.equal(await p.textContent('h1'), T.rulesH1);
+      assert.equal(await p.textContent('.dedica'), T.dedication);
       assert.equal(await p.inputValue('#lang-select'), '');
+      assert.equal(await p.locator('#lang-select option').count(), I.LANGUAGES.length + 1);
       const w = await p.evaluate(() => [document.documentElement.scrollWidth, innerWidth]);
       assert.ok(w[0] <= w[1], `pagina regole più larga dello schermo: ${w}`);
       if (shotDir) await p.screenshot({ path: path.join(shotDir, `rules-${lang}.png`), fullPage: true });
@@ -415,8 +424,8 @@ function assertFits(rep) {
     });
   }
 
-  await test('lingua non supportata (ru-RU) -> inglese', async () => {
-    const c = await newContext({ locale: 'ru-RU' });
+  await test('lingua non supportata (ar-SA) -> inglese', async () => {
+    const c = await newContext({ locale: 'ar-SA' });
     const p = await c.newPage();
     await p.goto(base);
     assert.equal(await p.getAttribute('html', 'lang'), 'en');
