@@ -33,8 +33,9 @@ il test con un solver a backtracking).
   Se `localStorage` non è disponibile (es. Safari in navigazione privata) si
   gioca lo stesso, senza salvataggio.
 - Schermate di vittoria e sconfitta; regole in `rules.html` (pulsante "?").
-- 8 lingue: italiano, inglese, francese, spagnolo, tedesco, portoghese,
-  cinese (semplificato) e giapponese. Vedi sotto.
+- 15 lingue: italiano, inglese, francese, spagnolo, tedesco, portoghese,
+  olandese, polacco, turco, indonesiano, russo, cinese semplificato e
+  tradizionale, giapponese e coreano. Vedi sotto.
 - Tastiera: frecce per muoversi, <kbd>Invio</kbd>/<kbd>Spazio</kbd> per
   scrivere, <kbd>Ctrl</kbd>+<kbd>Z</kbd> o <kbd>U</kbd> per annullare,
   <kbd>M</kbd> per le mosse.
@@ -46,15 +47,17 @@ Il sito si mostra nella lingua preferita del browser, senza fingerprinting:
 - la lingua si sceglie **solo nel browser**, leggendo `navigator.languages`
   (le preferenze impostate dall'utente); non parte nessuna richiesta, non ci
   sono cookie, analytics né servizi esterni;
-- vale la prima lingua supportata dell'elenco (`pt-BR` → portoghese,
-  `zh-TW` → cinese); se nessuna è supportata si usa l'inglese, se il browser
-  non ne indica nessuna l'italiano;
+- vale la prima lingua supportata dell'elenco (`pt-BR` → portoghese;
+  `zh-TW`, `zh-HK`, `zh-Hant` → cinese tradizionale, `zh-CN` e `zh` →
+  semplificato); se nessuna è supportata si usa l'inglese, se il browser non
+  ne indica nessuna l'italiano;
 - nella pagina "?" c'è un selettore per sceglierla a mano; la scelta resta
   in `localStorage` su quel dispositivo (come la partita) e non viene mai
   trasmessa.
 
-Il titolo "Gioco del 100" e la dedica restano in italiano in tutte le lingue.
-Per aggiungere una lingua basta un nuovo dizionario in `i18n.js`:
+Anche il titolo ("Gioco del 100", "The Game of 100", "数到 100"…) e la
+dedica sono tradotti; manifest e icona dell'app installata restano "Gioco del
+100". Per aggiungere una lingua basta un nuovo dizionario in `i18n.js`:
 `tests/i18n.test.js` controlla che abbia tutte le chiavi.
 
 ## Dettagli per il mobile
