@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://giocodel100.neocities.org/sitemap.xml
