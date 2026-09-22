@@ -50,6 +50,12 @@ done
 # così ogni deploy invalida la cache offline dei visitatori.
 BUILD="${GITHUB_SHA:-$(git rev-parse HEAD 2>/dev/null || date -u +%Y%m%d%H%M%S)}"
 BUILD="${BUILD:0:12}"
+# Deploy locale con modifiche non committate: stesso hash ma file diversi.
+# Senza un suffisso sw.js resterebbe identico e i visitatori non vedrebbero
+# la nuova versione.
+if [ -z "${GITHUB_SHA:-}" ] && [ -n "$(git status --porcelain 2>/dev/null)" ]; then
+  BUILD="$BUILD-$(date -u +%Y%m%d%H%M%S)"
+fi
 
 STAGE="$(mktemp -d)"
 trap 'rm -rf "$STAGE"' EXIT
