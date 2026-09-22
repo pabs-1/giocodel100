@@ -21,6 +21,9 @@ jobs:
       - name: Test della logica di gioco
         run: node tests/logic.test.js
 
+      - name: Test delle traduzioni
+        run: node tests/i18n.test.js
+
       - name: Upload su Neocities
         env:
           NEOCITIES_API_KEY: ${{ secrets.NEOCITIES_API_KEY }}
