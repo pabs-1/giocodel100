@@ -10,6 +10,7 @@ const path = require('node:path');
 const assert = require('node:assert/strict');
 const { chromium, devices } = require('playwright');
 const L = require('../logic.js');
+const I = require('../i18n.js');
 
 const ROOT = path.join(__dirname, '..');
 const TYPES = {
@@ -100,6 +101,9 @@ function assertFits(rep) {
   const base = `http://127.0.0.1:${server.address().port}/`;
   const localhost = `http://localhost:${server.address().port}/`;
   const browser = await chromium.launch();
+  // I test esistenti controllano i testi italiani: il browser "parla" italiano
+  // salvo dove un test sceglie un'altra lingua.
+  const newContext = (opts = {}) => browser.newContext({ locale: 'it-IT', ...opts });
   const shotDir = process.env.SHOT_DIR;
 
   const viewports = [
@@ -118,7 +122,7 @@ function assertFits(rep) {
     await test(`${name}: niente scroll, griglia quadrata nel viewport, pulsanti ≥ 44px`, async () => {
       // devices[] usa webkit come default browser: forziamo chromium.
       delete opts.defaultBrowserType;
-      const ctx = await browser.newContext(opts);
+      const ctx = await newContext(opts);
       const page = await ctx.newPage();
       const errors = watchConsole(page);
       await page.goto(base);
@@ -133,7 +137,7 @@ function assertFits(rep) {
   console.log('Partita completa al tocco (iPhone 13)');
   const phone = { ...devices['iPhone 13'] };
   delete phone.defaultBrowserType;
-  const ctx = await browser.newContext(phone);
+  const ctx = await newContext(phone);
   const page = await ctx.newPage();
   const errors = watchConsole(page);
   await page.goto(base);
@@ -260,7 +264,7 @@ function assertFits(rep) {
 
   console.log('Tastiera e accessibilità (desktop)');
   await test('frecce + Invio piazzano i numeri, focus visibile, ruoli ARIA', async () => {
-    const c = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+    const c = await newContext({ viewport: { width: 1280, height: 800 } });
     const p = await c.newPage();
     const errs = watchConsole(p);
     await p.goto(base);
@@ -292,7 +296,7 @@ function assertFits(rep) {
 
   console.log('Robustezza');
   await test('localStorage che lancia eccezioni (Safari privato): si gioca lo stesso', async () => {
-    const c = await browser.newContext();
+    const c = await newContext();
     await c.addInitScript(() => {
       Object.defineProperty(window, 'localStorage', {
         get() { throw new DOMException('The operation is insecure.', 'SecurityError'); }
@@ -309,7 +313,7 @@ function assertFits(rep) {
   });
 
   await test('localStorage pieno (setItem lancia QuotaExceededError)', async () => {
-    const c = await browser.newContext();
+    const c = await newContext();
     await c.addInitScript(() => {
       Storage.prototype.setItem = function () { throw new DOMException('quota', 'QuotaExceededError'); };
     });
@@ -323,7 +327,7 @@ function assertFits(rep) {
   });
 
   await test('salvataggio corrotto ignorato', async () => {
-    const c = await browser.newContext();
+    const c = await newContext();
     await c.addInitScript(() => {
       localStorage.setItem('giocodel100:partita', '{"v":1,"path":[0,1,2]}');
       localStorage.setItem('giocodel100:record', 'banana');
@@ -338,7 +342,7 @@ function assertFits(rep) {
   });
 
   await test('service worker: installabile e funziona offline', async () => {
-    const c = await browser.newContext();
+    const c = await newContext();
     const p = await c.newPage();
     const errs = watchConsole(p);
     await p.goto(localhost);
@@ -354,6 +358,113 @@ function assertFits(rep) {
     assert.match(await p.textContent('h1'), /Come si gioca/);
     await c.setOffline(false);
     assert.deepEqual(errs, []);
+    await c.close();
+  });
+
+  console.log('Lingue (scelte solo dalle preferenze del browser)');
+  const LOCALES = { it: 'it-IT', en: 'en-US', fr: 'fr-FR', es: 'es-ES', de: 'de-DE', pt: 'pt-BR', zh: 'zh-CN', ja: 'ja-JP' };
+  const narrow = { viewport: { width: 320, height: 568 }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 };
+  const dead = (() => {
+    let s = L.applyMove(L.createState(), 0);
+    while (L.legalMoves(s).length) s = L.applyMove(s, L.legalMoves(s)[0]);
+    return s;
+  })();
+
+  for (const lang of I.LANGUAGES) {
+    const T = I.STRINGS[lang];
+    await test(`${lang} (${LOCALES[lang]}): testi tradotti, niente trabocchi a 320px, partita e regole`, async () => {
+      const c = await newContext({ ...narrow, locale: LOCALES[lang] });
+      const p = await c.newPage();
+      const errs = watchConsole(p);
+      await p.goto(base);
+      assert.equal(await p.getAttribute('html', 'lang'), T.htmlLang);
+      assert.equal(await p.textContent('[data-i18n="undo"]'), T.undo);
+      assert.equal(await p.textContent('#status'), T.statusReady);
+      assertFits(await layoutReport(p));
+
+      let pt = await cellCenter(p, 0);
+      await p.touchscreen.tap(pt.x, pt.y);
+      assert.equal(await p.textContent('#status'), T.placed(1, T.position(1, 1)) + ' ' + T.statusPlaying(2, 3));
+      assert.equal(await p.getAttribute('.cell >> nth=0', 'aria-label'), T.position(1, 1) + T.colon + '1' + T.comma + T.cellLast);
+
+      // "Nuova partita" a partita in corso: testo di conferma senza trabocchi.
+      await p.click('#btn-new');
+      assert.equal(await p.textContent('#btn-new'), T.confirm);
+      assertFits(await layoutReport(p));
+      await p.click('#btn-new');
+
+      for (const i of dead.path) {
+        pt = await cellCenter(p, i);
+        await p.touchscreen.tap(pt.x, pt.y);
+      }
+      await p.waitForSelector('#overlay:not([hidden])');
+      assert.equal(await p.textContent('#overlay-title'), T.lostTitle);
+      assert.equal(await p.textContent('#overlay-text'), T.lostText(dead.path.length, 100 - dead.path.length, dead.path.length, true));
+      assertFits(await layoutReport(p));
+      if (shotDir) await p.screenshot({ path: path.join(shotDir, `lang-${lang}.png`) });
+
+      await p.goto(base + 'rules.html');
+      assert.equal(await p.title(), T.pageTitle);
+      assert.equal(await p.textContent('h1'), T.rulesH1);
+      assert.equal(await p.inputValue('#lang-select'), '');
+      const w = await p.evaluate(() => [document.documentElement.scrollWidth, innerWidth]);
+      assert.ok(w[0] <= w[1], `pagina regole più larga dello schermo: ${w}`);
+      if (shotDir) await p.screenshot({ path: path.join(shotDir, `rules-${lang}.png`), fullPage: true });
+      assert.deepEqual(errs, []);
+      await c.close();
+    });
+  }
+
+  await test('lingua non supportata (ru-RU) -> inglese', async () => {
+    const c = await newContext({ locale: 'ru-RU' });
+    const p = await c.newPage();
+    await p.goto(base);
+    assert.equal(await p.getAttribute('html', 'lang'), 'en');
+    assert.equal(await p.textContent('[data-i18n="undo"]'), 'Undo');
+    await c.close();
+  });
+
+  await test('scelta manuale: vale anche per il gioco, resta dopo il reload, "Automatica" la toglie', async () => {
+    const c = await newContext({ locale: 'it-IT' });
+    const p = await c.newPage();
+    const errs = watchConsole(p);
+    await p.goto(base + 'rules.html');
+    await p.selectOption('#lang-select', 'ja');
+    assert.equal(await p.textContent('h1'), I.STRINGS.ja.rulesH1);
+    await p.click('.back');
+    await p.waitForURL(base);
+    assert.equal(await p.textContent('[data-i18n="undo"]'), I.STRINGS.ja.undo);
+    await p.reload();
+    assert.equal(await p.getAttribute('html', 'lang'), 'ja');
+    // Indietro/avanti dalla cache (bfcache) dopo un cambio di lingua.
+    await p.goto(base + 'rules.html');
+    await p.selectOption('#lang-select', '');
+    assert.equal(await p.textContent('h1'), I.STRINGS.it.rulesH1);
+    await p.goBack();
+    await p.waitForFunction(() => document.documentElement.lang === 'it');
+    assert.equal(await p.textContent('[data-i18n="undo"]'), I.STRINGS.it.undo);
+    assert.deepEqual(errs, []);
+    await c.close();
+  });
+
+  console.log('Privacy');
+  await test('zero richieste esterne, zero cookie, localStorage solo con chiavi del gioco', async () => {
+    const c = await newContext({ locale: 'de-DE' });
+    const p = await c.newPage();
+    const urls = [];
+    p.on('request', (r) => urls.push(r.url()));
+    await p.goto(base);
+    const pt = await cellCenter(p, 44);
+    await p.mouse.click(pt.x, pt.y);
+    await p.goto(base + 'rules.html');
+    await p.selectOption('#lang-select', 'fr');
+    await p.goto(base);
+    const external = urls.filter((u) => !u.startsWith(base));
+    assert.deepEqual(external, [], 'richieste verso altri domini');
+    assert.deepEqual(await c.cookies(), []);
+    assert.equal(await p.evaluate(() => document.cookie), '');
+    const keys = await p.evaluate(() => Object.keys(localStorage).sort());
+    assert.deepEqual(keys, ['giocodel100:lingua', 'giocodel100:partita', 'giocodel100:record']);
     await c.close();
   });
 
