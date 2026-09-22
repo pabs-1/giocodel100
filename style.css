@@ -111,16 +111,18 @@ body {
 }
 
 .brand {
+  flex: 1 1 0;
   min-width: 0;
 }
 
 .title {
   margin: 0;
-  font-size: 1.6rem;
+  /* I titoli tradotti sono più lunghi di "Gioco del 100": si rimpiccioliscono
+     un po' sugli schermi stretti e, se serve, vanno a capo. */
+  font-size: clamp(1.3rem, 6.5vw, 1.6rem);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.1;
-  white-space: nowrap;
 }
 
 .title-num {
@@ -701,4 +703,10 @@ body {
   margin-top: 32px;
   color: var(--ink-soft);
   text-align: center;
+}
+
+/* Il coreano va a capo tra le parole, non dentro (cinese e giapponese sì). */
+:lang(ko) {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }

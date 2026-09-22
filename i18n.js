@@ -30,6 +30,19 @@
     return n === 1 ? one : many;
   }
 
+  /**
+   * Plurale di russo e polacco: 1 / 2–4 / 5+ (12–14 vanno con 5+).
+   * In russo 21, 31… tornano al singolare; in polacco solo 1 lo è
+   * (strictOne = true).
+   */
+  function pluralSlavic(n, one, few, many, strictOne) {
+    var d = n % 10;
+    var h = n % 100;
+    if (strictOne ? n === 1 : d === 1 && h !== 11) return one;
+    if (d >= 2 && d <= 4 && (h < 12 || h > 14)) return few;
+    return many;
+  }
+
   // Tasti (uguali in tutte le lingue: le scorciatoie non cambiano).
   var ARROWS = '<kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd>';
 
@@ -37,6 +50,8 @@
     it: {
       name: 'Italiano',
       htmlLang: 'it',
+      title: 'Gioco del 100',
+      dedication: 'Dedicato alla 5C dello Spalla',
       colon: ': ',
       comma: ', ',
       statCurrent: 'Numero',
@@ -75,7 +90,6 @@
       overlayUndo: 'Annulla ultima mossa',
       overlayNew: 'Nuova partita',
       overlayClose: 'Guarda la griglia',
-      pageTitle: 'Regole — Gioco del 100',
       back: '← Torna al gioco',
       language: 'Lingua',
       languageAuto: 'Automatica (dal browser)',
@@ -105,6 +119,8 @@
     en: {
       name: 'English',
       htmlLang: 'en',
+      title: 'The Game of 100',
+      dedication: 'Dedicated to class 5C at the Spalla',
       colon: ': ',
       comma: ', ',
       statCurrent: 'Number',
@@ -143,7 +159,6 @@
       overlayUndo: 'Undo last move',
       overlayNew: 'New game',
       overlayClose: 'Look at the grid',
-      pageTitle: 'Rules — Gioco del 100',
       back: '← Back to the game',
       language: 'Language',
       languageAuto: 'Automatic (from browser)',
@@ -173,6 +188,8 @@
     fr: {
       name: 'Français',
       htmlLang: 'fr',
+      title: 'Le jeu du 100',
+      dedication: 'Dédié à la classe 5C du Spalla',
       colon: ' : ',
       comma: ', ',
       statCurrent: 'Numéro',
@@ -211,7 +228,6 @@
       overlayUndo: 'Annuler le dernier coup',
       overlayNew: 'Nouvelle partie',
       overlayClose: 'Voir la grille',
-      pageTitle: 'Règles — Gioco del 100',
       back: '← Retour au jeu',
       language: 'Langue',
       languageAuto: 'Automatique (navigateur)',
@@ -241,6 +257,8 @@
     es: {
       name: 'Español',
       htmlLang: 'es',
+      title: 'El juego del 100',
+      dedication: 'Dedicado a la clase 5C del Spalla',
       colon: ': ',
       comma: ', ',
       statCurrent: 'Número',
@@ -279,7 +297,6 @@
       overlayUndo: 'Deshacer la última jugada',
       overlayNew: 'Nueva partida',
       overlayClose: 'Ver la cuadrícula',
-      pageTitle: 'Reglas — Gioco del 100',
       back: '← Volver al juego',
       language: 'Idioma',
       languageAuto: 'Automático (navegador)',
@@ -309,6 +326,8 @@
     de: {
       name: 'Deutsch',
       htmlLang: 'de',
+      title: 'Das Spiel der 100',
+      dedication: 'Gewidmet der Klasse 5C des Spalla',
       colon: ': ',
       comma: ', ',
       statCurrent: 'Zahl',
@@ -348,7 +367,6 @@
       overlayUndo: 'Letzten Zug zurücknehmen',
       overlayNew: 'Neues Spiel',
       overlayClose: 'Raster ansehen',
-      pageTitle: 'Regeln — Gioco del 100',
       back: '← Zurück zum Spiel',
       language: 'Sprache',
       languageAuto: 'Automatisch (Browser)',
@@ -378,6 +396,8 @@
     pt: {
       name: 'Português',
       htmlLang: 'pt',
+      title: 'O jogo do 100',
+      dedication: 'Dedicado à turma 5C do Spalla',
       colon: ': ',
       comma: ', ',
       statCurrent: 'Número',
@@ -416,7 +436,6 @@
       overlayUndo: 'Desfazer a última jogada',
       overlayNew: 'Novo jogo',
       overlayClose: 'Ver o tabuleiro',
-      pageTitle: 'Regras — Gioco del 100',
       back: '← Voltar ao jogo',
       language: 'Idioma',
       languageAuto: 'Automático (navegador)',
@@ -444,8 +463,10 @@
     },
 
     zh: {
-      name: '中文',
+      name: '简体中文',
       htmlLang: 'zh-Hans',
+      title: '数到 100',
+      dedication: '献给 Spalla 的 5C 班',
       colon: '：',
       comma: '，',
       statCurrent: '数字',
@@ -484,7 +505,6 @@
       overlayUndo: '撤销上一步',
       overlayNew: '新游戏',
       overlayClose: '查看方格',
-      pageTitle: '规则 — Gioco del 100',
       back: '← 返回游戏',
       language: '语言',
       languageAuto: '自动（跟随浏览器）',
@@ -514,6 +534,8 @@
     ja: {
       name: '日本語',
       htmlLang: 'ja',
+      title: '100 マスゲーム',
+      dedication: 'Spalla の 5C クラスに捧ぐ',
       colon: '：',
       comma: '、',
       statCurrent: '数字',
@@ -552,7 +574,6 @@
       overlayUndo: '最後の一手を戻す',
       overlayNew: '新しいゲーム',
       overlayClose: '盤面を見る',
-      pageTitle: 'ルール — Gioco del 100',
       back: '← ゲームに戻る',
       language: '言語',
       languageAuto: '自動（ブラウザー）',
@@ -577,10 +598,503 @@
       win: 'はい。1 をどこに書いても、100 まで到達できる道が少なくとも 1 つあります。見つけられるかどうかは別の話です。',
       privacyH: 'プライバシー',
       privacy: 'Cookie なし、トラッキングなし、外部サービスなし。ゲームの進行、最高記録、言語の選択はこのブラウザーの中だけに保存されます。言語はお使いのブラウザーの設定をもとに端末上で選ばれ、どこにも送信されません。'
+    },
+
+    nl: {
+      name: 'Nederlands',
+      htmlLang: 'nl',
+      title: 'Het spel van 100',
+      dedication: 'Opgedragen aan klas 5C van het Spalla',
+      colon: ': ',
+      comma: ', ',
+      statCurrent: 'Getal',
+      statRemaining: 'Over',
+      statBest: 'Record',
+      rulesLink: 'Spelregels',
+      rulesTitle: 'Regels',
+      boardLabel: 'Rooster van 10 bij 10',
+      controlsLabel: 'Spelbediening',
+      undo: 'Terug',
+      hints: 'Zetten',
+      newShort: 'Nieuw',
+      newRest: ' spel',
+      confirm: 'Zeker?',
+      statusReady: 'Tik op een vakje om de 1 te schrijven.',
+      statusWon: 'Rooster vol: 100 van de 100!',
+      statusLost: function (next) { return 'Geen zetten meer voor de ' + next + '. Neem een zet terug of begin een nieuw spel.'; },
+      statusPlaying: function (next, k) { return 'Schrijf de ' + next + ' — ' + k + ' ' + plural(k, 'mogelijke zet', 'mogelijke zetten') + '.'; },
+      placed: function (n, pos) { return n + ' op ' + pos + '.'; },
+      undone: function (n) { return n + ' teruggenomen.'; },
+      invalid: function (n, pos) { return 'De ' + n + ' kan niet op ' + pos + '.'; },
+      newGame: 'Nieuw spel.',
+      resumed: 'Spel hervat.',
+      position: function (r, c) { return 'rij ' + r + ', kolom ' + c; },
+      cellEmpty: 'leeg',
+      cellLegal: 'mogelijke zet',
+      cellLast: 'laatste getal',
+      wonTitle: 'Gewonnen!',
+      wonText: 'Je hebt alle getallen van 1 tot en met 100 geschreven.',
+      lostTitle: 'Geen zetten meer',
+      lostText: function (n, missing, best, isRecord) {
+        return 'Je bent tot ' + n + ' gekomen: ' +
+          (missing === 1 ? 'nog maar 1 getal te gaan' : 'nog ' + missing + ' getallen te gaan') + '. ' +
+          (isRecord ? 'Nieuw record!' : 'Record: ' + best + '.');
+      },
+      overlayUndo: 'Laatste zet terugnemen',
+      overlayNew: 'Nieuw spel',
+      overlayClose: 'Rooster bekijken',
+      back: '← Terug naar het spel',
+      language: 'Taal',
+      languageAuto: 'Automatisch (browser)',
+      rulesH1: 'Zo speel je',
+      rulesIntro: 'Schrijf de getallen van <strong>1 tot en met 100</strong> in het rooster van 10×10, één per vakje.',
+      rule1: 'De <strong>1</strong> zet je waar je wilt: tik op een willekeurig vakje.',
+      rule2: 'Elk volgend getal vertrekt vanaf het vakje van het laatst geschreven getal.',
+      rule3: '<strong>Horizontaal of verticaal</strong> sla je 2 vakjes over en kom je op het 3e.',
+      rule4: '<strong>Diagonaal</strong> sla je 1 vakje over en kom je op het 2e.',
+      rule5: 'Je mag geen bezet vakje gebruiken en niet buiten het rooster gaan.',
+      rule6: 'Zit je vast vóór de 100, dan heb je verloren; haal je de 100, dan heb je gewonnen.',
+      diagram: 'Vanaf het oranje vakje kun je naar de 8 groene vakjes springen:',
+      commandsH: 'Knoppen',
+      command1: '<strong>Zetten</strong>: toont of verbergt de vakjes waar je naartoe kunt springen.',
+      command2: '<strong>Terug</strong>: haalt het laatste getal weg, zo vaak als je wilt.',
+      command3: '<strong>Nieuw spel</strong>: begint opnieuw (vraagt tijdens een spel om bevestiging).',
+      command4: 'Het spel wordt vanzelf bewaard: sluit het, open het opnieuw en ga verder waar je was.',
+      keyboardH: 'Toetsenbord',
+      key1: ARROWS + ' om over het rooster te bewegen, <kbd>Enter</kbd> of <kbd>Spatie</kbd> om het getal te schrijven.',
+      key2: '<kbd>Ctrl</kbd>+<kbd>Z</kbd> of <kbd>U</kbd> om een zet terug te nemen, <kbd>M</kbd> om de zetten te tonen/verbergen.',
+      winH: 'Kun je altijd winnen?',
+      win: 'Ja: waar de 1 ook staat, er is altijd minstens één route tot 100. Die vinden is een ander verhaal.',
+      privacyH: 'Privacy',
+      privacy: 'Geen cookies, geen tracking, geen externe diensten. Je spel, je record en je taalkeuze blijven alleen in deze browser. De taal wordt op je apparaat gekozen op basis van je browserinstellingen: er wordt niets verstuurd.'
+    },
+
+    pl: {
+      name: 'Polski',
+      htmlLang: 'pl',
+      title: 'Gra w 100',
+      dedication: 'Dedykowane klasie 5C ze Spalla',
+      colon: ': ',
+      comma: ', ',
+      statCurrent: 'Liczba',
+      statRemaining: 'Zostało',
+      statBest: 'Rekord',
+      rulesLink: 'Zasady gry',
+      rulesTitle: 'Zasady',
+      boardLabel: 'Plansza 10 na 10',
+      controlsLabel: 'Sterowanie grą',
+      undo: 'Cofnij',
+      hints: 'Ruchy',
+      newShort: 'Nowa',
+      newRest: ' gra',
+      confirm: 'Na pewno?',
+      statusReady: 'Dotknij dowolnego pola, aby wpisać 1.',
+      statusWon: 'Plansza pełna: 100 na 100!',
+      statusLost: function (next) { return 'Brak ruchów dla liczby ' + next + '. Cofnij ruch albo zacznij nową grę.'; },
+      statusPlaying: function (next, k) { return 'Wpisz ' + next + ' — ' + k + ' ' + pluralSlavic(k, 'możliwy ruch', 'możliwe ruchy', 'możliwych ruchów', true) + '.'; },
+      placed: function (n, pos) { return 'Wpisano ' + n + ' (' + pos + ').'; },
+      undone: function (n) { return 'Cofnięto ' + n + '.'; },
+      invalid: function (n, pos) { return 'Nie można wpisać ' + n + ' w tym miejscu (' + pos + ').'; },
+      newGame: 'Nowa gra.',
+      resumed: 'Wznowiono grę.',
+      position: function (r, c) { return 'wiersz ' + r + ', kolumna ' + c; },
+      cellEmpty: 'puste',
+      cellLegal: 'możliwy ruch',
+      cellLast: 'ostatnia liczba',
+      wonTitle: 'Wygrana!',
+      wonText: 'Wszystkie liczby od 1 do 100 są na planszy.',
+      lostTitle: 'Brak ruchów',
+      lostText: function (n, missing, best, isRecord) {
+        // "brakuje" regge il genitivo: 1 liczby, 2/5/… liczb.
+        return 'Dotarto do ' + n + ': ' +
+          (missing === 1 ? 'brakuje tylko 1 liczby' : 'brakuje jeszcze ' + missing + ' liczb') + '. ' +
+          (isRecord ? 'Nowy rekord!' : 'Rekord: ' + best + '.');
+      },
+      overlayUndo: 'Cofnij ostatni ruch',
+      overlayNew: 'Nowa gra',
+      overlayClose: 'Zobacz planszę',
+      back: '← Wróć do gry',
+      language: 'Język',
+      languageAuto: 'Automatycznie (z przeglądarki)',
+      rulesH1: 'Jak grać',
+      rulesIntro: 'Wpisz liczby od <strong>1 do 100</strong> na planszy 10×10, po jednej w każde pole.',
+      rule1: '<strong>1</strong> wpisujesz, gdzie chcesz: dotknij dowolnego pola.',
+      rule2: 'Każda następna liczba startuje z pola ostatnio wpisanej liczby.',
+      rule3: '<strong>W poziomie lub w pionie</strong> przeskakujesz 2 pola i lądujesz na trzecim.',
+      rule4: '<strong>Po skosie</strong> przeskakujesz 1 pole i lądujesz na drugim.',
+      rule5: 'Nie można użyć zajętego pola ani wyjść poza planszę.',
+      rule6: 'Jeśli zabraknie ruchów przed 100 — przegrywasz; jeśli dojdziesz do 100 — wygrywasz.',
+      diagram: 'Z pomarańczowego pola można skoczyć na jedno z 8 zielonych pól:',
+      commandsH: 'Przyciski',
+      command1: '<strong>Ruchy</strong>: pokazuje lub ukrywa pola, na które możesz skoczyć.',
+      command2: '<strong>Cofnij</strong>: usuwa ostatnią liczbę; możesz cofać dowolnie wiele razy.',
+      command3: '<strong>Nowa gra</strong>: zaczyna od nowa (w trakcie gry prosi o potwierdzenie).',
+      command4: 'Gra zapisuje się sama: zamknij ją, otwórz ponownie i graj dalej od tego samego miejsca.',
+      keyboardH: 'Klawiatura',
+      key1: ARROWS + ' — poruszanie się po planszy, <kbd>Enter</kbd> lub <kbd>Spacja</kbd> — wpisanie liczby.',
+      key2: '<kbd>Ctrl</kbd>+<kbd>Z</kbd> lub <kbd>U</kbd> — cofnij, <kbd>M</kbd> — pokaż/ukryj ruchy.',
+      winH: 'Czy zawsze da się wygrać?',
+      win: 'Tak: niezależnie od tego, gdzie stoi 1, istnieje co najmniej jedna droga do 100. Znalezienie jej to już inna sprawa.',
+      privacyH: 'Prywatność',
+      privacy: 'Bez plików cookie, bez śledzenia, bez zewnętrznych usług. Twoja gra, rekord i wybrany język są zapisane tylko w tej przeglądarce. Język jest wybierany na Twoim urządzeniu na podstawie ustawień przeglądarki: nic nie jest wysyłane.'
+    },
+
+    ru: {
+      name: 'Русский',
+      htmlLang: 'ru',
+      title: 'Игра до 100',
+      dedication: 'Посвящается классу 5C из «Spalla»',
+      colon: ': ',
+      comma: ', ',
+      statCurrent: 'Число',
+      statRemaining: 'Осталось',
+      statBest: 'Рекорд',
+      rulesLink: 'Правила игры',
+      rulesTitle: 'Правила',
+      boardLabel: 'Поле 10 на 10',
+      controlsLabel: 'Управление игрой',
+      undo: 'Отменить',
+      hints: 'Ходы',
+      newShort: 'Новая',
+      newRest: ' игра',
+      confirm: 'Точно?',
+      statusReady: 'Нажмите на любую клетку, чтобы написать 1.',
+      statusWon: 'Поле заполнено: 100 из 100!',
+      statusLost: function (next) { return 'Для числа ' + next + ' нет ходов. Отмените ход или начните новую игру.'; },
+      statusPlaying: function (next, k) { return 'Напишите ' + next + ' — ' + k + ' ' + pluralSlavic(k, 'возможный ход', 'возможных хода', 'возможных ходов') + '.'; },
+      placed: function (n, pos) { return n + ' — ' + pos + '.'; },
+      undone: function (n) { return 'Число ' + n + ' отменено.'; },
+      invalid: function (n, pos) { return 'Число ' + n + ' нельзя поставить сюда (' + pos + ').'; },
+      newGame: 'Новая игра.',
+      resumed: 'Игра продолжена.',
+      position: function (r, c) { return 'ряд ' + r + ', столбец ' + c; },
+      cellEmpty: 'пусто',
+      cellLegal: 'возможный ход',
+      cellLast: 'последнее число',
+      wonTitle: 'Победа!',
+      wonText: 'Вы написали все числа от 1 до 100.',
+      lostTitle: 'Ходов больше нет',
+      lostText: function (n, missing, best, isRecord) {
+        return 'Вы дошли до ' + n + ': ' +
+          (missing === 1 ? 'осталось всего 1 число' : 'осталось ' + missing + ' ' + pluralSlavic(missing, 'число', 'числа', 'чисел')) + '. ' +
+          (isRecord ? 'Новый рекорд!' : 'Рекорд: ' + best + '.');
+      },
+      overlayUndo: 'Отменить последний ход',
+      overlayNew: 'Новая игра',
+      overlayClose: 'Посмотреть поле',
+      back: '← Назад к игре',
+      language: 'Язык',
+      languageAuto: 'Автоматически (из браузера)',
+      rulesH1: 'Как играть',
+      rulesIntro: 'Напишите числа от <strong>1 до 100</strong> на поле 10×10, по одному в каждую клетку.',
+      rule1: '<strong>1</strong> можно поставить куда угодно: нажмите на любую клетку.',
+      rule2: 'Каждое следующее число ставится, начиная с клетки последнего написанного числа.',
+      rule3: '<strong>По горизонтали или вертикали</strong> вы перепрыгиваете 2 клетки и попадаете на третью.',
+      rule4: '<strong>По диагонали</strong> вы перепрыгиваете 1 клетку и попадаете на вторую.',
+      rule5: 'Нельзя занимать уже заполненную клетку или выходить за пределы поля.',
+      rule6: 'Если ходы закончились раньше 100 — вы проиграли; дошли до 100 — победили.',
+      diagram: 'Из оранжевой клетки можно прыгнуть на любую из 8 зелёных:',
+      commandsH: 'Кнопки',
+      command1: '<strong>Ходы</strong>: показывает или скрывает клетки, на которые можно прыгнуть.',
+      command2: '<strong>Отменить</strong>: убирает последнее число; отменять можно сколько угодно раз.',
+      command3: '<strong>Новая игра</strong>: начинает заново (во время игры просит подтверждения).',
+      command4: 'Игра сохраняется сама: закройте её, откройте снова и продолжайте с того же места.',
+      keyboardH: 'Клавиатура',
+      key1: ARROWS + ' — перемещение по полю, <kbd>Enter</kbd> или <kbd>Пробел</kbd> — написать число.',
+      key2: '<kbd>Ctrl</kbd>+<kbd>Z</kbd> или <kbd>U</kbd> — отменить, <kbd>M</kbd> — показать/скрыть ходы.',
+      winH: 'Можно ли выиграть всегда?',
+      win: 'Да: с какой бы клетки ни начиналась 1, существует хотя бы один путь до 100. Найти его — другое дело.',
+      privacyH: 'Конфиденциальность',
+      privacy: 'Никаких cookie, отслеживания и внешних сервисов. Ваша игра, рекорд и выбранный язык хранятся только в этом браузере. Язык выбирается по настройкам вашего браузера прямо на устройстве: никакие данные не отправляются.'
+    },
+
+    tr: {
+      name: 'Türkçe',
+      htmlLang: 'tr',
+      title: '100 Oyunu',
+      dedication: 'Spalla 5C sınıfına ithaf edilmiştir',
+      colon: ': ',
+      comma: ', ',
+      statCurrent: 'Sayı',
+      statRemaining: 'Kalan',
+      statBest: 'Rekor',
+      rulesLink: 'Oyun kuralları',
+      rulesTitle: 'Kurallar',
+      boardLabel: '10’a 10 ızgara',
+      controlsLabel: 'Oyun kontrolleri',
+      undo: 'Geri al',
+      hints: 'Hamle',
+      newShort: 'Yeni',
+      newRest: ' oyun',
+      confirm: 'Emin misin?',
+      statusReady: '1’i yazmak için herhangi bir kareye dokun.',
+      statusWon: 'Izgara doldu: 100’de 100!',
+      statusLost: function (next) { return next + ' için hamle kalmadı. Geri al ya da yeni oyuna başla.'; },
+      statusPlaying: function (next, k) { return 'Sıradaki sayı: ' + next + ' — ' + k + ' olası hamle.'; },
+      placed: function (n, pos) { return n + ': ' + pos + '.'; },
+      undone: function (n) { return n + ' geri alındı.'; },
+      invalid: function (n, pos) { return n + ' buraya yazılamaz (' + pos + ').'; },
+      newGame: 'Yeni oyun.',
+      resumed: 'Oyun kaldığı yerden devam ediyor.',
+      position: function (r, c) { return 'satır ' + r + ', sütun ' + c; },
+      cellEmpty: 'boş',
+      cellLegal: 'olası hamle',
+      cellLast: 'son sayı',
+      wonTitle: 'Kazandın!',
+      wonText: '1’den 100’e kadar bütün sayıları yazdın.',
+      lostTitle: 'Hamle kalmadı',
+      lostText: function (n, missing, best, isRecord) {
+        return 'Ulaştığın sayı: ' + n + '. ' +
+          (missing === 1 ? 'Sadece 1 sayı kaldı' : missing + ' sayı kaldı') + '. ' +
+          (isRecord ? 'Yeni rekor!' : 'Rekor: ' + best + '.');
+      },
+      overlayUndo: 'Son hamleyi geri al',
+      overlayNew: 'Yeni oyun',
+      overlayClose: 'Izgaraya bak',
+      back: '← Oyuna dön',
+      language: 'Dil',
+      languageAuto: 'Otomatik (tarayıcı)',
+      rulesH1: 'Nasıl oynanır',
+      rulesIntro: '10×10 ızgaraya <strong>1’den 100’e</strong> kadar sayıları, her kareye bir tane olacak şekilde yaz.',
+      rule1: '<strong>1</strong> istediğin yere gelir: herhangi bir kareye dokun.',
+      rule2: 'Her yeni sayı, en son yazdığın sayının karesinden başlar.',
+      rule3: '<strong>Yatay veya dikey</strong> olarak 2 kare atlar, 3. kareye konarsın.',
+      rule4: '<strong>Çapraz</strong> olarak 1 kare atlar, 2. kareye konarsın.',
+      rule5: 'Dolu bir kareyi yeniden kullanamaz, ızgaranın dışına çıkamazsın.',
+      rule6: '100’den önce hamlen kalmazsa kaybedersin; 100’e ulaşırsan kazanırsın.',
+      diagram: 'Turuncu kareden 8 yeşil kareye atlayabilirsin:',
+      commandsH: 'Düğmeler',
+      command1: '<strong>Hamle</strong>: atlayabileceğin kareleri gösterir ya da gizler.',
+      command2: '<strong>Geri al</strong>: son sayıyı siler; istediğin kadar geri alabilirsin.',
+      command3: '<strong>Yeni oyun</strong>: baştan başlar (oyun sürerken onay ister).',
+      command4: 'Oyun kendiliğinden kaydedilir: kapatıp yeniden açtığında kaldığın yerden devam edersin.',
+      keyboardH: 'Klavye',
+      key1: ARROWS + ' ile ızgarada gezin, <kbd>Enter</kbd> veya <kbd>Boşluk</kbd> ile sayıyı yaz.',
+      key2: 'Geri almak için <kbd>Ctrl</kbd>+<kbd>Z</kbd> veya <kbd>U</kbd>, hamleleri göstermek/gizlemek için <kbd>M</kbd>.',
+      winH: 'Her zaman kazanılabilir mi?',
+      win: 'Evet: 1 nereden başlarsa başlasın, 100’e ulaşan en az bir yol vardır. Onu bulmak ise başka bir hikâye.',
+      privacyH: 'Gizlilik',
+      privacy: 'Çerez yok, takip yok, harici hizmet yok. Oyunun, rekorun ve dil seçimin yalnızca bu tarayıcıda saklanır. Dil, cihazında tarayıcı ayarlarına göre seçilir: hiçbir veri gönderilmez.'
+    },
+
+    id: {
+      name: 'Bahasa Indonesia',
+      htmlLang: 'id',
+      title: 'Permainan 100',
+      dedication: 'Didedikasikan untuk kelas 5C Spalla',
+      colon: ': ',
+      comma: ', ',
+      statCurrent: 'Angka',
+      statRemaining: 'Sisa',
+      statBest: 'Rekor',
+      rulesLink: 'Aturan permainan',
+      rulesTitle: 'Aturan',
+      boardLabel: 'Kisi 10 kali 10',
+      controlsLabel: 'Kontrol permainan',
+      undo: 'Urungkan',
+      hints: 'Langkah',
+      newShort: 'Ulang',
+      newRest: '',
+      confirm: 'Yakin?',
+      statusReady: 'Ketuk kotak mana saja untuk menulis angka 1.',
+      statusWon: 'Kisi penuh: 100 dari 100!',
+      statusLost: function (next) { return 'Tidak ada langkah untuk angka ' + next + '. Urungkan atau mulai permainan baru.'; },
+      statusPlaying: function (next, k) { return 'Tulis angka ' + next + ' — ' + k + ' langkah mungkin.'; },
+      placed: function (n, pos) { return n + ' di ' + pos + '.'; },
+      undone: function (n) { return 'Angka ' + n + ' diurungkan.'; },
+      invalid: function (n, pos) { return 'Angka ' + n + ' tidak bisa ditulis di ' + pos + '.'; },
+      newGame: 'Permainan baru.',
+      resumed: 'Permainan dilanjutkan.',
+      position: function (r, c) { return 'baris ' + r + ', kolom ' + c; },
+      cellEmpty: 'kosong',
+      cellLegal: 'langkah mungkin',
+      cellLast: 'angka terakhir',
+      wonTitle: 'Kamu menang!',
+      wonText: 'Kamu sudah menulis semua angka dari 1 sampai 100.',
+      lostTitle: 'Tidak ada langkah lagi',
+      lostText: function (n, missing, best, isRecord) {
+        return 'Kamu sampai di angka ' + n + ': ' +
+          (missing === 1 ? 'tinggal 1 angka lagi' : 'masih kurang ' + missing + ' angka') + '. ' +
+          (isRecord ? 'Rekor baru!' : 'Rekor: ' + best + '.');
+      },
+      overlayUndo: 'Urungkan langkah terakhir',
+      overlayNew: 'Permainan baru',
+      overlayClose: 'Lihat kisi',
+      back: '← Kembali ke permainan',
+      language: 'Bahasa',
+      languageAuto: 'Otomatis (dari browser)',
+      rulesH1: 'Cara bermain',
+      rulesIntro: 'Tulis angka <strong>1 sampai 100</strong> di kisi 10×10, satu angka per kotak.',
+      rule1: 'Angka <strong>1</strong> boleh di mana saja: ketuk kotak mana pun.',
+      rule2: 'Setiap angka berikutnya berangkat dari kotak angka terakhir yang kamu tulis.',
+      rule3: '<strong>Mendatar atau menurun</strong>: lompati 2 kotak dan mendarat di kotak ke-3.',
+      rule4: '<strong>Diagonal</strong>: lompati 1 kotak dan mendarat di kotak ke-2.',
+      rule5: 'Kotak yang sudah terisi tidak boleh dipakai lagi, dan kamu tidak boleh keluar dari kisi.',
+      rule6: 'Kalau langkahmu habis sebelum 100, kamu kalah; kalau sampai 100, kamu menang.',
+      diagram: 'Dari kotak oranye kamu bisa melompat ke 8 kotak hijau:',
+      commandsH: 'Tombol',
+      command1: '<strong>Langkah</strong>: menampilkan atau menyembunyikan kotak tujuan lompatan.',
+      command2: '<strong>Urungkan</strong>: menghapus angka terakhir; bisa diulang sebanyak yang kamu mau.',
+      command3: '<strong>Ulang</strong>: mulai lagi dari awal (saat permainan berjalan, ada konfirmasi).',
+      command4: 'Permainan tersimpan otomatis: tutup, buka lagi, dan lanjutkan dari posisi terakhir.',
+      keyboardH: 'Keyboard',
+      key1: ARROWS + ' untuk bergerak di kisi, <kbd>Enter</kbd> atau <kbd>Spasi</kbd> untuk menulis angka.',
+      key2: '<kbd>Ctrl</kbd>+<kbd>Z</kbd> atau <kbd>U</kbd> untuk mengurungkan, <kbd>M</kbd> untuk menampilkan/menyembunyikan langkah.',
+      winH: 'Apakah selalu bisa menang?',
+      win: 'Ya: dari kotak mana pun angka 1 dimulai, selalu ada setidaknya satu jalur sampai 100. Menemukannya, itu cerita lain.',
+      privacyH: 'Privasi',
+      privacy: 'Tanpa cookie, tanpa pelacakan, tanpa layanan eksternal. Permainan, rekor, dan pilihan bahasamu hanya tersimpan di browser ini. Bahasa dipilih di perangkatmu berdasarkan pengaturan browser: tidak ada data yang dikirim.'
+    },
+
+    'zh-Hant': {
+      name: '繁體中文',
+      htmlLang: 'zh-Hant',
+      title: '數到 100',
+      dedication: '獻給 Spalla 的 5C 班',
+      colon: '：',
+      comma: '，',
+      statCurrent: '數字',
+      statRemaining: '剩餘',
+      statBest: '最佳',
+      rulesLink: '遊戲規則',
+      rulesTitle: '規則',
+      boardLabel: '10×10 方格',
+      controlsLabel: '遊戲控制',
+      undo: '復原',
+      hints: '走法',
+      newShort: '新遊戲',
+      newRest: '',
+      confirm: '確定？',
+      statusReady: '點選任一格子，寫下 1。',
+      statusWon: '全部填滿：100/100！',
+      statusLost: function (next) { return next + ' 無路可走。請復原或開始新遊戲。'; },
+      statusPlaying: function (next, k) { return '請寫 ' + next + ' — 有 ' + k + ' 種走法。'; },
+      placed: function (n, pos) { return n + ' 寫在' + pos + '。'; },
+      undone: function (n) { return '已復原 ' + n + '。'; },
+      invalid: function (n, pos) { return n + ' 不能寫在' + pos + '。'; },
+      newGame: '新遊戲。',
+      resumed: '已繼續上次的遊戲。',
+      // 台灣與香港「行」「列」的用法和中國大陸相反，用「橫列／直行」避免混淆。
+      position: function (r, c) { return '第 ' + r + ' 橫列、第 ' + c + ' 直行'; },
+      cellEmpty: '空',
+      cellLegal: '可走',
+      cellLast: '最後一個數字',
+      wonTitle: '你贏了！',
+      wonText: '你寫下了從 1 到 100 的所有數字。',
+      lostTitle: '無路可走',
+      lostText: function (n, missing, best, isRecord) {
+        return '你寫到了 ' + n + '：' +
+          (missing === 1 ? '只差 1 個數字' : '還差 ' + missing + ' 個數字') + '。' +
+          (isRecord ? '新紀錄！' : '最佳：' + best + '。');
+      },
+      overlayUndo: '復原上一步',
+      overlayNew: '新遊戲',
+      overlayClose: '查看方格',
+      back: '← 返回遊戲',
+      language: '語言',
+      languageAuto: '自動（依瀏覽器）',
+      rulesH1: '玩法',
+      rulesIntro: '在 10×10 的方格中寫下 <strong>1 到 100</strong>，每格一個數字。',
+      rule1: '<strong>1</strong> 可以寫在任何位置：點選任一格子即可。',
+      rule2: '之後的每個數字都從上一個數字所在的格子出發。',
+      rule3: '<strong>橫向或直向</strong>：跳過 2 格，落在第 3 格。',
+      rule4: '<strong>斜向</strong>：跳過 1 格，落在第 2 格。',
+      rule5: '不能使用已被佔用的格子，也不能跳出方格。',
+      rule6: '寫到 100 之前無路可走就輸了；寫到 100 就贏了。',
+      diagram: '從橘色格子可以跳到 8 個綠色格子：',
+      commandsH: '按鈕',
+      command1: '<strong>走法</strong>：顯示或隱藏可以跳到的格子。',
+      command2: '<strong>復原</strong>：擦掉最後一個數字，可以無限次復原。',
+      command3: '<strong>新遊戲</strong>：從頭開始（遊戲進行中會先確認）。',
+      command4: '遊戲會自動儲存：關閉後再打開，可以從上次的位置繼續。',
+      keyboardH: '鍵盤',
+      key1: '用 ' + ARROWS + ' 在方格中移動，按 <kbd>Enter</kbd> 或 <kbd>空白鍵</kbd> 寫下數字。',
+      key2: '<kbd>Ctrl</kbd>+<kbd>Z</kbd> 或 <kbd>U</kbd> 復原，<kbd>M</kbd> 顯示／隱藏走法。',
+      winH: '總是能贏嗎？',
+      win: '能：無論 1 寫在哪裡，至少有一條路徑能寫到 100。至於能不能找到，那就是另一回事了。',
+      privacyH: '隱私',
+      privacy: '沒有 Cookie，沒有追蹤，沒有外部服務。你的遊戲進度、最佳成績和語言選擇只儲存在這個瀏覽器中。語言根據你的瀏覽器設定在本機上選擇，不會傳送任何資料。'
+    },
+
+    ko: {
+      name: '한국어',
+      htmlLang: 'ko',
+      title: '100 게임',
+      dedication: 'Spalla 5C 반에게 바칩니다',
+      colon: ': ',
+      comma: ', ',
+      statCurrent: '숫자',
+      statRemaining: '남은 칸',
+      statBest: '최고',
+      rulesLink: '게임 규칙',
+      rulesTitle: '규칙',
+      boardLabel: '10×10 격자',
+      controlsLabel: '게임 조작',
+      undo: '되돌리기',
+      hints: '이동',
+      newShort: '새 게임',
+      newRest: '',
+      confirm: '정말요?',
+      // 숫자 뒤의 조사(을/를)는 읽는 법에 따라 달라지므로 피한다.
+      statusReady: '아무 칸이나 눌러 1부터 시작하세요.',
+      statusWon: '격자 완성: 100/100!',
+      statusLost: function (next) { return '숫자 ' + next + ': 더 이상 이동할 수 없습니다. 되돌리거나 새 게임을 시작하세요.'; },
+      statusPlaying: function (next, k) { return '다음 숫자: ' + next + ' — 이동 가능한 칸 ' + k + '곳.'; },
+      placed: function (n, pos) { return pos + '에 ' + n + '.'; },
+      undone: function (n) { return '되돌림: ' + n + '.'; },
+      invalid: function (n, pos) { return pos + '에는 쓸 수 없습니다 (숫자 ' + n + ').'; },
+      newGame: '새 게임.',
+      resumed: '이전 게임을 이어서 합니다.',
+      position: function (r, c) { return r + '행 ' + c + '열'; },
+      cellEmpty: '빈 칸',
+      cellLegal: '이동 가능',
+      cellLast: '마지막 숫자',
+      wonTitle: '승리!',
+      wonText: '1부터 100까지 모든 숫자를 썼습니다.',
+      lostTitle: '더 이상 이동할 수 없습니다',
+      lostText: function (n, missing, best, isRecord) {
+        return n + '까지 도달: ' +
+          (missing === 1 ? '딱 1개 남았습니다' : missing + '개 남았습니다') + '. ' +
+          (isRecord ? '새 기록!' : '최고 기록: ' + best + '.');
+      },
+      overlayUndo: '마지막 수 되돌리기',
+      overlayNew: '새 게임',
+      overlayClose: '격자 보기',
+      back: '← 게임으로 돌아가기',
+      language: '언어',
+      languageAuto: '자동 (브라우저)',
+      rulesH1: '게임 방법',
+      rulesIntro: '10×10 격자에 <strong>1부터 100까지</strong> 숫자를 한 칸에 하나씩 쓰세요.',
+      rule1: '<strong>1</strong>은 원하는 곳에 씁니다. 아무 칸이나 누르세요.',
+      rule2: '다음 숫자는 마지막으로 쓴 숫자의 칸에서 출발합니다.',
+      rule3: '<strong>가로 또는 세로</strong>로는 2칸을 건너뛰어 3번째 칸에 놓습니다.',
+      rule4: '<strong>대각선</strong>으로는 1칸을 건너뛰어 2번째 칸에 놓습니다.',
+      rule5: '이미 쓴 칸은 다시 쓸 수 없고, 격자 밖으로 나갈 수도 없습니다.',
+      rule6: '100 전에 이동할 곳이 없으면 패배, 100까지 쓰면 승리입니다.',
+      diagram: '주황색 칸에서 초록색 8칸으로 이동할 수 있습니다:',
+      commandsH: '버튼',
+      command1: '<strong>이동</strong>: 이동할 수 있는 칸을 보이거나 숨깁니다.',
+      command2: '<strong>되돌리기</strong>: 마지막 숫자를 지웁니다. 몇 번이든 되돌릴 수 있습니다.',
+      command3: '<strong>새 게임</strong>: 처음부터 다시 시작합니다 (게임 중에는 확인을 묻습니다).',
+      command4: '게임은 자동으로 저장됩니다. 닫았다가 다시 열면 이어서 할 수 있습니다.',
+      keyboardH: '키보드',
+      key1: ARROWS + '로 격자를 이동하고, <kbd>Enter</kbd> 또는 <kbd>Space</kbd>로 숫자를 씁니다.',
+      key2: '<kbd>Ctrl</kbd>+<kbd>Z</kbd> 또는 <kbd>U</kbd>로 되돌리기, <kbd>M</kbd>으로 이동 칸 표시/숨기기.',
+      winH: '항상 이길 수 있나요?',
+      win: '네. 1을 어디에 쓰든 100까지 가는 길이 적어도 하나 있습니다. 찾는 건 또 다른 문제지만요.',
+      privacyH: '개인정보',
+      privacy: '쿠키, 추적, 외부 서비스가 없습니다. 게임 진행, 최고 기록, 선택한 언어는 이 브라우저에만 저장됩니다. 언어는 기기에서 브라우저 설정에 따라 선택되며, 어떤 데이터도 전송되지 않습니다.'
     }
+
   };
 
-  var LANGUAGES = ['it', 'en', 'fr', 'es', 'de', 'pt', 'zh', 'ja'];
+  // Ordine del selettore: prima l'originale, poi alfabeti latini, poi gli altri.
+  var LANGUAGES = ['it', 'en', 'fr', 'es', 'de', 'pt', 'nl', 'pl', 'tr', 'id', 'ru', 'zh', 'zh-Hant', 'ja', 'ko'];
+
+  // Titolo della pagina regole ricavato dal titolo tradotto.
+  LANGUAGES.forEach(function (code) {
+    STRINGS[code].pageTitle = STRINGS[code].rulesTitle + ' — ' + STRINGS[code].title;
+  });
 
   // Francese: spazio non separabile prima di : ; ! ? (tipografia francese),
   // così la punteggiatura non va a capo da sola.
@@ -593,10 +1107,19 @@
     });
   })(STRINGS.fr);
 
+  /** zh-Hant, zh-TW, zh-HK, zh-MO -> tradizionale; tutto il resto -> semplificato. */
+  function chineseVariant(parts) {
+    if (parts.indexOf('hant') !== -1) return 'zh-Hant';
+    if (parts.indexOf('hans') !== -1) return 'zh';
+    if (parts.indexOf('tw') !== -1 || parts.indexOf('hk') !== -1 || parts.indexOf('mo') !== -1) return 'zh-Hant';
+    return 'zh';
+  }
+
   /**
    * Sceglie la lingua dall'elenco di preferenze del browser (es.
    * navigator.languages = ['pt-BR', 'en-US']). Confronta solo la lingua
-   * principale ('pt-BR' -> 'pt', 'zh-TW' -> 'zh').
+   * principale ('pt-BR' -> 'pt'); per il cinese distingue tradizionale
+   * (zh-TW, zh-HK, zh-Hant) e semplificato (zh-CN, zh-Hans, zh).
    *   - nessuna preferenza nota  -> italiano (lingua originale del sito)
    *   - preferenze non supportate -> inglese
    */
@@ -606,7 +1129,9 @@
     for (var i = 0; i < list.length; i++) {
       if (typeof list[i] !== 'string' || !list[i]) continue;
       any = true;
-      var base = list[i].toLowerCase().split(/[-_]/)[0];
+      var parts = list[i].toLowerCase().split(/[-_]/);
+      var base = parts[0];
+      if (base === 'zh') return chineseVariant(parts);
       if (Object.prototype.hasOwnProperty.call(STRINGS, base)) return base;
     }
     return any ? FALLBACK_LANG : DEFAULT_LANG;
@@ -670,6 +1195,23 @@
     Array.prototype.forEach.call(doc.querySelectorAll('[data-i18n-html]'), function (el) {
       var v = t[el.getAttribute('data-i18n-html')];
       if (typeof v === 'string') el.innerHTML = v;
+    });
+    // Titolo: testo tradotto con il "100" nel colore d'accento.
+    Array.prototype.forEach.call(doc.querySelectorAll('[data-i18n-accent]'), function (el) {
+      var v = t[el.getAttribute('data-i18n-accent')];
+      if (typeof v !== 'string') return;
+      var at = v.indexOf('100');
+      el.textContent = '';
+      if (at === -1) {
+        el.textContent = v;
+        return;
+      }
+      var num = doc.createElement('span');
+      num.className = 'title-num';
+      num.textContent = '100';
+      el.appendChild(doc.createTextNode(v.slice(0, at)));
+      el.appendChild(num);
+      el.appendChild(doc.createTextNode(v.slice(at + 3)));
     });
     Array.prototype.forEach.call(doc.querySelectorAll('[data-i18n-attr]'), function (el) {
       el.getAttribute('data-i18n-attr').split(';').forEach(function (pair) {
