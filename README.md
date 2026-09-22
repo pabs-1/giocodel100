@@ -1,0 +1,125 @@
+# Gioco del 100
+
+Il classico rompicapo "100 numeri" (*Jumping Numbers*) nel browser: scrivi i
+numeri da 1 a 100 su una griglia 10×10 saltando da una cella all'altra.
+
+**Gioca qui → https://giocodel100.neocities.org/**
+
+HTML, CSS e JavaScript puri: niente build step, dipendenze o CDN. Funziona su
+telefono, tablet e desktop, si installa come app (PWA) e dopo la prima visita
+funziona anche offline.
+
+## Regole
+
+1. Scrivi l'**1** in una cella qualsiasi.
+2. Ogni numero successivo parte dalla cella dell'ultimo numero scritto:
+   - **in orizzontale o verticale** salti 2 celle e atterri sulla 3ª (±3);
+   - **in diagonale** salti 1 cella e atterri sulla 2ª (±2, ±2).
+
+   In tutto sono 8 destinazioni possibili.
+3. Non puoi riusare una cella occupata né uscire dalla griglia.
+4. Se resti senza mosse prima del 100 hai perso; se arrivi a 100 hai vinto.
+
+Da qualunque cella parta l'1 esiste almeno una soluzione completa (lo verifica
+il test con un solver a backtracking).
+
+## Funzioni
+
+- Evidenziazione delle mosse legali, attivabile e disattivabile ("Mosse").
+- Annulla illimitato e "Nuova partita" (con conferma a due tocchi se la
+  partita è in corso).
+- Contatori del numero corrente, delle celle rimaste e del record.
+- Salvataggio automatico in `localStorage`: ricarichi la pagina e riprendi.
+  Se `localStorage` non è disponibile (es. Safari in navigazione privata) si
+  gioca lo stesso, senza salvataggio.
+- Schermate di vittoria e sconfitta; regole in `rules.html` (pulsante "?").
+- Tastiera: frecce per muoversi, <kbd>Invio</kbd>/<kbd>Spazio</kbd> per
+  scrivere, <kbd>Ctrl</kbd>+<kbd>Z</kbd> o <kbd>U</kbd> per annullare,
+  <kbd>M</kbd> per le mosse.
+
+### Dettagli per il mobile
+
+- La griglia è il quadrato più grande che sta nello spazio libero (container
+  query, con fallback su `min(100vw, 100dvh)`), senza scroll orizzontale;
+  `100dvh` evita che le barre di Safari la coprano, `env(safe-area-inset-*)`
+  gestisce notch e home indicator.
+- `touch-action: manipulation` + meta viewport contro doppio-tap-zoom e ritardo
+  di 300 ms; niente menu da long-press né selezione del testo sulla griglia.
+- Input con Pointer Events (fallback a `click` solo dove mancano), quindi un
+  tocco non genera mai due mosse. Il tocco si aggancia alla mossa legale più
+  vicina: le celle su un telefono sono ~33 px, ma il bersaglio effettivo di
+  ogni mossa supera i 44 px.
+- Il numero si scrive al `pointerdown`; il `click` sintetico che segue non può
+  "premere" i pulsanti della schermata di fine partita comparsa sotto il dito.
+
+## Struttura
+
+| File | Cosa contiene |
+| --- | --- |
+| `index.html` | Pagina del gioco |
+| `rules.html` | Regole |
+| `style.css` | Stili (tema chiaro/scuro automatico) |
+| `logic.js` | Logica pura: mosse legali, stato, undo, stallo, solver. Nessun DOM |
+| `game.js` | Interfaccia: render, input, tastiera, salvataggio |
+| `sw.js` | Service worker cache-first per il gioco offline |
+| `manifest.json`, `icons/` | PWA |
+| `tests/` | Test (non vengono pubblicati) |
+| `deploy.sh` | Upload su Neocities |
+
+## Giocare in locale
+
+Basta un qualsiasi server statico nella cartella del progetto, ad esempio:
+
+```sh
+python3 -m http.server 8000
+# poi apri http://localhost:8000
+```
+
+(Aprire `index.html` direttamente con `file://` funziona, ma senza service
+worker.)
+
+## Test
+
+```sh
+node tests/logic.test.js
+```
+
+Nessun framework: controlla le mosse legali ad angoli, bordi e centro, lo
+stallo, che l'undo ripristini esattamente lo stato precedente e che esista
+una soluzione da 100 partendo da ognuna delle 100 celle.
+
+Test end-to-end facoltativo in Chromium (serve [Playwright](https://playwright.dev)):
+
+```sh
+npm install --no-save playwright && npx playwright install chromium
+node tests/browser.test.js
+```
+
+Gioca partite complete con tocchi reali su viewport di telefoni, tablet e
+desktop; verifica layout, tastiera, overlay, `localStorage` che lancia
+eccezioni, service worker offline e console senza errori.
+
+## Deploy su Neocities
+
+Ogni push su `main` lancia `.github/workflows/deploy.yml`, che esegue i test e
+poi `deploy.sh`. Lo script carica solo i file del sito (niente `.git`,
+`.github`, README, test o script) tramite l'API
+`https://neocities.org/api/upload` e marca la cache del service worker con
+l'hash del commit, così i visitatori ricevono la versione nuova.
+
+**Secret su GitHub** (una volta sola): repository → *Settings* → *Secrets and
+variables* → *Actions* → *New repository secret*, nome `NEOCITIES_API_KEY`,
+valore la chiave presa da Neocities → *Settings* → *API*. Oppure:
+
+```sh
+gh secret set NEOCITIES_API_KEY --repo pabs-1/giocodel100
+```
+
+**Deploy dal tuo computer:**
+
+```sh
+export NEOCITIES_API_KEY='la-tua-chiave'
+./deploy.sh
+```
+
+La chiave non va mai scritta in un file del repository.
