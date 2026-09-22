@@ -1,0 +1,123 @@
+<!doctype html>
+<!-- Generato da tools/build-pages.js a partire da /rules.html: non modificare a mano. -->
+<html lang="pt" data-i18n-lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title data-i18n="pageTitle">Regras — O jogo do 100</title>
+  <!-- seo:start -->
+  <meta name="description" content="Como jogar: Escreva os números de 1 a 100 no tabuleiro 10×10, um por casa. Na horizontal ou na vertical, salta 2 casas e cai na 3.ª. Na diagonal, salta 1 casa e cai na 2.ª.">
+  <link rel="canonical" href="https://giocodel100.neocities.org/pt/rules.html">
+  <link rel="alternate" hreflang="it" href="https://giocodel100.neocities.org/it/rules.html">
+  <link rel="alternate" hreflang="en" href="https://giocodel100.neocities.org/en/rules.html">
+  <link rel="alternate" hreflang="fr" href="https://giocodel100.neocities.org/fr/rules.html">
+  <link rel="alternate" hreflang="es" href="https://giocodel100.neocities.org/es/rules.html">
+  <link rel="alternate" hreflang="de" href="https://giocodel100.neocities.org/de/rules.html">
+  <link rel="alternate" hreflang="pt" href="https://giocodel100.neocities.org/pt/rules.html">
+  <link rel="alternate" hreflang="nl" href="https://giocodel100.neocities.org/nl/rules.html">
+  <link rel="alternate" hreflang="pl" href="https://giocodel100.neocities.org/pl/rules.html">
+  <link rel="alternate" hreflang="tr" href="https://giocodel100.neocities.org/tr/rules.html">
+  <link rel="alternate" hreflang="id" href="https://giocodel100.neocities.org/id/rules.html">
+  <link rel="alternate" hreflang="ru" href="https://giocodel100.neocities.org/ru/rules.html">
+  <link rel="alternate" hreflang="zh-Hans" href="https://giocodel100.neocities.org/zh-hans/rules.html">
+  <link rel="alternate" hreflang="zh-Hant" href="https://giocodel100.neocities.org/zh-hant/rules.html">
+  <link rel="alternate" hreflang="ja" href="https://giocodel100.neocities.org/ja/rules.html">
+  <link rel="alternate" hreflang="ko" href="https://giocodel100.neocities.org/ko/rules.html">
+  <link rel="alternate" hreflang="x-default" href="https://giocodel100.neocities.org/rules.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="O jogo do 100">
+  <meta property="og:title" content="Regras — O jogo do 100">
+  <meta property="og:description" content="Como jogar: Escreva os números de 1 a 100 no tabuleiro 10×10, um por casa. Na horizontal ou na vertical, salta 2 casas e cai na 3.ª. Na diagonal, salta 1 casa e cai na 2.ª.">
+  <meta property="og:url" content="https://giocodel100.neocities.org/pt/rules.html">
+  <meta property="og:image" content="https://giocodel100.neocities.org/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="O jogo do 100">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:locale:alternate" content="it_IT">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="fr_FR">
+  <meta property="og:locale:alternate" content="es_ES">
+  <meta property="og:locale:alternate" content="de_DE">
+  <meta property="og:locale:alternate" content="nl_NL">
+  <meta property="og:locale:alternate" content="pl_PL">
+  <meta property="og:locale:alternate" content="tr_TR">
+  <meta property="og:locale:alternate" content="id_ID">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:locale:alternate" content="zh_TW">
+  <meta property="og:locale:alternate" content="ja_JP">
+  <meta property="og:locale:alternate" content="ko_KR">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- seo:end -->
+  <meta name="theme-color" content="#f6f1e7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1b1a17" media="(prefers-color-scheme: dark)">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <main class="rules">
+    <div class="rules-top">
+      <a class="btn back" href="./" data-i18n="back">← Voltar ao jogo</a>
+      <label class="lang-picker">
+        <span data-i18n="language">Idioma</span>
+        <select id="lang-select" class="btn"></select>
+      </label>
+    </div>
+
+    <h1 data-i18n="rulesH1">Como jogar</h1>
+    <p data-i18n-html="rulesIntro">Escreva os números de <strong>1 a 100</strong> no tabuleiro 10×10, um por casa.</p>
+
+    <ul>
+      <li data-i18n-html="rule1">O <strong>1</strong> vai onde quiser: toque em qualquer casa.</li>
+      <li data-i18n-html="rule2">Cada número seguinte parte da casa do último número escrito.</li>
+      <li data-i18n-html="rule3"><strong>Na horizontal ou na vertical</strong>, salta 2 casas e cai na 3.ª.</li>
+      <li data-i18n-html="rule4"><strong>Na diagonal</strong>, salta 1 casa e cai na 2.ª.</li>
+      <li data-i18n-html="rule5">Não pode usar uma casa ocupada nem sair do tabuleiro.</li>
+      <li data-i18n-html="rule6">Se ficar sem jogadas antes do 100, perde; se chegar ao 100, ganha.</li>
+    </ul>
+
+    <p data-i18n="diagram">A partir da casa laranja pode saltar para as 8 casas verdes:</p>
+    <div class="move-diagram" aria-hidden="true">
+      <span></span><span></span><span></span><span class="to"></span><span></span><span></span><span></span>
+      <span></span><span class="to"></span><span></span><span></span><span></span><span class="to"></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      <span class="to"></span><span></span><span></span><span class="from"></span><span></span><span></span><span class="to"></span>
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span class="to"></span><span></span><span></span><span></span><span class="to"></span><span></span>
+      <span></span><span></span><span></span><span class="to"></span><span></span><span></span><span></span>
+    </div>
+
+    <h2 data-i18n="commandsH">Comandos</h2>
+    <ul>
+      <li data-i18n-html="command1"><strong>Jogadas</strong>: mostra ou esconde as casas para onde pode saltar.</li>
+      <li data-i18n-html="command2"><strong>Desfazer</strong>: retira o último número; pode desfazer quantas vezes quiser.</li>
+      <li data-i18n-html="command3"><strong>Novo jogo</strong>: recomeça do zero (pede confirmação durante um jogo).</li>
+      <li data-i18n-html="command4">O jogo não se perde: feche, volte a abrir e continue de onde parou.</li>
+    </ul>
+
+    <h2 data-i18n="keyboardH">Teclado</h2>
+    <ul>
+      <li data-i18n-html="key1"><kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd> para se mover no tabuleiro, <kbd>Enter</kbd> ou <kbd>Espaço</kbd> para escrever o número.</li>
+      <li data-i18n-html="key2"><kbd>Ctrl</kbd>+<kbd>Z</kbd> ou <kbd>U</kbd> para desfazer, <kbd>M</kbd> para mostrar/esconder as jogadas.</li>
+    </ul>
+
+    <h2 data-i18n="winH">Dá sempre para ganhar?</h2>
+    <p data-i18n="win">Sim: seja qual for a casa do 1, existe pelo menos um percurso que chega ao 100. Encontrá-lo é outra história.</p>
+
+    <h2 data-i18n="privacyH">Privacidade</h2>
+    <p data-i18n="privacy">Sem cookies, sem rastreamento, sem serviços externos. O jogo, o recorde e o idioma escolhido ficam apenas neste navegador. O idioma é escolhido a partir das preferências do navegador, no seu dispositivo: nada é enviado.</p>
+
+    <!-- langs:start -->
+    <nav class="lang-links" aria-label="Idioma" data-i18n-attr="aria-label:language">
+      <a href="../it/rules.html" lang="it" hreflang="it">Italiano</a> <span aria-hidden="true">·</span> <a href="../en/rules.html" lang="en" hreflang="en">English</a> <span aria-hidden="true">·</span> <a href="../fr/rules.html" lang="fr" hreflang="fr">Français</a> <span aria-hidden="true">·</span> <a href="../es/rules.html" lang="es" hreflang="es">Español</a> <span aria-hidden="true">·</span> <a href="../de/rules.html" lang="de" hreflang="de">Deutsch</a> <span aria-hidden="true">·</span> <a href="../pt/rules.html" lang="pt" hreflang="pt" aria-current="page">Português</a> <span aria-hidden="true">·</span> <a href="../nl/rules.html" lang="nl" hreflang="nl">Nederlands</a> <span aria-hidden="true">·</span> <a href="../pl/rules.html" lang="pl" hreflang="pl">Polski</a> <span aria-hidden="true">·</span> <a href="../tr/rules.html" lang="tr" hreflang="tr">Türkçe</a> <span aria-hidden="true">·</span> <a href="../id/rules.html" lang="id" hreflang="id">Bahasa Indonesia</a> <span aria-hidden="true">·</span> <a href="../ru/rules.html" lang="ru" hreflang="ru">Русский</a> <span aria-hidden="true">·</span> <a href="../zh-hans/rules.html" lang="zh-Hans" hreflang="zh-Hans">简体中文</a> <span aria-hidden="true">·</span> <a href="../zh-hant/rules.html" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a> <span aria-hidden="true">·</span> <a href="../ja/rules.html" lang="ja" hreflang="ja">日本語</a> <span aria-hidden="true">·</span> <a href="../ko/rules.html" lang="ko" hreflang="ko">한국어</a>
+    </nav>
+    <!-- langs:end -->
+
+    <p class="dedica" data-i18n="dedication">Dedicado à turma 5C do Spalla</p>
+  </main>
+  <script src="../i18n.js"></script>
+</body>
+</html>
