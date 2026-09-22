@@ -60,6 +60,36 @@ dedica sono tradotti; manifest e icona dell'app installata restano "Gioco del
 100". Per aggiungere una lingua basta un nuovo dizionario in `i18n.js`:
 `tests/i18n.test.js` controlla che abbia tutte le chiavi.
 
+## Motori di ricerca
+
+Ogni lingua ha il suo indirizzo, con il testo già tradotto nell'HTML, così
+i motori di ricerca possono mostrarla a chi cerca in quella lingua:
+
+| Pagina | Indirizzo |
+| --- | --- |
+| Gioco, lingua dal browser (`x-default`) | `/` |
+| Gioco in una lingua | `/it/`, `/en/`, `/fr/`, … `/zh-hans/`, `/zh-hant/`, `/ja/`, `/ko/` |
+| Regole | `/rules.html`, `/fr/rules.html`, … |
+
+- Su `/fr/` vince la lingua dell'indirizzo; la partita salvata è la stessa in
+  tutte le lingue.
+- Ogni pagina ha titolo e descrizione tradotti, `canonical`, `hreflang` verso
+  tutte le altre lingue, Open Graph (anteprima quando si condivide il link,
+  `og-image.png`) e dati strutturati schema.org (`WebApplication`).
+- `sitemap.xml` elenca tutte le 32 pagine con le alternative linguistiche;
+  `robots.txt` la dichiara; `not_found.html` è la pagina 404 (non indicizzata).
+
+Le cartelle delle lingue e la sitemap **si generano** da `index.html` e
+`rules.html` (le sorgenti, da modificare a mano):
+
+```sh
+node tools/build-pages.js           # dopo ogni modifica a index.html, rules.html o i18n.js
+node tools/build-pages.js --check   # la CI fallisce se ci si è dimenticati
+```
+
+I file generati stanno nel repository: quello che si vede su GitHub è
+esattamente il sito pubblicato.
+
 ## Dettagli per il mobile
 
 - La griglia è il quadrato più grande che sta nello spazio libero (container
@@ -87,6 +117,9 @@ dedica sono tradotti; manifest e icona dell'app installata restano "Gioco del
 | `game.js` | Interfaccia: render, input, tastiera, salvataggio |
 | `sw.js` | Service worker cache-first per il gioco offline |
 | `manifest.json`, `icons/` | PWA |
+| `it/`, `en/`, … `ko/`, `sitemap.xml` | Pagine per lingua e sitemap, generate da `tools/build-pages.js` |
+| `robots.txt`, `not_found.html`, `og-image.png` | Motori di ricerca, pagina 404, anteprima per i social |
+| `tools/` | Generatore delle pagine, icone e anteprima (non pubblicati) |
 | `tests/` | Test (non vengono pubblicati) |
 | `deploy.sh` | Upload su Neocities |
 
@@ -107,12 +140,15 @@ worker.)
 ```sh
 node tests/logic.test.js
 node tests/i18n.test.js
+node tests/seo.test.js
 ```
 
 Nessun framework: controlla le mosse legali ad angoli, bordi e centro, lo
 stallo, che l'undo ripristini esattamente lo stato precedente e che esista
 una soluzione da 100 partendo da ognuna delle 100 celle; per le traduzioni,
-la scelta della lingua e che ogni dizionario sia completo.
+la scelta della lingua e che ogni dizionario sia completo; per il SEO, che
+ogni pagina abbia titolo, descrizione, canonical, hreflang reciproci, Open
+Graph e dati strutturati, senza testo italiano rimasto nelle altre lingue.
 
 Test end-to-end facoltativo in Chromium (serve [Playwright](https://playwright.dev)):
 
