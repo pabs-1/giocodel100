@@ -97,6 +97,7 @@
   var overlayUndo = $('overlay-undo');
   var overlayNew = $('overlay-new');
   var overlayClose = $('overlay-close');
+  var appEl = document.querySelector('.app');
   var newLabel = btnNew.innerHTML;
 
   // ---------------------------------------------------------------------
@@ -175,7 +176,7 @@
       if (delayOverlay) overlayTimer = setTimeout(function () { showOverlay(st); }, 350);
       else showOverlay(st);
     } else if (!over) {
-      hideOverlay(false);
+      hideOverlay();
     }
   }
 
@@ -221,6 +222,9 @@
     }
     state = next;
     focusIndex = index;
+    // Un'altra scheda può aver alzato il record nel frattempo: si confronta
+    // sempre con quello salvato, così il record non può mai scendere.
+    best = Math.max(best, loadBest());
     if (state.path.length > best) {
       best = state.path.length;
       newRecordThisGame = true;
@@ -299,22 +303,32 @@
       lastFocusBeforeOverlay = document.activeElement;
       overlayShownAt = now();
       overlay.hidden = false;
+      // Sfondo non raggiungibile (né con Tab né dai lettori di schermo).
+      appEl.inert = true;
+      appEl.setAttribute('aria-hidden', 'true');
       overlayNew.focus();
     }
   }
 
-  function hideOverlay(restoreFocus) {
+  function hideOverlay() {
     if (overlay.hidden) return;
+    var hadFocus = overlay.contains(document.activeElement);
     overlay.hidden = true;
-    if (restoreFocus && lastFocusBeforeOverlay && lastFocusBeforeOverlay.focus) {
-      lastFocusBeforeOverlay.focus();
+    appEl.inert = false;
+    appEl.removeAttribute('aria-hidden');
+    // Il focus era su un pulsante ora nascosto: lo si riporta dov'era prima
+    // o, se non c'è più, sulla cella attiva della griglia.
+    if (hadFocus) {
+      var target = lastFocusBeforeOverlay;
+      if (!target || !target.focus || !document.body.contains(target) || target === document.body) target = cells[focusIndex];
+      target.focus();
     }
     lastFocusBeforeOverlay = null;
   }
 
   function dismissOverlay() {
     overlayDismissed = true;
-    hideOverlay(true);
+    hideOverlay();
     announce('');
   }
 
@@ -462,16 +476,47 @@
     }
   });
 
+  /**
+   * Il tasto corrisponde alla lettera? Con tastiere latine (anche AZERTY o
+   * QWERTZ) vale la lettera prodotta; con tastiere non latine (russa,
+   * coreana…) e.key è 'я', 'ㅡ'… e si usa la posizione fisica del tasto.
+   */
+  function isLetterKey(e, letter) {
+    var key = e.key || '';
+    if (/^[a-z]$/i.test(key)) return key.toLowerCase() === letter;
+    return e.code === 'Key' + letter.toUpperCase();
+  }
+
   document.addEventListener('keydown', function (e) {
-    if (!overlay.hidden) return;
-    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && (e.key === 'z' || e.key === 'Z')) {
+    if (!overlay.hidden || e.isComposing) return;
+    var plain = !e.ctrlKey && !e.metaKey && !e.altKey;
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey && isLetterKey(e, 'z')) {
       e.preventDefault();
       undoMove();
-    } else if (!e.ctrlKey && !e.metaKey && !e.altKey && (e.key === 'u' || e.key === 'U' || e.key === 'Backspace')) {
+    } else if (plain && (isLetterKey(e, 'u') || e.key === 'Backspace')) {
       e.preventDefault();
       undoMove();
-    } else if (!e.ctrlKey && !e.metaKey && !e.altKey && (e.key === 'm' || e.key === 'M')) {
+    } else if (plain && isLetterKey(e, 'm')) {
       toggleHints();
+    }
+  });
+
+  // Più schede aperte (es. app installata + browser): quando un'altra scheda
+  // salva, questa si allinea invece di sovrascriverla alla mossa successiva.
+  // L'evento "storage" è locale al browser: non passa nulla in rete.
+  window.addEventListener('storage', function (e) {
+    if (e.key === KEYS.best) {
+      best = Math.max(best, loadBest());
+      statBest.textContent = String(best);
+    } else if (e.key === KEYS.save) {
+      state = loadState();
+      best = Math.max(best, loadBest(), state.path.length);
+      focusIndex = state.path.length ? L.lastCell(state) : focusIndex;
+      overlayDismissed = false;
+      newRecordThisGame = false;
+      resetConfirm();
+      render();
+      announce(state.path.length ? T.resumed : '');
     }
   });
 
@@ -482,11 +527,11 @@
   btnHints.addEventListener('click', toggleHints);
   btnNew.addEventListener('click', requestNewGame);
   overlayUndo.addEventListener('click', overlayAction(function () {
-    hideOverlay(false);
+    hideOverlay();
     undoMove();
   }));
   overlayNew.addEventListener('click', overlayAction(function () {
-    hideOverlay(false);
+    hideOverlay();
     newGame();
   }));
   overlayClose.addEventListener('click', overlayAction(dismissOverlay));
