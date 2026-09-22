@@ -142,7 +142,8 @@ function translate(html, d) {
     for (const pair of spec.split(';')) {
       const [attr, key] = pair.split(':');
       if (typeof d[key] !== 'string') continue;
-      tag = tag.replace(new RegExp(`(\\s${attr}=")[^"]*(")`), `$1${esc(d[key])}$2`);
+      // Funzione di sostituzione: un "$" nella traduzione resta un "$".
+      tag = tag.replace(new RegExp(`(\\s${attr}=")[^"]*(")`), (_, a, b) => a + esc(d[key]) + b);
     }
     return tag;
   });
