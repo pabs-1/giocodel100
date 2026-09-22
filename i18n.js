@@ -50,6 +50,9 @@
     it: {
       name: 'Italiano',
       htmlLang: 'it',
+      noscript: 'Per giocare serve JavaScript.',
+      ogLocale: 'it_IT',
+      metaDescription: 'Il gioco del 100: scrivi i numeri da 1 a 100 su una griglia 10×10 saltando 2 caselle in orizzontale o verticale e 1 in diagonale. Gratis e senza pubblicità.',
       title: 'Gioco del 100',
       dedication: 'Dedicato alla 5C dello Spalla',
       colon: ': ',
@@ -119,6 +122,9 @@
     en: {
       name: 'English',
       htmlLang: 'en',
+      noscript: 'JavaScript is required to play.',
+      ogLocale: 'en_US',
+      metaDescription: 'The Game of 100: write the numbers 1 to 100 on a 10×10 grid, skipping 2 squares across or down and 1 diagonally. A free puzzle with no ads and no tracking.',
       title: 'The Game of 100',
       dedication: 'Dedicated to class 5C at the Spalla',
       colon: ': ',
@@ -188,6 +194,9 @@
     fr: {
       name: 'Français',
       htmlLang: 'fr',
+      noscript: 'JavaScript est nécessaire pour jouer.',
+      ogLocale: 'fr_FR',
+      metaDescription: 'Le jeu du 100 : écrivez les nombres de 1 à 100 sur une grille 10×10 en sautant 2 cases en ligne droite et 1 en diagonale. Casse-tête gratuit, sans pub.',
       title: 'Le jeu du 100',
       dedication: 'Dédié à la classe 5C du Spalla',
       colon: ' : ',
@@ -257,6 +266,9 @@
     es: {
       name: 'Español',
       htmlLang: 'es',
+      noscript: 'Para jugar se necesita JavaScript.',
+      ogLocale: 'es_ES',
+      metaDescription: 'El juego del 100: escribe los números del 1 al 100 en una cuadrícula de 10×10 saltando 2 casillas en línea recta y 1 en diagonal. Gratis y sin anuncios.',
       title: 'El juego del 100',
       dedication: 'Dedicado a la clase 5C del Spalla',
       colon: ': ',
@@ -326,6 +338,9 @@
     de: {
       name: 'Deutsch',
       htmlLang: 'de',
+      noscript: 'Zum Spielen wird JavaScript benötigt.',
+      ogLocale: 'de_DE',
+      metaDescription: 'Das Spiel der 100: Schreibe die Zahlen 1 bis 100 in ein 10×10-Raster und überspringe dabei 2 Felder gerade oder 1 diagonal. Kostenlos und ohne Werbung.',
       title: 'Das Spiel der 100',
       dedication: 'Gewidmet der Klasse 5C des Spalla',
       colon: ': ',
@@ -396,6 +411,9 @@
     pt: {
       name: 'Português',
       htmlLang: 'pt',
+      noscript: 'É preciso JavaScript para jogar.',
+      ogLocale: 'pt_BR',
+      metaDescription: 'O jogo do 100: escreva os números de 1 a 100 num tabuleiro 10×10 saltando 2 casas em linha reta e 1 na diagonal. Quebra-cabeça grátis e sem anúncios.',
       title: 'O jogo do 100',
       dedication: 'Dedicado à turma 5C do Spalla',
       colon: ': ',
@@ -465,6 +483,9 @@
     zh: {
       name: '简体中文',
       htmlLang: 'zh-Hans',
+      noscript: '需要启用 JavaScript 才能玩。',
+      ogLocale: 'zh_CN',
+      metaDescription: '数到 100：在 10×10 方格中依次写下 1 到 100，横竖跳过 2 格，斜向跳过 1 格。免费益智游戏，无广告。',
       title: '数到 100',
       dedication: '献给 Spalla 的 5C 班',
       colon: '：',
@@ -534,6 +555,9 @@
     ja: {
       name: '日本語',
       htmlLang: 'ja',
+      noscript: '遊ぶには JavaScript が必要です。',
+      ogLocale: 'ja_JP',
+      metaDescription: '100 マスゲーム：10×10 のマス目に 1 から 100 までの数字を書くパズル。縦横は 2 マス、斜めは 1 マス飛ばして進みます。無料・広告なし。',
       title: '100 マスゲーム',
       dedication: 'Spalla の 5C クラスに捧ぐ',
       colon: '：',
@@ -603,6 +627,9 @@
     nl: {
       name: 'Nederlands',
       htmlLang: 'nl',
+      noscript: 'Om te spelen is JavaScript nodig.',
+      ogLocale: 'nl_NL',
+      metaDescription: 'Het spel van 100: schrijf de getallen 1 tot en met 100 in een rooster van 10×10 en sla 2 vakjes recht of 1 diagonaal over. Gratis puzzel zonder reclame.',
       title: 'Het spel van 100',
       dedication: 'Opgedragen aan klas 5C van het Spalla',
       colon: ': ',
@@ -672,6 +699,9 @@
     pl: {
       name: 'Polski',
       htmlLang: 'pl',
+      noscript: 'Do gry potrzebny jest JavaScript.',
+      ogLocale: 'pl_PL',
+      metaDescription: 'Gra w 100: wpisz liczby od 1 do 100 na planszy 10×10, przeskakując 2 pola w linii prostej lub 1 po skosie. Darmowa łamigłówka bez reklam.',
       title: 'Gra w 100',
       dedication: 'Dedykowane klasie 5C ze Spalla',
       colon: ': ',
@@ -742,6 +772,9 @@
     ru: {
       name: 'Русский',
       htmlLang: 'ru',
+      noscript: 'Для игры нужен JavaScript.',
+      ogLocale: 'ru_RU',
+      metaDescription: 'Игра до 100: напишите числа от 1 до 100 на поле 10×10, перепрыгивая 2 клетки по прямой или 1 по диагонали. Бесплатная головоломка без рекламы.',
       title: 'Игра до 100',
       dedication: 'Посвящается классу 5C из «Spalla»',
       colon: ': ',
@@ -811,6 +844,9 @@
     tr: {
       name: 'Türkçe',
       htmlLang: 'tr',
+      noscript: 'Oynamak için JavaScript gerekli.',
+      ogLocale: 'tr_TR',
+      metaDescription: '100 Oyunu: 1’den 100’e kadar sayıları 10×10 ızgaraya yaz; düz giderken 2, çaprazda 1 kare atla. Reklamsız, ücretsiz bir bulmaca.',
       title: '100 Oyunu',
       dedication: 'Spalla 5C sınıfına ithaf edilmiştir',
       colon: ': ',
@@ -880,6 +916,9 @@
     id: {
       name: 'Bahasa Indonesia',
       htmlLang: 'id',
+      noscript: 'Perlu JavaScript untuk bermain.',
+      ogLocale: 'id_ID',
+      metaDescription: 'Permainan 100: tulis angka 1 sampai 100 di kisi 10×10 dengan melompati 2 kotak lurus atau 1 kotak diagonal. Teka-teki gratis tanpa iklan.',
       title: 'Permainan 100',
       dedication: 'Didedikasikan untuk kelas 5C Spalla',
       colon: ': ',
@@ -949,6 +988,9 @@
     'zh-Hant': {
       name: '繁體中文',
       htmlLang: 'zh-Hant',
+      noscript: '需要啟用 JavaScript 才能玩。',
+      ogLocale: 'zh_TW',
+      metaDescription: '數到 100：在 10×10 方格中依序寫下 1 到 100，橫直跳過 2 格，斜向跳過 1 格。免費益智遊戲，無廣告。',
       title: '數到 100',
       dedication: '獻給 Spalla 的 5C 班',
       colon: '：',
@@ -1019,6 +1061,9 @@
     ko: {
       name: '한국어',
       htmlLang: 'ko',
+      noscript: '게임을 하려면 JavaScript가 필요합니다.',
+      ogLocale: 'ko_KR',
+      metaDescription: '100 게임: 10×10 격자에 1부터 100까지 숫자를 쓰는 퍼즐. 가로세로는 2칸, 대각선은 1칸을 건너뜁니다. 무료, 광고 없음.',
       title: '100 게임',
       dedication: 'Spalla 5C 반에게 바칩니다',
       colon: ': ',
@@ -1137,6 +1182,13 @@
     return any ? FALLBACK_LANG : DEFAULT_LANG;
   }
 
+  var ORIGIN = 'https://giocodel100.neocities.org/';
+
+  /** Cartella delle pagine di una lingua: 'fr', 'zh-hans', 'zh-hant'… */
+  function dirFor(code) {
+    return STRINGS[code].htmlLang.toLowerCase();
+  }
+
   function isSupported(lang) {
     return typeof lang === 'string' && LANGUAGES.indexOf(lang) !== -1;
   }
@@ -1150,7 +1202,9 @@
     DEFAULT_LANG: DEFAULT_LANG,
     FALLBACK_LANG: FALLBACK_LANG,
     STORAGE_KEY: STORAGE_KEY,
+    ORIGIN: ORIGIN,
     pickLanguage: pickLanguage,
+    dirFor: dirFor,
     lang: DEFAULT_LANG,
     strings: STRINGS[DEFAULT_LANG],
     start: start,
@@ -1222,10 +1276,17 @@
     });
   }
 
+  // Radice del sito = cartella di i18n.js (serve alle pagine in /fr/, /de/…).
+  var SCRIPT_SRC = typeof document !== 'undefined' && document.currentScript ? document.currentScript.src : '';
+
   function start(win) {
     var doc = win.document;
     var choice = readChoice();
-    setLanguage(choice || pickLanguage(browserPreferences(win.navigator)));
+    // Le pagine /fr/, /de/… hanno la lingua fissata dall'indirizzo: vince
+    // su preferenze e scelta salvata. La radice / sceglie dal browser.
+    var fixed = doc.documentElement.getAttribute('data-i18n-lang');
+    if (!isSupported(fixed)) fixed = null;
+    setLanguage(fixed || choice || pickLanguage(browserPreferences(win.navigator)));
     apply(doc);
 
     // Selettore della lingua (pagina delle regole).
@@ -1243,10 +1304,17 @@
         opt.textContent = STRINGS[code].name;
         select.appendChild(opt);
       });
-      select.value = choice || '';
+      select.value = fixed || choice || '';
       select.addEventListener('change', function () {
         var value = isSupported(select.value) ? select.value : '';
         writeChoice(value);
+        if (fixed && SCRIPT_SRC) {
+          // Pagina con lingua nell'indirizzo: si va alla stessa pagina
+          // nell'altra lingua (o alla radice per "Automatica").
+          var page = win.location.pathname.split('/').pop();
+          win.location.href = new URL((value ? dirFor(value) + '/' : '') + page, SCRIPT_SRC).href;
+          return;
+        }
         setLanguage(value || pickLanguage(browserPreferences(win.navigator)));
         apply(doc);
       });
@@ -1255,7 +1323,7 @@
     // Tornando indietro, il browser può mostrare la pagina dalla cache
     // (bfcache) con la lingua vecchia: se la scelta è cambiata, ricarica.
     win.addEventListener('pageshow', function (e) {
-      if (!e.persisted) return;
+      if (!e.persisted || fixed) return;
       var now = readChoice() || pickLanguage(browserPreferences(win.navigator));
       if (now !== api.lang) win.location.reload();
     });

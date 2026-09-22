@@ -8,6 +8,9 @@
   'use strict';
 
   var L = window.GameLogic;
+  // sw.js sta nella radice del sito, accanto a game.js, anche per le pagine
+  // tradotte in /fr/, /de/…: il suo scope copre così tutto il sito.
+  var SW_URL = document.currentScript ? new URL('sw.js', document.currentScript.src).href : 'sw.js';
   var T = window.I18N.strings;
   var SIZE = L.SIZE;
   var TOTAL = L.TOTAL;
@@ -499,7 +502,7 @@
   if ('serviceWorker' in navigator &&
       (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('sw.js').catch(function () { /* offline non disponibile */ });
+      navigator.serviceWorker.register(SW_URL).catch(function () { /* offline non disponibile */ });
     });
   }
 })();
