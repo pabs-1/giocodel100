@@ -1,0 +1,32 @@
+name: Deploy su Neocities
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: neocities-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test della logica di gioco
+        run: node tests/logic.test.js
+
+      - name: Upload su Neocities
+        env:
+          NEOCITIES_API_KEY: ${{ secrets.NEOCITIES_API_KEY }}
+        run: |
+          if [ -z "$NEOCITIES_API_KEY" ]; then
+            echo "::error::Secret NEOCITIES_API_KEY mancante: Settings → Secrets and variables → Actions → New repository secret"
+            exit 1
+          fi
+          ./deploy.sh
