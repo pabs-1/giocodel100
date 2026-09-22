@@ -1,0 +1,18 @@
+# Sistema / editor
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Node (solo per i test opzionali in browser)
+node_modules/
+package-lock.json
+
+# Segreti: la chiave Neocities va SOLO in variabile d'ambiente o nei secret GitHub
+.env
+.env.*
+*.key
+
+# Output dei test
+screenshots/
