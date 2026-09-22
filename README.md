@@ -33,11 +33,31 @@ il test con un solver a backtracking).
   Se `localStorage` non è disponibile (es. Safari in navigazione privata) si
   gioca lo stesso, senza salvataggio.
 - Schermate di vittoria e sconfitta; regole in `rules.html` (pulsante "?").
+- 8 lingue: italiano, inglese, francese, spagnolo, tedesco, portoghese,
+  cinese (semplificato) e giapponese. Vedi sotto.
 - Tastiera: frecce per muoversi, <kbd>Invio</kbd>/<kbd>Spazio</kbd> per
   scrivere, <kbd>Ctrl</kbd>+<kbd>Z</kbd> o <kbd>U</kbd> per annullare,
   <kbd>M</kbd> per le mosse.
 
-### Dettagli per il mobile
+## Lingue e privacy
+
+Il sito si mostra nella lingua preferita del browser, senza fingerprinting:
+
+- la lingua si sceglie **solo nel browser**, leggendo `navigator.languages`
+  (le preferenze impostate dall'utente); non parte nessuna richiesta, non ci
+  sono cookie, analytics né servizi esterni;
+- vale la prima lingua supportata dell'elenco (`pt-BR` → portoghese,
+  `zh-TW` → cinese); se nessuna è supportata si usa l'inglese, se il browser
+  non ne indica nessuna l'italiano;
+- nella pagina "?" c'è un selettore per sceglierla a mano; la scelta resta
+  in `localStorage` su quel dispositivo (come la partita) e non viene mai
+  trasmessa.
+
+Il titolo "Gioco del 100" e la dedica restano in italiano in tutte le lingue.
+Per aggiungere una lingua basta un nuovo dizionario in `i18n.js`:
+`tests/i18n.test.js` controlla che abbia tutte le chiavi.
+
+## Dettagli per il mobile
 
 - La griglia è il quadrato più grande che sta nello spazio libero (container
   query, con fallback su `min(100vw, 100dvh)`), senza scroll orizzontale;
@@ -60,6 +80,7 @@ il test con un solver a backtracking).
 | `rules.html` | Regole |
 | `style.css` | Stili (tema chiaro/scuro automatico) |
 | `logic.js` | Logica pura: mosse legali, stato, undo, stallo, solver. Nessun DOM |
+| `i18n.js` | Traduzioni e scelta della lingua |
 | `game.js` | Interfaccia: render, input, tastiera, salvataggio |
 | `sw.js` | Service worker cache-first per il gioco offline |
 | `manifest.json`, `icons/` | PWA |
@@ -82,11 +103,13 @@ worker.)
 
 ```sh
 node tests/logic.test.js
+node tests/i18n.test.js
 ```
 
 Nessun framework: controlla le mosse legali ad angoli, bordi e centro, lo
 stallo, che l'undo ripristini esattamente lo stato precedente e che esista
-una soluzione da 100 partendo da ognuna delle 100 celle.
+una soluzione da 100 partendo da ognuna delle 100 celle; per le traduzioni,
+la scelta della lingua e che ogni dizionario sia completo.
 
 Test end-to-end facoltativo in Chromium (serve [Playwright](https://playwright.dev)):
 
@@ -97,7 +120,8 @@ node tests/browser.test.js
 
 Gioca partite complete con tocchi reali su viewport di telefoni, tablet e
 desktop; verifica layout, tastiera, overlay, `localStorage` che lancia
-eccezioni, service worker offline e console senza errori.
+eccezioni, service worker offline e console senza errori; per ogni lingua
+testi e layout a 320px; zero richieste esterne e zero cookie.
 
 ## Deploy su Neocities
 
