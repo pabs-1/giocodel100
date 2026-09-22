@@ -542,6 +542,95 @@ function assertFits(rep) {
     await c.close();
   });
 
+  console.log('Regressioni (revisione del codice)');
+  const tapCell = (pg, i) => pg.evaluate((k) => {
+    const e = document.querySelectorAll('.cell')[k];
+    const r = e.getBoundingClientRect();
+    e.dispatchEvent(new PointerEvent('pointerdown', {
+      bubbles: true, isPrimary: true, pointerType: 'mouse', button: 0,
+      clientX: r.left + r.width / 2, clientY: r.top + r.height / 2
+    }));
+  }, i);
+
+  await test('due schede aperte: il record non scende e la partita resta allineata', async () => {
+    const c = await newContext();
+    const A = await c.newPage();
+    await A.goto(base);
+    const B = await c.newPage();
+    await B.goto(base);
+    for (let i = 0; i < 20; i++) await tapCell(B, solution[i]);
+    await A.waitForFunction(() => document.getElementById('stat-current').textContent === '20');
+    assert.equal(await A.textContent('#stat-best'), '20');
+    // A continua la partita di B invece di sovrascriverla con la sua vecchia.
+    await tapCell(A, solution[20]);
+    assert.equal(await A.textContent('#stat-current'), '21');
+    assert.equal(await A.evaluate(() => localStorage.getItem('giocodel100:record')), '21');
+    // Nuova partita in B: il record resta 21 anche quando A gioca poche mosse.
+    await B.waitForFunction(() => document.getElementById('stat-current').textContent === '21');
+    await B.click('#btn-new');
+    await B.click('#btn-new');
+    await A.waitForFunction(() => document.getElementById('stat-current').textContent === '0');
+    for (let i = 0; i < 3; i++) await tapCell(A, solution[i]);
+    assert.equal(await A.evaluate(() => localStorage.getItem('giocodel100:record')), '21');
+    assert.equal(await A.textContent('#stat-best'), '21');
+    await c.close();
+  });
+
+  await test('scorciatoie con tastiera russa (Ctrl+Z → "я", U → "г") e AZERTY', async () => {
+    const c = await newContext({ locale: 'ru-RU' });
+    const p = await c.newPage();
+    await p.goto(base);
+    for (let i = 0; i < 3; i++) await tapCell(p, solution[i]);
+    const key = (init) => p.evaluate((o) => document.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, ...o })), init);
+    await key({ key: 'я', code: 'KeyZ', ctrlKey: true });
+    assert.equal(await p.textContent('#stat-current'), '2');
+    await key({ key: 'г', code: 'KeyU' });
+    assert.equal(await p.textContent('#stat-current'), '1');
+    await key({ key: 'ь', code: 'KeyM' });
+    assert.equal(await p.getAttribute('#btn-hints', 'aria-pressed'), 'false');
+    // AZERTY: la lettera "z" sta dove QWERTY ha la W (code KeyW). Vale la lettera.
+    await tapCell(p, solution[1]);
+    await key({ key: 'z', code: 'KeyW', ctrlKey: true });
+    assert.equal(await p.textContent('#stat-current'), '1');
+    // …e il tasto fisico KeyZ su AZERTY produce "w": non deve annullare.
+    await tapCell(p, solution[1]);
+    await key({ key: 'w', code: 'KeyZ', ctrlKey: true });
+    assert.equal(await p.textContent('#stat-current'), '2');
+    await c.close();
+  });
+
+  await test('schermata finale: sfondo inert, e dopo "Annulla ultima mossa" il focus torna sulla griglia', async () => {
+    const c = await newContext();
+    const p = await c.newPage();
+    await p.goto(base);
+    let s = L.applyMove(L.createState(), 0);
+    while (L.legalMoves(s).length) s = L.applyMove(s, L.legalMoves(s)[0]);
+    for (const i of s.path) await tapCell(p, i);
+    await p.waitForSelector('#overlay:not([hidden])');
+    assert.equal(await p.evaluate(() => document.querySelector('.app').inert), true);
+    await p.focus('#overlay-undo');
+    await p.keyboard.press('Enter');
+    assert.equal(await p.evaluate(() => document.querySelector('.app').inert), false);
+    assert.equal(await p.evaluate(() => document.activeElement.getAttribute('role')), 'gridcell');
+    assert.equal(await p.textContent('#stat-current'), String(s.path.length - 1));
+    // Le frecce funzionano subito, senza dover ritrovare la griglia col Tab.
+    await p.keyboard.press('ArrowRight');
+    assert.equal(await p.evaluate(() => document.activeElement.getAttribute('role')), 'gridcell');
+    await c.close();
+  });
+
+  await test('pagina regole: zoom permesso (solo il gioco lo blocca)', async () => {
+    const c = await newContext();
+    const p = await c.newPage();
+    for (const url of ['rules.html', 'fr/rules.html']) {
+      await p.goto(base + url);
+      assert.doesNotMatch(await p.getAttribute('meta[name=viewport]', 'content'), /user-scalable=no|maximum-scale/);
+    }
+    await p.goto(base);
+    assert.match(await p.getAttribute('meta[name=viewport]', 'content'), /user-scalable=no/);
+    await c.close();
+  });
+
   console.log('Privacy');
   await test('zero richieste esterne, zero cookie, localStorage solo con chiavi del gioco', async () => {
     const c = await newContext({ locale: 'de-DE' });
