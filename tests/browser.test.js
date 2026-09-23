@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 pabs-1 e i contributori del Gioco del 100
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Smoke test end-to-end in Chromium (solo sviluppo, serve Playwright):
 //   node tests/browser.test.js
 // Avvia un piccolo server statico, gioca una partita completa con tocchi
@@ -416,6 +418,9 @@ function assertFits(rep) {
       assert.equal(await p.textContent('.dedica'), T.dedication);
       assert.equal(await p.inputValue('#lang-select'), '');
       assert.equal(await p.locator('#lang-select option').count(), I.LANGUAGES.length + 1);
+      // AGPL: link visibile al codice sorgente, in ogni lingua.
+      assert.equal(await p.locator('.license a[href="https://github.com/pabs-1/giocodel100"]').count(), 1);
+      assert.equal(await p.locator('.license a[rel="license"]').count(), 2);
       const w = await p.evaluate(() => [document.documentElement.scrollWidth, innerWidth]);
       assert.ok(w[0] <= w[1], `pagina regole più larga dello schermo: ${w}`);
       if (shotDir) await p.screenshot({ path: path.join(shotDir, `rules-${lang}.png`), fullPage: true });

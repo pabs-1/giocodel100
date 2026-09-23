@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 pabs-1 e i contributori del Gioco del 100
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Test della logica pura, senza framework: `node tests/logic.test.js`
 'use strict';
 

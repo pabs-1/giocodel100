@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 pabs-1 e i contributori del Gioco del 100
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 name: Deploy su Neocities
 
 on:
@@ -29,6 +32,9 @@ jobs:
 
       - name: Test della condivisione
         run: node tests/share.test.js
+
+      - name: Licenze dichiarate per ogni file (REUSE)
+        run: pipx run reuse lint
 
       - name: Pagine per lingua e sitemap aggiornate
         run: node tools/build-pages.js --check

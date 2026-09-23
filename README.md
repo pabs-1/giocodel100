@@ -238,3 +238,20 @@ export NEOCITIES_API_KEY='la-tua-chiave'
 ```
 
 La chiave non va mai scritta in un file del repository.
+
+## Licenza
+
+- **Codice** (JavaScript, HTML, CSS, script, test, traduzioni, documentazione):
+  [GNU AGPL v3 o successiva](LICENSE) (`AGPL-3.0-or-later`). Chi usa il gioco
+  via rete può avere il codice sorgente: il link è nella pagina "?".
+- **Immagini** (`icons/`, `og-image.png`):
+  [CC BY-SA 4.0](LICENSES/CC-BY-SA-4.0.txt).
+
+Ogni file dichiara licenza e copyright con un'intestazione `SPDX`; quelli che
+non possono contenerla (immagini, JSON, file generati) sono elencati in
+`REUSE.toml`. I testi completi delle licenze sono in `LICENSES/`. Il progetto
+segue lo standard [REUSE](https://reuse.software): `reuse lint` lo verifica,
+anche nella CI.
+
+Nessun codice, font o immagine di terzi: i caratteri sono quelli del sistema e
+le emoji del messaggio di condivisione le disegna il dispositivo.

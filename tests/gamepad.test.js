@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 pabs-1 e i contributori del Gioco del 100
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Test del lettore del controller, senza framework: `node tests/gamepad.test.js`
 'use strict';
 

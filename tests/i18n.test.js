@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 pabs-1 e i contributori del Gioco del 100
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Test delle traduzioni, senza framework: `node tests/i18n.test.js`
 'use strict';
 
@@ -118,12 +120,12 @@ for (const lang of I.LANGUAGES) {
     const d = I.STRINGS[lang];
     for (const k of KEYS) {
       if (typeof d[k] !== 'string') continue;
-      for (const tag of ['strong', 'kbd', 'sup']) {
-        const open = (d[k].match(new RegExp(`<${tag}>`, 'g')) || []).length;
+      for (const tag of ['strong', 'kbd', 'sup', 'a']) {
+        const open = (d[k].match(new RegExp(`<${tag}[ >]`, 'g')) || []).length;
         const close = (d[k].match(new RegExp(`</${tag}>`, 'g')) || []).length;
         assert.equal(open, close, `${lang}.${k}: <${tag}> non bilanciato`);
       }
-      assert.doesNotMatch(d[k], /<(?!\/?(strong|kbd|sup)>)/, `${lang}.${k}: tag non previsto`);
+      assert.doesNotMatch(d[k], /<(?!\/?(strong|kbd|sup|a)>|a href="https:\/\/[^"<>]+"( rel="license")?>)/, `${lang}.${k}: tag non previsto`);
     }
   });
 }
@@ -147,6 +149,16 @@ test('plurale russo e polacco: 1 / 2–4 / 5+ (12–14 con 5+)', () => {
   assert.match(pl.statusPlaying(2, 1), /1 możliwy ruch\./);
   assert.match(pl.statusPlaying(2, 4), /4 możliwe ruchy\./);
   assert.match(pl.statusPlaying(2, 5), /5 możliwych ruchów\./);
+});
+
+test('avviso di licenza in ogni lingua: link al sorgente, AGPLv3 e CC BY-SA 4.0', () => {
+  for (const lang of I.LANGUAGES) {
+    const n = I.STRINGS[lang].licenseNotice;
+    assert.ok(n.includes('<a href="https://github.com/pabs-1/giocodel100">'), lang);
+    assert.ok(n.includes('>GNU AGPLv3</a>'), lang);
+    assert.ok(n.includes('>CC BY-SA 4.0</a>'), lang);
+    assert.doesNotMatch(n, /\{|\}/, `${lang}: segnaposto rimasto`);
+  }
 });
 
 console.log('Pagine');
