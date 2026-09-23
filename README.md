@@ -233,7 +233,21 @@ desktop; verifica layout, tastiera, overlay, `localStorage` che lancia
 eccezioni, service worker offline e console senza errori; per ogni lingua
 testi e layout a 320px; due schede aperte insieme; un controller simulato;
 la condivisione (menu, appunti, copia a mano); zero richieste esterne e zero
-cookie. Questi test non girano nella CI (servono Playwright e Chromium).
+cookie.
+
+Test "a raffica" (monkey test), sempre in Chromium:
+
+```sh
+node tests/monkey.test.js 21,22,23 350   # semi, azioni per seme
+```
+
+Centinaia di azioni casuali ma riproducibili (tocchi, clic, tastiera,
+controller, schermata finale, condivisione, una seconda scheda, partite vinte
+fino al 100); dopo ogni azione controlla che griglia, contatori e record
+corrispondano alla partita salvata, che il record non scenda mai e che la
+schermata finale sia aperta solo a partita finita.
+
+I test in Chromium non girano nella CI (servono Playwright e Chromium).
 
 ## Deploy su Neocities
 
