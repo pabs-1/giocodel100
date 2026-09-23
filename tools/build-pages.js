@@ -96,7 +96,6 @@ function seoBlock(code, page) {
       isAccessibleForFree: true,
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
       license: 'https://www.gnu.org/licenses/agpl-3.0.html',
-      codeRepository: I.SOURCE_URL,
       image: OG_IMAGE
     };
     // "<" escapato: il JSON sta dentro un <script>.
