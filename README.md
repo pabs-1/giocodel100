@@ -5,9 +5,11 @@ numeri da 1 a 100 su una griglia 10×10 saltando da una cella all'altra.
 
 **Gioca qui → https://giocodel100.neocities.org/**
 
-HTML, CSS e JavaScript puri: niente build step, dipendenze o CDN. Funziona su
-telefono, tablet e desktop, si installa come app (PWA) e dopo la prima visita
-funziona anche offline.
+HTML, CSS e JavaScript puri, senza dipendenze né CDN: i file del repository
+sono il sito così com'è (le pagine per lingua sono generate da uno script e
+salvate nel repository, vedi "Motori di ricerca"). Funziona su telefono,
+tablet e desktop, si installa come app (PWA) e dopo la prima visita funziona
+anche offline.
 
 ## Regole
 
@@ -54,9 +56,9 @@ E tu, riesci a fare 100?
 https://giocodel100.neocities.org/
 ```
 
-- Si apre il menu di condivisione del sistema (Web Share API: iPhone, iPad,
-  Android, Safari, Chrome su Windows): l'utente sceglie l'app, il sito non
-  invia nulla a nessuno.
+- Dove il browser lo offre (per esempio su iPhone, iPad e Android) si apre il
+  menu di condivisione del sistema (Web Share API): l'utente sceglie l'app, il
+  sito non invia nulla a nessuno.
 - Dove il menu non c'è, il messaggio viene copiato negli appunti; se anche
   questo non è possibile, compare il testo da copiare a mano.
 - Nessun pulsante o script di social network, che tracciano anche chi non
@@ -92,9 +94,10 @@ usato per il fingerprinting).
 
 Il sito si mostra nella lingua preferita del browser, senza fingerprinting:
 
-- la lingua si sceglie **solo nel browser**, leggendo `navigator.languages`
-  (le preferenze impostate dall'utente); non parte nessuna richiesta, non ci
-  sono cookie, analytics né servizi esterni;
+- sulla radice `/` la lingua si sceglie **solo nel browser**, leggendo
+  `navigator.languages` (le preferenze impostate dall'utente); non parte
+  nessuna richiesta, non ci sono cookie, analytics né servizi esterni. Sulle
+  pagine `/fr/`, `/de/`… la lingua è quella dell'indirizzo;
 - vale la prima lingua supportata dell'elenco (`pt-BR` → portoghese;
   `zh-TW`, `zh-HK`, `zh-Hant` → cinese tradizionale, `zh-CN` e `zh` →
   semplificato); se nessuna è supportata si usa l'inglese, se il browser non
@@ -105,8 +108,19 @@ Il sito si mostra nella lingua preferita del browser, senza fingerprinting:
 
 Anche il titolo ("Gioco del 100", "The Game of 100", "数到 100"…) e la
 dedica sono tradotti; manifest e icona dell'app installata restano "Gioco del
-100". Per aggiungere una lingua basta un nuovo dizionario in `i18n.js`:
-`tests/i18n.test.js` controlla che abbia tutte le chiavi.
+100".
+
+Per aggiungere una lingua: un nuovo dizionario in `i18n.js` e il suo codice
+in `LANGUAGES` (stesso file), poi `node tools/build-pages.js` per creare la
+cartella della lingua; infine l'elenco delle lingue in `tests/i18n.test.js` e
+la mappa `LOCALES` in `tests/browser.test.js`. `tests/i18n.test.js` controlla
+che il dizionario abbia tutte le chiavi, e che i testi italiani scritti in
+`index.html` e `rules.html` coincidano con quelli di `i18n.js`.
+
+Il browser, come con qualunque sito, comunica comunque al server la propria
+lingua preferita (intestazione `Accept-Language`) e il server di Neocities
+riceve le normali richieste: il gioco non aggiunge nulla a questo, e la
+pagina "?" lo dice in chiaro.
 
 ## Motori di ricerca
 
@@ -172,6 +186,8 @@ esattamente il sito pubblicato.
 | `tools/` | Generatore delle pagine, icone e anteprima (non pubblicati) |
 | `tests/` | Test (non vengono pubblicati) |
 | `deploy.sh` | Upload su Neocities |
+| `.github/workflows/deploy.yml` | CI: test, controllo licenze, pagine aggiornate, deploy |
+| `LICENSE`, `LICENSES/`, `REUSE.toml` | Licenze (vedi sotto) |
 
 ## Giocare in locale
 
@@ -198,9 +214,12 @@ node tests/seo.test.js
 Nessun framework: controlla le mosse legali ad angoli, bordi e centro, lo
 stallo, che l'undo ripristini esattamente lo stato precedente e che esista
 una soluzione da 100 partendo da ognuna delle 100 celle; per le traduzioni,
-la scelta della lingua e che ogni dizionario sia completo; per il SEO, che
-ogni pagina abbia titolo, descrizione, canonical, hreflang reciproci, Open
-Graph e dati strutturati, senza testo italiano rimasto nelle altre lingue.
+la scelta della lingua e che ogni dizionario sia completo; per il controller,
+pulsanti, ripetizione, zona morta e asse dominante (anche il ciclo di lettura
+con un finto browser); per la condivisione, il messaggio in ogni lingua e
+tutti i passaggi menu → appunti → copia a mano; per il SEO, che ogni pagina
+abbia titolo, descrizione, canonical, hreflang reciproci, Open Graph e dati
+strutturati, senza testo italiano rimasto nelle altre lingue.
 
 Test end-to-end facoltativo in Chromium (serve [Playwright](https://playwright.dev)):
 
@@ -212,12 +231,15 @@ node tests/browser.test.js
 Gioca partite complete con tocchi reali su viewport di telefoni, tablet e
 desktop; verifica layout, tastiera, overlay, `localStorage` che lancia
 eccezioni, service worker offline e console senza errori; per ogni lingua
-testi e layout a 320px; zero richieste esterne e zero cookie.
+testi e layout a 320px; due schede aperte insieme; un controller simulato;
+la condivisione (menu, appunti, copia a mano); zero richieste esterne e zero
+cookie. Questi test non girano nella CI (servono Playwright e Chromium).
 
 ## Deploy su Neocities
 
-Ogni push su `main` lancia `.github/workflows/deploy.yml`, che esegue i test e
-poi `deploy.sh`. Lo script carica solo i file del sito (niente `.git`,
+Ogni push su `main` lancia `.github/workflows/deploy.yml`: test in Node,
+`reuse lint`, controllo che le pagine generate siano aggiornate e infine
+`deploy.sh`; se un passaggio fallisce il sito non viene toccato. Lo script carica solo i file del sito (niente `.git`,
 `.github`, README, test o script) tramite l'API
 `https://neocities.org/api/upload` e marca la cache del service worker con
 l'hash del commit, così i visitatori ricevono la versione nuova.
