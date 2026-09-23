@@ -300,7 +300,7 @@ body {
 }
 
 .cell:focus-visible,
-.cell.kbd-focus {
+.board.show-cursor .cell[tabindex="0"] {
   outline: 3px solid var(--focus);
   outline-offset: 1px;
   z-index: 2;

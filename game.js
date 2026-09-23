@@ -416,6 +416,7 @@
   if (window.PointerEvent) {
     boardEl.addEventListener('pointerdown', function (e) {
       if (!e.isPrimary || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      showCursor(false);
       handleBoardInput(e.clientX, e.clientY, e.pointerType !== 'mouse');
     });
   } else {
@@ -433,37 +434,55 @@
   document.addEventListener('touchstart', function () {}, { passive: true });
 
   // ---------------------------------------------------------------------
-  // Tastiera: frecce per muoversi (roving tabindex), Invio/Spazio per scrivere.
+  // Cella selezionata: una sola, comune a tastiera e controller (roving
+  // tabindex). Il cursore si vede quando si usano tastiera o controller e
+  // sparisce appena si tocca la griglia.
   // ---------------------------------------------------------------------
+  function showCursor(on) {
+    boardEl.classList.toggle('show-cursor', on);
+  }
+
   function moveFocus(index) {
     cells[focusIndex].tabIndex = -1;
     focusIndex = index;
     cells[focusIndex].tabIndex = 0;
-    cells[focusIndex].focus();
+    cells[focusIndex].focus({ preventScroll: true });
   }
+
+  var STEP = { up: [-1, 0], down: [1, 0], left: [0, -1], right: [0, 1] };
+
+  /** Sposta la cella selezionata di un passo; ai bordi si ferma. */
+  function moveCursor(direction) {
+    var rc = L.toRowCol(focusIndex);
+    var row = Math.min(SIZE - 1, Math.max(0, rc.row + STEP[direction][0]));
+    var col = Math.min(SIZE - 1, Math.max(0, rc.col + STEP[direction][1]));
+    showCursor(true);
+    moveFocus(L.toIndex(row, col));
+  }
+
+  /** Scrive il prossimo numero nella cella selezionata. */
+  function selectCursor() {
+    showCursor(true);
+    place(focusIndex);
+  }
+
+  var ARROWS = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right' };
 
   boardEl.addEventListener('keydown', function (e) {
     var rc = L.toRowCol(focusIndex);
-    var row = rc.row;
-    var col = rc.col;
-    switch (e.key) {
-      case 'ArrowUp': row = Math.max(0, row - 1); break;
-      case 'ArrowDown': row = Math.min(SIZE - 1, row + 1); break;
-      case 'ArrowLeft': col = Math.max(0, col - 1); break;
-      case 'ArrowRight': col = Math.min(SIZE - 1, col + 1); break;
-      case 'Home': col = 0; if (e.ctrlKey) row = 0; break;
-      case 'End': col = SIZE - 1; if (e.ctrlKey) row = SIZE - 1; break;
-      case 'Enter':
-      case ' ':
-      case 'Spacebar':
-        e.preventDefault();
-        place(focusIndex);
-        return;
-      default:
-        return;
+    if (ARROWS[e.key]) {
+      e.preventDefault();
+      moveCursor(ARROWS[e.key]);
+    } else if (e.key === 'Home' || e.key === 'End') {
+      e.preventDefault();
+      var col = e.key === 'Home' ? 0 : SIZE - 1;
+      var row = e.ctrlKey ? col : rc.row;
+      showCursor(true);
+      moveFocus(L.toIndex(row, col));
+    } else if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+      e.preventDefault();
+      selectCursor();
     }
-    e.preventDefault();
-    moveFocus(L.toIndex(row, col));
   });
 
   // Tiene il roving tabindex allineato se una cella riceve il focus col mouse.
@@ -535,6 +554,50 @@
     newGame();
   }));
   overlayClose.addEventListener('click', overlayAction(dismissOverlay));
+
+  // ---------------------------------------------------------------------
+  // Controller (gamepad.js): stesse azioni della tastiera. Con la schermata
+  // finale aperta la croce sposta tra i pulsanti, A/✕ conferma, B/○ annulla.
+  // ---------------------------------------------------------------------
+  function overlayButtons() {
+    return Array.prototype.filter.call(overlay.querySelectorAll('button'), function (b) { return !b.hidden; });
+  }
+
+  function overlayStep(delta) {
+    var buttons = overlayButtons();
+    var at = buttons.indexOf(document.activeElement);
+    var next = at === -1 ? buttons.indexOf(overlayNew) : (at + delta + buttons.length) % buttons.length;
+    buttons[next].focus();
+  }
+
+  function whenOverlay(onOverlay, onBoard) {
+    return function () {
+      if (!overlay.hidden) onOverlay();
+      else onBoard();
+    };
+  }
+
+  if (window.GamepadInput) {
+    window.GamepadInput.attach({
+      up: whenOverlay(function () { overlayStep(-1); }, function () { moveCursor('up'); }),
+      left: whenOverlay(function () { overlayStep(-1); }, function () { moveCursor('left'); }),
+      down: whenOverlay(function () { overlayStep(1); }, function () { moveCursor('down'); }),
+      right: whenOverlay(function () { overlayStep(1); }, function () { moveCursor('right'); }),
+      select: whenOverlay(function () {
+        var buttons = overlayButtons();
+        (buttons.indexOf(document.activeElement) !== -1 ? document.activeElement : overlayNew).click();
+      }, selectCursor),
+      undo: whenOverlay(function () {
+        (overlayUndo.hidden ? overlayClose : overlayUndo).click();
+      }, undoMove),
+      newGame: whenOverlay(function () { overlayNew.click(); }, requestNewGame),
+      hints: whenOverlay(function () {}, toggleHints),
+      connected: function () {
+        showCursor(true);
+        if (overlay.hidden) announce(T.gamepadConnected);
+      }
+    });
+  }
 
   // ---------------------------------------------------------------------
   // Avvio

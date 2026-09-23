@@ -23,6 +23,7 @@ FILES=(
   style.css
   i18n.js
   logic.js
+  gamepad.js
   game.js
   sw.js
   manifest.json
