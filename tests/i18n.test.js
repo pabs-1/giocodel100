@@ -176,5 +176,20 @@ for (const file of ['index.html', 'rules.html']) {
   });
 }
 
+test('testi italiani scritti nelle pagine sorgente = dizionario italiano', () => {
+  // La radice mostra l'HTML statico prima (e senza) JavaScript: deve dire
+  // esattamente quello che dice /it/, generata da i18n.js.
+  const unesc = (s) => s.replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+  for (const file of ['index.html', 'rules.html', 'not_found.html']) {
+    const html = fs.readFileSync(path.join(__dirname, '..', file), 'utf8');
+    for (const m of html.matchAll(/<(\w+)\b[^>]*\sdata-i18n="([^"]+)"[^>]*>([\s\S]*?)<\/\1>/g)) {
+      assert.equal(unesc(m[3]), REF[m[2]], `${file}: ${m[2]}`);
+    }
+    for (const m of html.matchAll(/<(\w+)\b[^>]*\sdata-i18n-html="([^"]+)"[^>]*>([\s\S]*?)<\/\1>/g)) {
+      assert.equal(m[3], REF[m[2]], `${file}: ${m[2]}`);
+    }
+  }
+});
+
 console.log(`\n${passed} passati, ${failed} falliti`);
 process.exitCode = failed ? 1 : 0;

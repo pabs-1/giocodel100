@@ -34,7 +34,8 @@ jobs:
         run: node tests/share.test.js
 
       - name: Licenze dichiarate per ogni file (REUSE)
-        run: pipx run reuse lint
+        # Versione fissata: un aggiornamento di reuse non blocca un deploy.
+        run: pipx run --spec reuse==6.2.0 reuse lint
 
       - name: Pagine per lingua e sitemap aggiornate
         run: node tools/build-pages.js --check
