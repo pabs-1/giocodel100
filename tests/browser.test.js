@@ -631,6 +631,153 @@ function assertFits(rep) {
     await c.close();
   });
 
+  console.log('Controller (simulato)');
+  // Controller finto: il test decide quali tasti sono premuti. Leggere
+  // gamepad.id viene registrato, per verificare che il gioco non lo faccia.
+  // Come nei browser veri, il controller è invisibile finché non si preme
+  // un tasto (__pad.awake): quella pressione "lo sveglia".
+  const fakePad = () => {
+    window.__pad = { buttons: new Array(17).fill(false), axes: [0, 0, 0, 0], idRead: false, awake: false };
+    navigator.getGamepads = () => (!window.__pad.awake ? [null] : [{
+      connected: true,
+      mapping: 'standard',
+      get id() { window.__pad.idRead = true; return 'Test controller'; },
+      buttons: window.__pad.buttons.map((p) => ({ pressed: p, value: p ? 1 : 0 })),
+      axes: window.__pad.axes.slice()
+    }]);
+  };
+  const wake = (pg, button) => pg.evaluate((b) => {
+    if (b != null) window.__pad.buttons[b] = true;
+    window.__pad.awake = true;
+    window.dispatchEvent(new Event('gamepadconnected'));
+  }, button);
+  const padSet = (pg, patch) => pg.evaluate((o) => {
+    if (o.buttons) for (const [i, v] of Object.entries(o.buttons)) window.__pad.buttons[i] = v;
+    if (o.axes) window.__pad.axes = o.axes;
+  }, patch);
+  const frames = (pg, n = 3) => pg.evaluate((k) => new Promise((res) => {
+    const step = () => (k-- > 0 ? requestAnimationFrame(step) : res());
+    step();
+  }), n);
+  const press = async (pg, button) => {
+    await padSet(pg, { buttons: { [button]: true } });
+    await frames(pg);
+    await padSet(pg, { buttons: { [button]: false } });
+    await frames(pg);
+  };
+  const cursor = (pg) => pg.evaluate(() => Number(document.querySelector('.cell[tabindex="0"]').dataset.index));
+  const PAD = { A: 0, B: 1, Y: 3, START: 9, UP: 12, DOWN: 13, LEFT: 14, RIGHT: 15 };
+
+  await test('controller: collegamento, cursore visibile, croce, A scrive, B annulla, Y mosse', async () => {
+    const c = await newContext({ locale: 'en-US' });
+    await c.addInitScript(fakePad);
+    const p = await c.newPage();
+    const errs = watchConsole(p);
+    await p.goto(base);
+    // Il tasto che "sveglia" il controller (qui A) non deve scrivere nulla.
+    await frames(p, 5);
+    assert.equal(await p.locator('#board.show-cursor').count(), 0, 'nessun cursore prima del controller');
+    await wake(p, PAD.A);
+    await frames(p, 5);
+    await padSet(p, { buttons: { [PAD.A]: false } });
+    await frames(p);
+    assert.equal(await p.textContent('#stat-current'), '0');
+    // Messaggio di collegamento, seguito da cosa fare adesso.
+    assert.equal(await p.textContent('#status'), I.STRINGS.en.gamepadConnected + ' ' + I.STRINGS.en.statusReady);
+    assert.equal(await p.locator('#board.show-cursor').count(), 1);
+    assert.equal(await cursor(p), 44);
+
+    await press(p, PAD.RIGHT);
+    await press(p, PAD.DOWN);
+    assert.equal(await cursor(p), 55);
+    await press(p, PAD.A);
+    assert.equal(await p.textContent('#stat-current'), '1');
+    assert.equal(await p.locator('.cell').nth(55).textContent(), '1');
+    // Tre passi a destra = mossa legale (5,8): la scrive.
+    for (let i = 0; i < 3; i++) await press(p, PAD.RIGHT);
+    await press(p, PAD.A);
+    assert.equal(await p.locator('.cell').nth(58).textContent(), '2');
+    await press(p, PAD.B);
+    assert.equal(await p.textContent('#stat-current'), '1');
+    await press(p, PAD.Y);
+    assert.equal(await p.getAttribute('#btn-hints', 'aria-pressed'), 'false');
+    // Start: nuova partita con la stessa conferma a due pressioni.
+    await press(p, PAD.START);
+    assert.equal(await p.textContent('#stat-current'), '1');
+    await press(p, PAD.START);
+    assert.equal(await p.textContent('#stat-current'), '0');
+    // Toccare lo schermo nasconde il cursore.
+    await p.mouse.click(5, 5);
+    const pt = await cellCenter(p, 0);
+    await p.mouse.click(pt.x, pt.y);
+    assert.equal(await p.locator('#board.show-cursor').count(), 0);
+    assert.equal(await p.evaluate(() => window.__pad.idRead), false, 'gamepad.id letto');
+    assert.deepEqual(errs, []);
+    await c.close();
+  });
+
+  await test('controller: tenere premuto ripete (non attraversa la griglia), ai bordi si ferma', async () => {
+    const c = await newContext();
+    await c.addInitScript(fakePad);
+    const p = await c.newPage();
+    await p.goto(base);
+    await wake(p);
+    await frames(p);
+    await padSet(p, { buttons: { [PAD.LEFT]: true } });
+    await p.waitForTimeout(250);
+    assert.equal(await cursor(p), 43, 'un solo passo prima della ripetizione');
+    await p.waitForTimeout(700);
+    await padSet(p, { buttons: { [PAD.LEFT]: false } });
+    await frames(p);
+    assert.equal(await cursor(p), 40, 'fermo al bordo sinistro');
+    await c.close();
+  });
+
+  await test('controller: levetta con zona morta e asse dominante', async () => {
+    const c = await newContext();
+    await c.addInitScript(fakePad);
+    const p = await c.newPage();
+    await p.goto(base);
+    await wake(p);
+    await frames(p);
+    await padSet(p, { axes: [0.2, -0.25, 0, 0] });
+    await frames(p, 5);
+    assert.equal(await cursor(p), 44, 'levetta quasi ferma: nessun movimento');
+    await padSet(p, { axes: [0.3, -0.9, 0, 0] });
+    await frames(p);
+    await padSet(p, { axes: [0, 0, 0, 0] });
+    await frames(p);
+    assert.equal(await cursor(p), 34, 'su (asse dominante), non in diagonale');
+    await c.close();
+  });
+
+  await test('controller: schermata finale — croce tra i pulsanti, A conferma, B annulla', async () => {
+    const c = await newContext();
+    await c.addInitScript(fakePad);
+    const p = await c.newPage();
+    await p.goto(base);
+    await wake(p);
+    await frames(p);
+    let s = L.applyMove(L.createState(), 0);
+    while (L.legalMoves(s).length) s = L.applyMove(s, L.legalMoves(s)[0]);
+    for (const i of s.path) await tapCell(p, i);
+    await p.waitForSelector('#overlay:not([hidden])');
+    // B = annulla l'ultima mossa (come fuori dalla schermata).
+    await press(p, PAD.B);
+    assert.ok(!(await p.isVisible('#overlay')));
+    assert.equal(await p.textContent('#stat-current'), String(s.path.length - 1));
+    // Di nuovo alla fine: su/giù spostano tra i pulsanti, A conferma quello scelto.
+    await tapCell(p, s.path[s.path.length - 1]);
+    await p.waitForSelector('#overlay:not([hidden])');
+    assert.equal(await p.evaluate(() => document.activeElement.id), 'overlay-new');
+    await press(p, PAD.DOWN);
+    assert.equal(await p.evaluate(() => document.activeElement.id), 'overlay-close');
+    await press(p, PAD.A);
+    assert.ok(!(await p.isVisible('#overlay')));
+    assert.equal(await p.textContent('#stat-current'), String(s.path.length), '"Guarda la griglia" non cambia la partita');
+    await c.close();
+  });
+
   console.log('Privacy');
   await test('zero richieste esterne, zero cookie, localStorage solo con chiavi del gioco', async () => {
     const c = await newContext({ locale: 'de-DE' });

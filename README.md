@@ -39,6 +39,30 @@ il test con un solver a backtracking).
 - Tastiera: frecce per muoversi, <kbd>Invio</kbd>/<kbd>Spazio</kbd> per
   scrivere, <kbd>Ctrl</kbd>+<kbd>Z</kbd> o <kbd>U</kbd> per annullare,
   <kbd>M</kbd> per le mosse.
+- Controller Xbox, PlayStation e compatibili (anche su iPad): vedi sotto.
+
+## Controller
+
+| Controller | Azione |
+| --- | --- |
+| Croce direzionale o levetta sinistra | sposta la cella selezionata |
+| A / ✕ | scrive il numero nella cella selezionata |
+| B / ○ | annulla l'ultima mossa |
+| Y / △ | mostra o nasconde le mosse |
+| Start / Options | nuova partita (a partita in corso, due pressioni) |
+
+Nella schermata di fine partita la croce passa da un pulsante all'altro, A/✕
+conferma e B/○ annulla l'ultima mossa (o chiude, dopo una vittoria).
+
+`gamepad.js` è un altro modo di dare comandi, come tastiera e tocco: non
+conosce le regole, trasforma tasti e levette in azioni (`up`, `select`,
+`undo`…) e `game.js` le esegue con le stesse funzioni della tastiera.
+Legge i controller a ogni frame solo mentre ce n'è uno collegato; una
+direzione tenuta si ripete come in tastiera (dopo 300 ms, poi ogni 120 ms);
+la levetta ha una zona morta (0,35) e segue l'asse dominante, quindi niente
+diagonali; il tasto che "sveglia" il controller nel browser non scrive nulla.
+Si leggono solo tasti e levette, mai il nome del controller (`gamepad.id`,
+usato per il fingerprinting).
 
 ## Lingue e privacy
 
@@ -115,6 +139,7 @@ esattamente il sito pubblicato.
 | `logic.js` | Logica pura: mosse legali, stato, undo, stallo, solver. Nessun DOM |
 | `i18n.js` | Traduzioni e scelta della lingua |
 | `game.js` | Interfaccia: render, input, tastiera, salvataggio |
+| `gamepad.js` | Controller: tasti e levette → azioni (parte pura testabile in Node) |
 | `sw.js` | Service worker cache-first per il gioco offline |
 | `manifest.json`, `icons/` | PWA |
 | `it/`, `en/`, … `ko/`, `sitemap.xml` | Pagine per lingua e sitemap, generate da `tools/build-pages.js` |
@@ -140,6 +165,7 @@ worker.)
 ```sh
 node tests/logic.test.js
 node tests/i18n.test.js
+node tests/gamepad.test.js
 node tests/seo.test.js
 ```
 

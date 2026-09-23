@@ -24,6 +24,9 @@ jobs:
       - name: Test delle traduzioni
         run: node tests/i18n.test.js
 
+      - name: Test del controller
+        run: node tests/gamepad.test.js
+
       - name: Pagine per lingua e sitemap aggiornate
         run: node tools/build-pages.js --check
 
