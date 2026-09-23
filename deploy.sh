@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-FileCopyrightText: 2026 pabs-1 e i contributori del Gioco del 100
+# SPDX-License-Identifier: AGPL-3.0-or-later
 # Carica il sito statico su Neocities via API.
 #
 #   export NEOCITIES_API_KEY=...   # mai scriverla in un file del repo

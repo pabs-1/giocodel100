@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 pabs-1 e i contributori del Gioco del 100
+// SPDX-License-Identifier: AGPL-3.0-or-later
 /*
  * Service worker minimale: cache-first sugli asset del gioco, così dopo la
  * prima visita si gioca anche offline.

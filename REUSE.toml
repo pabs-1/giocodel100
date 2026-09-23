@@ -1,0 +1,24 @@
+# Licenze dei file che non possono contenere un'intestazione SPDX.
+# Standard REUSE (https://reuse.software): verifica con `reuse lint`.
+version = 1
+
+# Immagini: CC BY-SA 4.0
+[[annotations]]
+path = ["icons/**", "og-image.png"]
+SPDX-FileCopyrightText = "2026 pabs-1 e i contributori del Gioco del 100"
+SPDX-License-Identifier = "CC-BY-SA-4.0"
+
+# Tutto il resto (dati, documentazione, configurazione): AGPL-3.0-or-later
+[[annotations]]
+path = [
+  "manifest.json",
+  "robots.txt",
+  "sitemap.xml",
+  "README.md",
+  ".gitignore",
+  ".gitattributes",
+  "*/index.html",
+  "*/rules.html",
+]
+SPDX-FileCopyrightText = "2026 pabs-1 e i contributori del Gioco del 100"
+SPDX-License-Identifier = "AGPL-3.0-or-later"

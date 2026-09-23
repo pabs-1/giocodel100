@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 pabs-1 e i contributori del Gioco del 100
+// SPDX-License-Identifier: AGPL-3.0-or-later
 /*
  * Gioco del 100 — traduzioni.
  *
@@ -43,6 +45,17 @@
     return many;
   }
 
+  // Licenze e codice sorgente (AGPL: chi usa il gioco deve poter avere il
+  // sorgente). {src:testo} diventa il link al repository, {agpl} e {cc} i
+  // link alle licenze: gli indirizzi stanno qui una volta sola.
+  var SOURCE_URL = 'https://github.com/pabs-1/giocodel100';
+  function licenseNotice(template) {
+    return template
+      .replace(/\{src:([^}]+)\}/, '<a href="' + SOURCE_URL + '">$1</a>')
+      .replace('{agpl}', '<a href="https://www.gnu.org/licenses/agpl-3.0.html" rel="license">GNU AGPLv3</a>')
+      .replace('{cc}', '<a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a>');
+  }
+
   // Tasti (uguali in tutte le lingue: le scorciatoie non cambiano).
   var ARROWS = '<kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd>';
 
@@ -50,6 +63,7 @@
     it: {
       name: 'Italiano',
       htmlLang: 'it',
+      licenseNotice: licenseNotice('Il {src:codice sorgente} è libero, con licenza {agpl}; le immagini sono con licenza {cc}.'),
       share: 'Condividi il risultato',
       shareCopied: 'Risultato copiato: incollalo dove vuoi.',
       shareManual: 'Copia il testo:',
@@ -132,6 +146,7 @@
     en: {
       name: 'English',
       htmlLang: 'en',
+      licenseNotice: licenseNotice('The {src:source code} is free software under the {agpl}; images are licensed under {cc}.'),
       share: 'Share your result',
       shareCopied: 'Result copied: paste it anywhere.',
       shareManual: 'Copy this text:',
@@ -214,6 +229,7 @@
     fr: {
       name: 'Français',
       htmlLang: 'fr',
+      licenseNotice: licenseNotice('Le {src:code source} est libre, sous licence {agpl} ; les images sont sous licence {cc}.'),
       share: 'Partager le résultat',
       shareCopied: 'Résultat copié : collez-le où vous voulez.',
       shareManual: 'Copiez ce texte :',
@@ -296,6 +312,7 @@
     es: {
       name: 'Español',
       htmlLang: 'es',
+      licenseNotice: licenseNotice('El {src:código fuente} es libre, con licencia {agpl}; las imágenes, con licencia {cc}.'),
       share: 'Compartir resultado',
       shareCopied: 'Resultado copiado: pégalo donde quieras.',
       shareManual: 'Copia este texto:',
@@ -378,6 +395,7 @@
     de: {
       name: 'Deutsch',
       htmlLang: 'de',
+      licenseNotice: licenseNotice('Der {src:Quellcode} ist freie Software unter der {agpl}; die Bilder stehen unter {cc}.'),
       share: 'Ergebnis teilen',
       shareCopied: 'Ergebnis kopiert: Füge es ein, wo du willst.',
       shareManual: 'Kopiere diesen Text:',
@@ -461,6 +479,7 @@
     pt: {
       name: 'Português',
       htmlLang: 'pt',
+      licenseNotice: licenseNotice('O {src:código-fonte} é livre, com licença {agpl}; as imagens estão sob a licença {cc}.'),
       share: 'Compartilhar resultado',
       shareCopied: 'Resultado copiado: cole onde quiser.',
       shareManual: 'Copie este texto:',
@@ -543,6 +562,7 @@
     zh: {
       name: '简体中文',
       htmlLang: 'zh-Hans',
+      licenseNotice: licenseNotice('{src:源代码}为自由软件，采用 {agpl} 许可；图片采用 {cc} 许可。'),
       share: '分享成绩',
       shareCopied: '已复制，粘贴到任意地方即可。',
       shareManual: '复制下面的文字：',
@@ -625,6 +645,7 @@
     ja: {
       name: '日本語',
       htmlLang: 'ja',
+      licenseNotice: licenseNotice('{src:ソースコード}は {agpl} のフリーソフトウェアです。画像は {cc} で提供しています。'),
       share: '結果をシェア',
       shareCopied: 'コピーしました。好きな場所に貼り付けてください。',
       shareManual: 'このテキストをコピー：',
@@ -707,6 +728,7 @@
     nl: {
       name: 'Nederlands',
       htmlLang: 'nl',
+      licenseNotice: licenseNotice('De {src:broncode} is vrije software onder de {agpl}; de afbeeldingen vallen onder {cc}.'),
       share: 'Resultaat delen',
       shareCopied: 'Resultaat gekopieerd: plak het waar je wilt.',
       shareManual: 'Kopieer deze tekst:',
@@ -789,6 +811,7 @@
     pl: {
       name: 'Polski',
       htmlLang: 'pl',
+      licenseNotice: licenseNotice('{src:Kod źródłowy} jest wolny, na licencji {agpl}; obrazy są na licencji {cc}.'),
       share: 'Udostępnij wynik',
       shareCopied: 'Wynik skopiowany: wklej go, gdzie chcesz.',
       shareManual: 'Skopiuj ten tekst:',
@@ -872,6 +895,7 @@
     ru: {
       name: 'Русский',
       htmlLang: 'ru',
+      licenseNotice: licenseNotice('{src:Исходный код} свободный, по лицензии {agpl}; изображения — по лицензии {cc}.'),
       share: 'Поделиться результатом',
       shareCopied: 'Результат скопирован: вставьте его куда угодно.',
       shareManual: 'Скопируйте текст:',
@@ -954,6 +978,7 @@
     tr: {
       name: 'Türkçe',
       htmlLang: 'tr',
+      licenseNotice: licenseNotice('{src:Kaynak kodu}, {agpl} lisanslı özgür yazılımdır; görseller {cc} lisanslıdır.'),
       share: 'Sonucu paylaş',
       shareCopied: 'Sonuç kopyalandı: istediğin yere yapıştır.',
       shareManual: 'Bu metni kopyala:',
@@ -1036,6 +1061,7 @@
     id: {
       name: 'Bahasa Indonesia',
       htmlLang: 'id',
+      licenseNotice: licenseNotice('{src:Kode sumber} bebas dengan lisensi {agpl}; gambar berlisensi {cc}.'),
       share: 'Bagikan hasil',
       shareCopied: 'Hasil disalin: tempel di mana saja.',
       shareManual: 'Salin teks ini:',
@@ -1118,6 +1144,7 @@
     'zh-Hant': {
       name: '繁體中文',
       htmlLang: 'zh-Hant',
+      licenseNotice: licenseNotice('{src:原始碼}為自由軟體，採用 {agpl} 授權；圖片採用 {cc} 授權。'),
       share: '分享成績',
       shareCopied: '已複製，貼到任何地方即可。',
       shareManual: '複製下面的文字：',
@@ -1201,6 +1228,7 @@
     ko: {
       name: '한국어',
       htmlLang: 'ko',
+      licenseNotice: licenseNotice('{src:소스 코드}는 {agpl} 라이선스의 자유 소프트웨어이며, 이미지는 {cc} 라이선스입니다.'),
       share: '결과 공유',
       shareCopied: '결과를 복사했습니다. 원하는 곳에 붙여 넣으세요.',
       shareManual: '이 텍스트를 복사하세요:',
@@ -1353,6 +1381,7 @@
     FALLBACK_LANG: FALLBACK_LANG,
     STORAGE_KEY: STORAGE_KEY,
     ORIGIN: ORIGIN,
+    SOURCE_URL: SOURCE_URL,
     pickLanguage: pickLanguage,
     dirFor: dirFor,
     lang: DEFAULT_LANG,

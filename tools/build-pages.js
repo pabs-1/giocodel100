@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// SPDX-FileCopyrightText: 2026 pabs-1 e i contributori del Gioco del 100
+// SPDX-License-Identifier: AGPL-3.0-or-later
 /*
  * Genera le pagine per i motori di ricerca, a partire da index.html e
  * rules.html (le sorgenti, in italiano):
@@ -93,6 +95,8 @@ function seoBlock(code, page) {
       browserRequirements: 'Requires JavaScript',
       isAccessibleForFree: true,
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+      license: 'https://www.gnu.org/licenses/agpl-3.0.html',
+      codeRepository: I.SOURCE_URL,
       image: OG_IMAGE
     };
     // "<" escapato: il JSON sta dentro un <script>.
