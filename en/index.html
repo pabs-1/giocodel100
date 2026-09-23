@@ -113,8 +113,11 @@
       <div class="dialog-actions">
         <button id="overlay-undo" class="btn" type="button" data-i18n="overlayUndo">Undo last move</button>
         <button id="overlay-new" class="btn btn-primary" type="button" data-i18n="overlayNew">New game</button>
+        <button id="overlay-share" class="btn" type="button" data-i18n="share">Share your result</button>
         <button id="overlay-close" class="btn btn-quiet" type="button" data-i18n="overlayClose">Look at the grid</button>
       </div>
+      <p id="share-status" class="share-status" aria-live="polite"></p>
+      <textarea id="share-text" class="share-text" readonly rows="5" aria-labelledby="share-status" hidden></textarea>
     </div>
   </div>
 
@@ -122,6 +125,7 @@
   <script src="../i18n.js"></script>
   <script src="../logic.js"></script>
   <script src="../gamepad.js"></script>
+  <script src="../share.js"></script>
   <script src="../game.js"></script>
 </body>
 </html>

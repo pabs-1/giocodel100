@@ -113,8 +113,11 @@
       <div class="dialog-actions">
         <button id="overlay-undo" class="btn" type="button" data-i18n="overlayUndo">最後の一手を戻す</button>
         <button id="overlay-new" class="btn btn-primary" type="button" data-i18n="overlayNew">新しいゲーム</button>
+        <button id="overlay-share" class="btn" type="button" data-i18n="share">結果をシェア</button>
         <button id="overlay-close" class="btn btn-quiet" type="button" data-i18n="overlayClose">盤面を見る</button>
       </div>
+      <p id="share-status" class="share-status" aria-live="polite"></p>
+      <textarea id="share-text" class="share-text" readonly rows="5" aria-labelledby="share-status" hidden></textarea>
     </div>
   </div>
 
@@ -122,6 +125,7 @@
   <script src="../i18n.js"></script>
   <script src="../logic.js"></script>
   <script src="../gamepad.js"></script>
+  <script src="../share.js"></script>
   <script src="../game.js"></script>
 </body>
 </html>

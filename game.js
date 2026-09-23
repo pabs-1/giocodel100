@@ -97,6 +97,9 @@
   var overlayUndo = $('overlay-undo');
   var overlayNew = $('overlay-new');
   var overlayClose = $('overlay-close');
+  var overlayShare = $('overlay-share');
+  var shareStatus = $('share-status');
+  var shareText = $('share-text');
   var appEl = document.querySelector('.app');
   var newLabel = btnNew.innerHTML;
 
@@ -299,7 +302,9 @@
       overlayText.textContent = T.lostText(n, TOTAL - n, best, newRecordThisGame && n === best);
       overlayUndo.hidden = false;
     }
+    overlayShare.hidden = !window.Share;
     if (overlay.hidden) {
+      resetShare();
       lastFocusBeforeOverlay = document.activeElement;
       overlayShownAt = now();
       overlay.hidden = false;
@@ -324,6 +329,34 @@
       target.focus();
     }
     lastFocusBeforeOverlay = null;
+  }
+
+  // ---------------------------------------------------------------------
+  // Condivisione del risultato (share.js): menu di sistema, poi appunti,
+  // poi testo da copiare a mano. Il link è la radice del sito, senza
+  // parametri: chi lo apre vede il gioco nella sua lingua.
+  // ---------------------------------------------------------------------
+  function resetShare() {
+    shareStatus.textContent = '';
+    shareText.hidden = true;
+    shareText.value = '';
+  }
+
+  function shareResult() {
+    var message = window.Share.compose(T, L.currentNumber(state), window.I18N.ORIGIN);
+    resetShare();
+    window.Share.share(message).then(function (outcome) {
+      if (outcome === 'copied') {
+        shareStatus.textContent = T.shareCopied;
+      } else if (outcome === 'manual') {
+        shareStatus.textContent = T.shareManual;
+        shareText.value = message.full;
+        shareText.hidden = false;
+        shareText.focus();
+        shareText.select();
+        shareText.scrollTop = 0; // la selezione porta in fondo: si riparte dall'inizio
+      }
+    });
   }
 
   function dismissOverlay() {
@@ -365,7 +398,7 @@
     }
     if (e.key !== 'Tab') return;
     var buttons = Array.prototype.filter.call(
-      overlay.querySelectorAll('button'),
+      overlay.querySelectorAll('button, textarea'),
       function (b) { return !b.hidden; }
     );
     var first = buttons[0];
@@ -554,6 +587,7 @@
     newGame();
   }));
   overlayClose.addEventListener('click', overlayAction(dismissOverlay));
+  overlayShare.addEventListener('click', overlayAction(shareResult));
 
   // ---------------------------------------------------------------------
   // Controller (gamepad.js): stesse azioni della tastiera. Con la schermata

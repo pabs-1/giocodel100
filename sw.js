@@ -16,6 +16,7 @@ var ASSETS = [
   'i18n.js',
   'logic.js',
   'gamepad.js',
+  'share.js',
   'game.js',
   'manifest.json',
   'icons/icon.svg',

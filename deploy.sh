@@ -24,6 +24,7 @@ FILES=(
   i18n.js
   logic.js
   gamepad.js
+  share.js
   game.js
   sw.js
   manifest.json

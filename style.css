@@ -549,6 +549,34 @@ body {
   gap: 8px;
 }
 
+.share-status {
+  min-height: 0;
+  margin: 10px 0 0 !important;
+  font-size: 0.9rem;
+}
+
+.share-status:empty {
+  display: none;
+}
+
+.share-text {
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--cell);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  resize: none;
+}
+
+.share-text[hidden] {
+  display: none;
+}
+
 .dialog-actions .btn[hidden] {
   display: none;
 }
