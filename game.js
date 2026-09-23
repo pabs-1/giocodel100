@@ -3,8 +3,10 @@
 /*
  * Gioco del 100 — interfaccia.
  *
- * Tutto ciò che tocca DOM, input e localStorage sta qui; le regole stanno
- * in logic.js (window.GameLogic) e questo file si limita a chiamarle.
+ * Griglia, tocco, mouse, tastiera, schermata di fine partita e salvataggio
+ * della partita. Le regole stanno in logic.js (window.GameLogic); lingua in
+ * i18n.js, controller in gamepad.js e condivisione in share.js: questo file
+ * li collega.
  */
 (function () {
   'use strict';

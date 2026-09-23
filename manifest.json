@@ -1,7 +1,7 @@
 {
   "name": "Gioco del 100",
   "short_name": "100",
-  "description": "Scrivi i numeri da 1 a 100 su una griglia 10×10 saltando di 3 in orizzontale/verticale o di 2 in diagonale.",
+  "description": "Scrivi i numeri da 1 a 100 su una griglia 10×10, saltando 2 celle in orizzontale o verticale e 1 in diagonale.",
   "lang": "it",
   "id": "./",
   "start_url": "./",
