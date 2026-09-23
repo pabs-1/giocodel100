@@ -27,6 +27,9 @@ jobs:
       - name: Test del controller
         run: node tests/gamepad.test.js
 
+      - name: Test della condivisione
+        run: node tests/share.test.js
+
       - name: Pagine per lingua e sitemap aggiornate
         run: node tools/build-pages.js --check
 

@@ -40,6 +40,30 @@ il test con un solver a backtracking).
   scrivere, <kbd>Ctrl</kbd>+<kbd>Z</kbd> o <kbd>U</kbd> per annullare,
   <kbd>M</kbd> per le mosse.
 - Controller Xbox, PlayStation e compatibili (anche su iPad): vedi sotto.
+- Condivisione del risultato a fine partita, senza tracciamento: vedi sotto.
+
+## Condividere il risultato
+
+Nella schermata di fine partita, "Condividi il risultato" prepara un
+messaggio come questo:
+
+```
+Gioco del 100 — Ho scritto 69 numeri su 100.
+🟩🟩🟩🟩🟩🟩🟨⬜⬜⬜
+E tu, riesci a fare 100?
+https://giocodel100.neocities.org/
+```
+
+- Si apre il menu di condivisione del sistema (Web Share API: iPhone, iPad,
+  Android, Safari, Chrome su Windows): l'utente sceglie l'app, il sito non
+  invia nulla a nessuno.
+- Dove il menu non c'è, il messaggio viene copiato negli appunti; se anche
+  questo non è possibile, compare il testo da copiare a mano.
+- Nessun pulsante o script di social network, che tracciano anche chi non
+  clicca. Il link è la radice del sito senza parametri di tracciamento: chi
+  lo apre vede il gioco nella sua lingua (e l'anteprima `og-image.png`).
+- Il testo è tradotto in tutte le 15 lingue (`share.js` lo compone, i testi
+  stanno in `i18n.js`).
 
 ## Controller
 
@@ -140,6 +164,7 @@ esattamente il sito pubblicato.
 | `i18n.js` | Traduzioni e scelta della lingua |
 | `game.js` | Interfaccia: render, input, tastiera, salvataggio |
 | `gamepad.js` | Controller: tasti e levette → azioni (parte pura testabile in Node) |
+| `share.js` | Condivisione del risultato: messaggio, menu di sistema, appunti |
 | `sw.js` | Service worker cache-first per il gioco offline |
 | `manifest.json`, `icons/` | PWA |
 | `it/`, `en/`, … `ko/`, `sitemap.xml` | Pagine per lingua e sitemap, generate da `tools/build-pages.js` |
@@ -166,6 +191,7 @@ worker.)
 node tests/logic.test.js
 node tests/i18n.test.js
 node tests/gamepad.test.js
+node tests/share.test.js
 node tests/seo.test.js
 ```
 

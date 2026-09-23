@@ -771,10 +771,111 @@ function assertFits(rep) {
     await p.waitForSelector('#overlay:not([hidden])');
     assert.equal(await p.evaluate(() => document.activeElement.id), 'overlay-new');
     await press(p, PAD.DOWN);
+    assert.equal(await p.evaluate(() => document.activeElement.id), 'overlay-share');
+    await press(p, PAD.DOWN);
     assert.equal(await p.evaluate(() => document.activeElement.id), 'overlay-close');
     await press(p, PAD.A);
     assert.ok(!(await p.isVisible('#overlay')));
     assert.equal(await p.textContent('#stat-current'), String(s.path.length), '"Guarda la griglia" non cambia la partita');
+    await c.close();
+  });
+
+  console.log('Condivisione del risultato');
+  const loseGame = async (pg) => {
+    let st = L.applyMove(L.createState(), 0);
+    while (L.legalMoves(st).length) st = L.applyMove(st, L.legalMoves(st)[0]);
+    for (const i of st.path) await tapCell(pg, i);
+    await pg.waitForSelector('#overlay:not([hidden])');
+    return st.path.length;
+  };
+
+  await test('condividi: menu di sistema con testo e link, nessuna richiesta esterna', async () => {
+    const c = await newContext({ ...narrow, locale: 'it-IT' });
+    await c.addInitScript(() => {
+      window.__shared = [];
+      navigator.share = (data) => { window.__shared.push(data); return Promise.resolve(); };
+      navigator.canShare = () => true;
+    });
+    const p = await c.newPage();
+    const errs = watchConsole(p);
+    const urls = [];
+    p.on('request', (r) => urls.push(r.url()));
+    await p.goto(base);
+    const n = await loseGame(p);
+    assertFits(await layoutReport(p));
+    await p.click('#overlay-share');
+    const shared = await p.evaluate(() => window.__shared);
+    assert.equal(shared.length, 1);
+    assert.equal(shared[0].url, 'https://giocodel100.neocities.org/');
+    assert.equal(shared[0].text, `Gioco del 100 — Ho scritto ${n} numeri su 100.\n${require('../share.js').progressBar(n)}\nE tu, riesci a fare 100?`);
+    assert.ok(await p.isVisible('#overlay'), 'la schermata resta aperta');
+    assert.deepEqual(urls.filter((u) => !u.startsWith(base)), []);
+    assert.deepEqual(errs, []);
+    await c.close();
+  });
+
+  await test('condividi senza menu di sistema: copiato negli appunti, con conferma', async () => {
+    const c = await newContext({ locale: 'de-DE' });
+    await c.addInitScript(() => {
+      window.__copied = [];
+      delete Navigator.prototype.share;
+      Object.defineProperty(navigator, 'clipboard', { value: { writeText: (t) => { window.__copied.push(t); return Promise.resolve(); } } });
+    });
+    const p = await c.newPage();
+    await p.goto(base);
+    const n = await loseGame(p);
+    await p.click('#overlay-share');
+    await p.waitForFunction(() => document.getElementById('share-status').textContent !== '');
+    assert.equal(await p.textContent('#share-status'), I.STRINGS.de.shareCopied);
+    const copied = await p.evaluate(() => window.__copied);
+    assert.equal(copied.length, 1);
+    assert.ok(copied[0].startsWith(`Das Spiel der 100 — Ich habe ${n} von 100 Zahlen geschrieben.`));
+    assert.ok(copied[0].endsWith('\nUnd du, schaffst du die 100?\nhttps://giocodel100.neocities.org/'));
+    assert.ok(await p.isHidden('#share-text'));
+    await c.close();
+  });
+
+  await test('condividi con appunti negati: testo pronto da copiare, selezionato', async () => {
+    const c = await newContext({ ...narrow, locale: 'ja-JP' });
+    await c.addInitScript(() => {
+      delete Navigator.prototype.share;
+      Object.defineProperty(navigator, 'clipboard', { value: { writeText: () => Promise.reject(new Error('negato')) } });
+    });
+    const p = await c.newPage();
+    await p.goto(base);
+    await loseGame(p);
+    await p.click('#overlay-share');
+    await p.waitForSelector('#share-text:not([hidden])');
+    assert.equal(await p.textContent('#share-status'), I.STRINGS.ja.shareManual);
+    const value = await p.inputValue('#share-text');
+    assert.ok(value.includes(I.STRINGS.ja.shareTagline) && value.endsWith('https://giocodel100.neocities.org/'));
+    assert.equal(await p.evaluate(() => document.activeElement.id), 'share-text');
+    assert.equal(await p.evaluate(() => { const t = document.activeElement; return t.selectionEnd - t.selectionStart; }), value.length);
+    assertFits(await layoutReport(p));
+    if (shotDir) await p.screenshot({ path: path.join(shotDir, 'share-manual-ja.png') });
+    // Chiudere e riaprire la schermata: il riquadro riparte vuoto.
+    await p.keyboard.press('Escape');
+    const last = await p.evaluate(() => Number(document.querySelector('.cell.last').dataset.index));
+    await tapCell(p, last);
+    await p.waitForSelector('#overlay:not([hidden])');
+    assert.ok(await p.isHidden('#share-text'));
+    assert.equal(await p.textContent('#share-status'), '');
+    await c.close();
+  });
+
+  await test('vittoria: si condivide "100 su 100"', async () => {
+    const c = await newContext({ locale: 'en-US' });
+    await c.addInitScript(() => {
+      window.__shared = [];
+      navigator.share = (data) => { window.__shared.push(data); return Promise.resolve(); };
+    });
+    const p = await c.newPage();
+    await p.goto(base);
+    for (const i of solution) await tapCell(p, i);
+    await p.waitForSelector('#overlay:not([hidden])');
+    await p.click('#overlay-share');
+    const [data] = await p.evaluate(() => window.__shared);
+    assert.equal(data.text, 'The Game of 100 — I wrote every number from 1 to 100! 🎉\n🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩\nCan you make it to 100?');
     await c.close();
   });
 
