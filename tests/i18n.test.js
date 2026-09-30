@@ -161,6 +161,14 @@ test('avviso di licenza in ogni lingua: link al sorgente, AGPLv3 e CC BY-SA 4.0'
   }
 });
 
+test('avviso sull’uso dell’IA in ogni lingua, con link alle segnalazioni', () => {
+  for (const lang of I.LANGUAGES) {
+    const n = I.STRINGS[lang].aiNotice;
+    assert.equal((n.match(/<a href="https:\/\/github\.com\/pabs-1\/giocodel100\/issues">[^<]+<\/a>/g) || []).length, 1, lang);
+    assert.doesNotMatch(n, /\{|\}/, `${lang}: segnaposto rimasto`);
+  }
+});
+
 console.log('Pagine');
 
 for (const file of ['index.html', 'rules.html']) {

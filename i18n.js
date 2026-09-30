@@ -56,6 +56,12 @@
       .replace('{cc}', '<a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a>');
   }
 
+  // Trasparenza: il gioco è fatto con l'assistenza dell'IA. {issues:testo}
+  // diventa il link alle segnalazioni del repository.
+  function aiNotice(template) {
+    return template.replace(/\{issues:([^}]+)\}/, '<a href="' + SOURCE_URL + '/issues">$1</a>');
+  }
+
   // Tasti (uguali in tutte le lingue: le scorciatoie non cambiano).
   var ARROWS = '<kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd>';
 
@@ -63,6 +69,7 @@
     it: {
       name: 'Italiano',
       htmlLang: 'it',
+      aiNotice: aiNotice('Questo gioco è stato creato con l’assistenza dell’intelligenza artificiale, traduzioni comprese: se trovi un errore, {issues:segnalalo su GitHub}.'),
       licenseNotice: licenseNotice('Il {src:codice sorgente} è libero, con licenza {agpl}; le immagini sono con licenza {cc}.'),
       share: 'Condividi il risultato',
       shareCopied: 'Risultato copiato: incollalo dove vuoi.',
@@ -146,6 +153,7 @@
     en: {
       name: 'English',
       htmlLang: 'en',
+      aiNotice: aiNotice('This game was made with the help of artificial intelligence, translations included: if you spot a mistake, {issues:report it on GitHub}.'),
       licenseNotice: licenseNotice('The {src:source code} is free software under the {agpl}; images are licensed under {cc}.'),
       share: 'Share your result',
       shareCopied: 'Result copied: paste it anywhere.',
@@ -229,6 +237,7 @@
     fr: {
       name: 'Français',
       htmlLang: 'fr',
+      aiNotice: aiNotice('Ce jeu a été créé avec l’aide de l’intelligence artificielle, traductions comprises : si vous trouvez une erreur, {issues:signalez-la sur GitHub}.'),
       licenseNotice: licenseNotice('Le {src:code source} est libre, sous licence {agpl} ; les images sont sous licence {cc}.'),
       share: 'Partager le résultat',
       shareCopied: 'Résultat copié : collez-le où vous voulez.',
@@ -312,6 +321,7 @@
     es: {
       name: 'Español',
       htmlLang: 'es',
+      aiNotice: aiNotice('Este juego se creó con la ayuda de la inteligencia artificial, traducciones incluidas: si encuentras un error, {issues:avísanos en GitHub}.'),
       licenseNotice: licenseNotice('El {src:código fuente} es libre, con licencia {agpl}; las imágenes, con licencia {cc}.'),
       share: 'Compartir resultado',
       shareCopied: 'Resultado copiado: pégalo donde quieras.',
@@ -395,6 +405,7 @@
     de: {
       name: 'Deutsch',
       htmlLang: 'de',
+      aiNotice: aiNotice('Dieses Spiel wurde mit Unterstützung künstlicher Intelligenz erstellt, einschließlich der Übersetzungen: Wenn du einen Fehler findest, {issues:melde ihn auf GitHub}.'),
       licenseNotice: licenseNotice('Der {src:Quellcode} ist freie Software unter der {agpl}; die Bilder stehen unter {cc}.'),
       share: 'Ergebnis teilen',
       shareCopied: 'Ergebnis kopiert: Füge es ein, wo du willst.',
@@ -479,6 +490,7 @@
     pt: {
       name: 'Português',
       htmlLang: 'pt',
+      aiNotice: aiNotice('Este jogo foi criado com a ajuda da inteligência artificial, incluindo as traduções: se encontrar um erro, {issues:avise no GitHub}.'),
       licenseNotice: licenseNotice('O {src:código-fonte} é livre, com licença {agpl}; as imagens estão sob a licença {cc}.'),
       share: 'Compartilhar resultado',
       shareCopied: 'Resultado copiado: cole onde quiser.',
@@ -562,6 +574,7 @@
     zh: {
       name: '简体中文',
       htmlLang: 'zh-Hans',
+      aiNotice: aiNotice('本游戏（包括翻译）在人工智能的协助下制作。如发现错误，请{issues:在 GitHub 上反馈}。'),
       licenseNotice: licenseNotice('{src:源代码}为自由软件，采用 {agpl} 许可；图片采用 {cc} 许可。'),
       share: '分享成绩',
       shareCopied: '已复制，粘贴到任意地方即可。',
@@ -645,6 +658,7 @@
     ja: {
       name: '日本語',
       htmlLang: 'ja',
+      aiNotice: aiNotice('このゲームは翻訳も含め、人工知能の支援を受けて作られました。誤りを見つけたら{issues:GitHub で報告}してください。'),
       licenseNotice: licenseNotice('{src:ソースコード}は {agpl} のフリーソフトウェアです。画像は {cc} で提供しています。'),
       share: '結果をシェア',
       shareCopied: 'コピーしました。好きな場所に貼り付けてください。',
@@ -728,6 +742,7 @@
     nl: {
       name: 'Nederlands',
       htmlLang: 'nl',
+      aiNotice: aiNotice('Dit spel is gemaakt met hulp van kunstmatige intelligentie, inclusief de vertalingen: zie je een fout, {issues:meld het op GitHub}.'),
       licenseNotice: licenseNotice('De {src:broncode} is vrije software onder de {agpl}; de afbeeldingen vallen onder {cc}.'),
       share: 'Resultaat delen',
       shareCopied: 'Resultaat gekopieerd: plak het waar je wilt.',
@@ -811,6 +826,7 @@
     pl: {
       name: 'Polski',
       htmlLang: 'pl',
+      aiNotice: aiNotice('Ta gra powstała z pomocą sztucznej inteligencji, łącznie z tłumaczeniami: jeśli zauważysz błąd, {issues:zgłoś go na GitHubie}.'),
       licenseNotice: licenseNotice('{src:Kod źródłowy} jest wolny, na licencji {agpl}; obrazy są na licencji {cc}.'),
       share: 'Udostępnij wynik',
       shareCopied: 'Wynik skopiowany: wklej go, gdzie chcesz.',
@@ -895,6 +911,7 @@
     ru: {
       name: 'Русский',
       htmlLang: 'ru',
+      aiNotice: aiNotice('Эта игра создана с помощью искусственного интеллекта, включая переводы: если заметите ошибку, {issues:сообщите о ней на GitHub}.'),
       licenseNotice: licenseNotice('{src:Исходный код} свободный, по лицензии {agpl}; изображения — по лицензии {cc}.'),
       share: 'Поделиться результатом',
       shareCopied: 'Результат скопирован: вставьте его куда угодно.',
@@ -978,6 +995,7 @@
     tr: {
       name: 'Türkçe',
       htmlLang: 'tr',
+      aiNotice: aiNotice('Bu oyun, çeviriler dahil, yapay zekâ desteğiyle hazırlandı: bir hata görürsen {issues:GitHub’da bildir}.'),
       licenseNotice: licenseNotice('{src:Kaynak kodu}, {agpl} lisanslı özgür yazılımdır; görseller {cc} lisanslıdır.'),
       share: 'Sonucu paylaş',
       shareCopied: 'Sonuç kopyalandı: istediğin yere yapıştır.',
@@ -1061,6 +1079,7 @@
     id: {
       name: 'Bahasa Indonesia',
       htmlLang: 'id',
+      aiNotice: aiNotice('Permainan ini dibuat dengan bantuan kecerdasan buatan, termasuk terjemahannya: kalau menemukan kesalahan, {issues:laporkan di GitHub}.'),
       licenseNotice: licenseNotice('{src:Kode sumber} bebas dengan lisensi {agpl}; gambar berlisensi {cc}.'),
       share: 'Bagikan hasil',
       shareCopied: 'Hasil disalin: tempel di mana saja.',
@@ -1144,6 +1163,7 @@
     'zh-Hant': {
       name: '繁體中文',
       htmlLang: 'zh-Hant',
+      aiNotice: aiNotice('本遊戲（包括翻譯）在人工智慧的協助下製作。如發現錯誤，請{issues:在 GitHub 上回報}。'),
       licenseNotice: licenseNotice('{src:原始碼}為自由軟體，採用 {agpl} 授權；圖片採用 {cc} 授權。'),
       share: '分享成績',
       shareCopied: '已複製，貼到任何地方即可。',
@@ -1228,6 +1248,7 @@
     ko: {
       name: '한국어',
       htmlLang: 'ko',
+      aiNotice: aiNotice('이 게임은 번역을 포함해 인공지능의 도움을 받아 만들었습니다. 오류를 발견하면 {issues:GitHub에 알려 주세요}.'),
       licenseNotice: licenseNotice('{src:소스 코드}는 {agpl} 라이선스의 자유 소프트웨어이며, 이미지는 {cc} 라이선스입니다.'),
       share: '결과 공유',
       shareCopied: '결과를 복사했습니다. 원하는 곳에 붙여 넣으세요.',

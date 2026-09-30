@@ -275,6 +275,16 @@ export NEOCITIES_API_KEY='la-tua-chiave'
 
 La chiave non va mai scritta in un file del repository.
 
+## Intelligenza artificiale
+
+Il gioco è stato creato con l'assistenza dell'intelligenza artificiale:
+codice, testi, traduzioni e immagini sono stati prodotti con l'IA sotto la
+direzione e la revisione di pabs-1. La correttezza del codice è verificata
+dai test automatici descritti sopra; le traduzioni invece non sono state
+riviste da madrelingua, quindi le correzioni sono benvenute nelle
+[segnalazioni](https://github.com/pabs-1/giocodel100/issues). La pagina "?"
+del gioco lo dice in tutte le lingue.
+
 ## Licenza
 
 - **Codice** (JavaScript, HTML, CSS, script, test, traduzioni, documentazione):

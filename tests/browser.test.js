@@ -421,6 +421,9 @@ function assertFits(rep) {
       // AGPL: link visibile al codice sorgente, in ogni lingua.
       assert.equal(await p.locator('.license a[href="https://github.com/pabs-1/giocodel100"]').count(), 1);
       assert.equal(await p.locator('.license a[rel="license"]').count(), 2);
+      // Trasparenza: il gioco è fatto con l'assistenza dell'IA.
+      assert.equal(await p.textContent('.ai-notice'), T.aiNotice.replace(/<[^>]+>/g, ''));
+      assert.equal(await p.locator('.ai-notice a[href="https://github.com/pabs-1/giocodel100/issues"]').count(), 1);
       const w = await p.evaluate(() => [document.documentElement.scrollWidth, innerWidth]);
       assert.ok(w[0] <= w[1], `pagina regole più larga dello schermo: ${w}`);
       if (shotDir) await p.screenshot({ path: path.join(shotDir, `rules-${lang}.png`), fullPage: true });
