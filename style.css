@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2026 pabs-1 e i contributori del Gioco del 100
+/* SPDX-FileCopyrightText: 2026 Pabs.one
    SPDX-License-Identifier: AGPL-3.0-or-later */
 /* ===== Gioco del 100 ===== */
 
@@ -115,6 +115,27 @@ body {
 .brand {
   flex: 1 1 0;
   min-width: 0;
+}
+
+.brand-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+}
+
+/* Badge "hosted by Neocities", servito dal sito stesso (nessuna richiesta a terzi). */
+.hosted {
+  display: block;
+  flex: none;
+  line-height: 0;
+  border-radius: 6px;
+}
+
+.hosted img {
+  display: block;
+  width: auto;
+  height: 26px;
 }
 
 .title {
@@ -401,7 +422,8 @@ body {
   transform: none;
 }
 
-.btn:focus-visible {
+.btn:focus-visible,
+.hosted:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
 }

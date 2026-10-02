@@ -5,8 +5,15 @@ version = 1
 # Immagini: CC BY-SA 4.0
 [[annotations]]
 path = ["icons/**", "og-image.png"]
-SPDX-FileCopyrightText = "2026 pabs-1 e i contributori del Gioco del 100"
+SPDX-FileCopyrightText = "2026 Pabs.one"
 SPDX-License-Identifier = "CC-BY-SA-4.0"
+
+# Badge "hosted by Neocities": file ufficiale di Neocities
+# (https://github.com/neocities/neocities, public/neocities.png), BSD-2-Clause.
+[[annotations]]
+path = "neocities.png"
+SPDX-FileCopyrightText = "2013 Kyle Drake"
+SPDX-License-Identifier = "BSD-2-Clause"
 
 # Tutto il resto (dati, documentazione, configurazione): AGPL-3.0-or-later
 [[annotations]]
@@ -20,5 +27,5 @@ path = [
   "*/index.html",
   "*/rules.html",
 ]
-SPDX-FileCopyrightText = "2026 pabs-1 e i contributori del Gioco del 100"
+SPDX-FileCopyrightText = "2026 Pabs.one"
 SPDX-License-Identifier = "AGPL-3.0-or-later"

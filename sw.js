@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 pabs-1 e i contributori del Gioco del 100
+// SPDX-FileCopyrightText: 2026 Pabs.one
 // SPDX-License-Identifier: AGPL-3.0-or-later
 /*
  * Service worker minimale: cache-first sugli asset del gioco, così dopo la
@@ -21,6 +21,7 @@ var ASSETS = [
   'share.js',
   'game.js',
   'manifest.json',
+  'neocities.png',
   'icons/icon.svg',
   'icons/icon-192.png',
   'icons/icon-512.png',

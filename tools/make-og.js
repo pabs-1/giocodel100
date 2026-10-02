@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 pabs-1 e i contributori del Gioco del 100
+// SPDX-FileCopyrightText: 2026 Pabs.one
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Rigenera og-image.png, l'anteprima 1200×630 usata quando si condivide il
 // link (solo sviluppo, serve Playwright):   node tools/make-og.js

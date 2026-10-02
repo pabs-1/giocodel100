@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SPDX-FileCopyrightText: 2026 pabs-1 e i contributori del Gioco del 100
+# SPDX-FileCopyrightText: 2026 Pabs.one
 # SPDX-License-Identifier: AGPL-3.0-or-later
 # Carica il sito statico su Neocities via API.
 #
@@ -36,6 +36,7 @@ FILES=(
   icons/icon-maskable-512.png
   icons/apple-touch-icon.png
   og-image.png
+  neocities.png
   robots.txt
   sitemap.xml
   not_found.html

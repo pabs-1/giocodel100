@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 pabs-1 e i contributori del Gioco del 100
+// SPDX-FileCopyrightText: 2026 Pabs.one
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Test delle traduzioni, senza framework: `node tests/i18n.test.js`
 'use strict';

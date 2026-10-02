@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 pabs-1 e i contributori del Gioco del 100
+// SPDX-FileCopyrightText: 2026 Pabs.one
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Smoke test end-to-end in Chromium (solo sviluppo, serve Playwright):
 //   node tests/browser.test.js
@@ -135,6 +135,34 @@ function assertFits(rep) {
       await ctx.close();
     });
   }
+
+  await test('badge Neocities: file locale caricato, link in nuova scheda, accanto al titolo', async () => {
+    const ctx = await newContext({ viewport: { width: 320, height: 480 } });
+    const page = await ctx.newPage();
+    await page.goto(base);
+    const b = await page.evaluate(() => {
+      const a = document.querySelector('.topbar .hosted');
+      const img = a.querySelector('img');
+      const r = img.getBoundingClientRect();
+      const help = document.querySelector('.topbar .btn-icon').getBoundingClientRect();
+      const stats = document.querySelector('.stats').getBoundingClientRect();
+      return {
+        href: a.href, target: a.target, rel: a.rel, src: img.src, alt: img.alt,
+        loaded: img.complete && img.naturalWidth === 200,
+        h: r.height, right: r.right, bottom: r.bottom, helpLeft: help.left, statsTop: stats.top
+      };
+    });
+    assert.equal(b.href, 'https://neocities.org/');
+    assert.equal(b.target, '_blank');
+    assert.deepEqual(b.rel.split(' ').sort(), ['noopener', 'noreferrer']);
+    assert.equal(b.src, base + 'neocities.png');
+    assert.equal(b.alt, 'Sito ospitato su Neocities');
+    assert.ok(b.loaded, 'immagine non caricata');
+    assert.ok(b.h >= 20, `badge troppo piccolo: ${b.h}px`);
+    assert.ok(b.right <= b.helpLeft, 'il badge finisce sotto il pulsante "?"');
+    assert.ok(b.bottom <= b.statsTop, 'il badge finisce sui contatori');
+    await ctx.close();
+  });
 
   console.log('Partita completa al tocco (iPhone 13)');
   const phone = { ...devices['iPhone 13'] };
@@ -274,7 +302,10 @@ function assertFits(rep) {
     assert.equal(await p.locator('[role=row]').count(), 10);
     assert.equal(await p.locator('[role=gridcell]').count(), 100);
     assert.equal(await p.locator('[role=gridcell][tabindex="0"]').count(), 1);
-    // Tab fino alla griglia: il primo elemento focusabile è "?", poi la cella attiva.
+    // Tab fino alla griglia: prima il badge di Neocities (con focus visibile), poi "?", poi la cella attiva.
+    await p.keyboard.press('Tab');
+    assert.equal(await p.evaluate(() => document.activeElement.className), 'hosted');
+    assert.equal(await p.evaluate(() => getComputedStyle(document.activeElement).outlineStyle), 'solid');
     await p.keyboard.press('Tab');
     await p.keyboard.press('Tab');
     assert.equal(await p.evaluate(() => document.activeElement.getAttribute('role')), 'gridcell');
@@ -387,6 +418,7 @@ function assertFits(rep) {
       assert.equal(await p.textContent('h1.title'), T.title);
       assert.equal(await p.textContent('h1.title .title-num'), '100');
       assert.equal(await p.textContent('.dedica'), T.dedication);
+      assert.equal(await p.getAttribute('.hosted img', 'alt'), T.hostedBy);
       assert.equal(await p.textContent('[data-i18n="undo"]'), T.undo);
       assert.equal(await p.textContent('#status'), T.statusReady);
       assertFits(await layoutReport(p));

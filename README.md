@@ -183,6 +183,7 @@ esattamente il sito pubblicato.
 | `manifest.json`, `icons/` | PWA |
 | `it/`, `en/`, … `ko/`, `sitemap.xml` | Pagine per lingua e sitemap, generate da `tools/build-pages.js` |
 | `robots.txt`, `not_found.html`, `og-image.png` | Motori di ricerca, pagina 404, anteprima per i social |
+| `neocities.png` | Badge "hosted by Neocities" accanto al titolo |
 | `tools/` | Generatore delle pagine, icone e anteprima (non pubblicati) |
 | `tests/` | Test (non vengono pubblicati) |
 | `deploy.sh` | Upload su Neocities |
@@ -279,7 +280,7 @@ La chiave non va mai scritta in un file del repository.
 
 Il gioco è stato creato con l'assistenza dell'intelligenza artificiale:
 codice, testi, traduzioni e immagini sono stati prodotti con l'IA sotto la
-direzione e la revisione di pabs-1. La correttezza del codice è verificata
+direzione e la revisione di Pabs.one. La correttezza del codice è verificata
 dai test automatici descritti sopra; le traduzioni invece non sono state
 riviste da madrelingua, quindi le correzioni sono benvenute nelle
 [segnalazioni](https://github.com/pabs-1/giocodel100/issues). La pagina "?"
@@ -292,6 +293,13 @@ del gioco lo dice in tutte le lingue.
   via rete può avere il codice sorgente: il link è nella pagina "?".
 - **Immagini** (`icons/`, `og-image.png`):
   [CC BY-SA 4.0](LICENSES/CC-BY-SA-4.0.txt).
+- **Badge "hosted by Neocities"** (`neocities.png`, accanto al titolo): è il
+  file ufficiale di Neocities, preso dal loro
+  [repository](https://github.com/neocities/neocities) (`public/neocities.png`),
+  © 2013 Kyle Drake, licenza [BSD-2-Clause](LICENSES/BSD-2-Clause.txt). Il
+  nome e il logo di Neocities restano loro.
+
+Copyright © 2026 Pabs.one.
 
 Ogni file dichiara licenza e copyright con un'intestazione `SPDX`; quelli che
 non possono contenerla (immagini, JSON, file generati) sono elencati in
@@ -299,5 +307,8 @@ non possono contenerla (immagini, JSON, file generati) sono elencati in
 segue lo standard [REUSE](https://reuse.software): `reuse lint` lo verifica,
 anche nella CI.
 
-Nessun codice, font o immagine di terzi: i caratteri sono quelli del sistema e
-le emoji del messaggio di condivisione le disegna il dispositivo.
+A parte il badge di Neocities, nessun codice, font o immagine di terzi: i
+caratteri sono quelli del sistema e le emoji del messaggio di condivisione le
+disegna il dispositivo. Anche il badge è servito dal sito stesso, quindi
+aprire il gioco non contatta nessun altro server; il link a neocities.org si
+apre in una nuova scheda solo se lo tocchi.
