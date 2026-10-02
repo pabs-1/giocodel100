@@ -452,7 +452,7 @@ function assertFits(rep) {
       assert.equal(await p.locator('#lang-select option').count(), I.LANGUAGES.length + 1);
       // AGPL: link visibile al codice sorgente, in ogni lingua.
       assert.equal(await p.locator('.license a[href="https://github.com/pabs-1/giocodel100"]').count(), 1);
-      assert.equal(await p.locator('.license a[rel="license"]').count(), 2);
+      assert.equal(await p.locator('.license a[rel="license"]').count(), 3); // AGPLv3, CC BY-SA 4.0, BSD-2-Clause (badge)
       // Trasparenza: il gioco è fatto con l'assistenza dell'IA.
       assert.equal(await p.textContent('.ai-notice'), T.aiNotice.replace(/<[^>]+>/g, ''));
       assert.equal(await p.locator('.ai-notice a[href="https://github.com/pabs-1/giocodel100/issues"]').count(), 1);

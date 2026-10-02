@@ -151,12 +151,13 @@ test('plurale russo e polacco: 1 / 2–4 / 5+ (12–14 con 5+)', () => {
   assert.match(pl.statusPlaying(2, 5), /5 możliwych ruchów\./);
 });
 
-test('avviso di licenza in ogni lingua: link al sorgente, AGPLv3 e CC BY-SA 4.0', () => {
+test('avviso di licenza in ogni lingua: link al sorgente, AGPLv3, CC BY-SA 4.0 e badge BSD', () => {
   for (const lang of I.LANGUAGES) {
     const n = I.STRINGS[lang].licenseNotice;
     assert.ok(n.includes('<a href="https://github.com/pabs-1/giocodel100">'), lang);
     assert.ok(n.includes('>GNU AGPLv3</a>'), lang);
     assert.ok(n.includes('>CC BY-SA 4.0</a>'), lang);
+    assert.ok(n.includes('>BSD-2-Clause</a>') && n.includes('Neocities'), `${lang}: manca l’eccezione del badge`);
     assert.doesNotMatch(n, /\{|\}/, `${lang}: segnaposto rimasto`);
   }
 });
