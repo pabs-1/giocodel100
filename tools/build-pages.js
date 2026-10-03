@@ -16,6 +16,12 @@
  *
  *   node tools/build-pages.js           # rigenera i file
  *   node tools/build-pages.js --check   # esce con errore se non aggiornati (CI)
+ *   node tools/build-pages.js --sitemap-lastmod
+ *       # stampa la sitemap con <lastmod> presa da git (la usa deploy.sh)
+ *
+ * La sitemap nel repository non ha <lastmod>: la data giusta di una pagina
+ * è quella del commit che l'ha cambiata, che esiste solo DOPO il commit.
+ * Per questo la aggiunge deploy.sh al momento della pubblicazione.
  *
  * Solo Node, nessuna dipendenza. Le sorgenti sono HTML scritto da noi e
  * marcato con data-i18n*, quindi bastano sostituzioni mirate.
@@ -24,6 +30,7 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const { execFileSync } = require('node:child_process');
 const I = require('../i18n.js');
 
 const ROOT = path.join(__dirname, '..');
@@ -52,7 +59,7 @@ function description(d, page) {
 function seoBlock(code, page) {
   const d = I.STRINGS[code || I.DEFAULT_LANG];
   const url = pageUrl(code, page);
-  const title = page === 'index' ? d.title : d.pageTitle;
+  const title = page === 'index' ? d.docTitle : d.pageTitle;
   const desc = description(d, page);
   const out = [
     `<meta name="description" content="${esc(desc)}">`,
@@ -189,7 +196,30 @@ function build() {
   return files;
 }
 
-function sitemap() {
+/** File che contiene una pagina; code = null per la radice. */
+function pageFile(code, page) {
+  return (code ? I.dirFor(code) + '/' : '') + PAGES[page];
+}
+
+/**
+ * Data dell'ultima modifica di un file secondo git (AAAA-MM-GG, UTC), oggi se
+ * ha modifiche non committate, null se git non può saperlo (niente git o
+ * copia "shallow", dove ogni file sembrerebbe cambiato nell'ultimo commit).
+ */
+function gitLastmod(file) {
+  const git = (...args) => execFileSync('git', args, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+  try {
+    if (git('rev-parse', '--is-shallow-repository') !== 'false') return null;
+    if (git('status', '--porcelain', '--', file)) return new Date().toISOString().slice(0, 10);
+    const iso = git('log', '-1', '--format=%cI', '--', file);
+    return iso ? new Date(iso).toISOString().slice(0, 10) : null;
+  } catch (err) {
+    return null;
+  }
+}
+
+/** lastmodFor(file) -> 'AAAA-MM-GG' o null; senza, la sitemap non ha date. */
+function sitemap(lastmodFor) {
   const out = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'
@@ -197,6 +227,8 @@ function sitemap() {
   for (const page of Object.keys(PAGES)) {
     for (const code of [null, ...I.LANGUAGES]) {
       out.push('  <url>', `    <loc>${pageUrl(code, page)}</loc>`);
+      const lastmod = lastmodFor && lastmodFor(pageFile(code, page));
+      if (lastmod) out.push(`    <lastmod>${lastmod}</lastmod>`);
       for (const c of I.LANGUAGES) {
         out.push(`    <xhtml:link rel="alternate" hreflang="${I.STRINGS[c].htmlLang}" href="${pageUrl(c, page)}"/>`);
       }
@@ -208,9 +240,18 @@ function sitemap() {
   return out.join('\n') + '\n';
 }
 
-module.exports = { build, pageUrl };
+module.exports = { build, pageUrl, sitemap, gitLastmod };
 
-if (require.main === module) {
+if (require.main === module && process.argv.includes('--sitemap-lastmod')) {
+  let dated = 0;
+  const xml = sitemap((file) => {
+    const d = gitLastmod(file);
+    if (d) dated++;
+    return d;
+  });
+  if (!dated) console.error('Attenzione: git non disponibile o copia "shallow": sitemap senza <lastmod>.');
+  process.stdout.write(xml);
+} else if (require.main === module) {
   const check = process.argv.includes('--check');
   const files = build();
   const stale = [];

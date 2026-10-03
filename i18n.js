@@ -86,6 +86,8 @@
       ogLocale: 'it_IT',
       metaDescription: 'Il gioco del 100: scrivi i numeri da 1 a 100 su una griglia 10×10 saltando 2 caselle in orizzontale o verticale e 1 in diagonale. Gratis e senza pubblicità.',
       title: 'Gioco del 100',
+      // Solo per il <title> e i motori di ricerca: dice cos'è il gioco.
+      tagline: 'puzzle di numeri online gratis',
       dedication: 'Dedicato alla 5C dello Spalla',
       colon: ': ',
       comma: ', ',
@@ -171,6 +173,7 @@
       ogLocale: 'en_US',
       metaDescription: 'The Game of 100: write the numbers 1 to 100 on a 10×10 grid, skipping 2 squares across or down and 1 diagonally. A free puzzle with no ads and no tracking.',
       title: 'The Game of 100',
+      tagline: 'free online number puzzle',
       dedication: 'Dedicated to class 5C at the Spalla',
       colon: ': ',
       comma: ', ',
@@ -256,6 +259,7 @@
       ogLocale: 'fr_FR',
       metaDescription: 'Le jeu du 100 : écrivez les nombres de 1 à 100 sur une grille 10×10 en sautant 2 cases en ligne droite et 1 en diagonale. Casse-tête gratuit, sans pub.',
       title: 'Le jeu du 100',
+      tagline: 'casse-tête de nombres gratuit en ligne',
       dedication: 'Dédié à la classe 5C du Spalla',
       colon: ' : ',
       comma: ', ',
@@ -341,6 +345,7 @@
       ogLocale: 'es_ES',
       metaDescription: 'El juego del 100: escribe los números del 1 al 100 en una cuadrícula de 10×10 saltando 2 casillas en línea recta y 1 en diagonal. Gratis y sin anuncios.',
       title: 'El juego del 100',
+      tagline: 'rompecabezas numérico gratis en línea',
       dedication: 'Dedicado a la clase 5C del Spalla',
       colon: ': ',
       comma: ', ',
@@ -426,6 +431,7 @@
       ogLocale: 'de_DE',
       metaDescription: 'Das Spiel der 100: Schreibe die Zahlen 1 bis 100 in ein 10×10-Raster und überspringe dabei 2 Felder gerade oder 1 diagonal. Kostenlos und ohne Werbung.',
       title: 'Das Spiel der 100',
+      tagline: 'kostenloses Zahlenrätsel online',
       dedication: 'Gewidmet der Klasse 5C des Spalla',
       colon: ': ',
       comma: ', ',
@@ -512,6 +518,7 @@
       ogLocale: 'pt_BR',
       metaDescription: 'O jogo do 100: escreva os números de 1 a 100 num tabuleiro 10×10 saltando 2 casas em linha reta e 1 na diagonal. Quebra-cabeça grátis e sem anúncios.',
       title: 'O jogo do 100',
+      tagline: 'quebra-cabeça de números grátis online',
       dedication: 'Dedicado à turma 5C do Spalla',
       colon: ': ',
       comma: ', ',
@@ -597,6 +604,7 @@
       ogLocale: 'zh_CN',
       metaDescription: '数到 100：在 10×10 方格中依次写下 1 到 100，横竖跳过 2 格，斜向跳过 1 格。免费益智游戏，无广告。',
       title: '数到 100',
+      tagline: '免费在线数字益智游戏',
       dedication: '献给 Spalla 的 5C 班',
       colon: '：',
       comma: '，',
@@ -682,6 +690,7 @@
       ogLocale: 'ja_JP',
       metaDescription: '100 マスゲーム：10×10 のマス目に 1 から 100 までの数字を書くパズル。縦横は 2 マス、斜めは 1 マス飛ばして進みます。無料・広告なし。',
       title: '100 マスゲーム',
+      tagline: '無料のオンライン数字パズル',
       dedication: 'Spalla の 5C クラスに捧ぐ',
       colon: '：',
       comma: '、',
@@ -767,6 +776,7 @@
       ogLocale: 'nl_NL',
       metaDescription: 'Het spel van 100: schrijf de getallen 1 tot en met 100 in een rooster van 10×10 en sla 2 vakjes recht of 1 diagonaal over. Gratis puzzel zonder reclame.',
       title: 'Het spel van 100',
+      tagline: 'gratis online getallenpuzzel',
       dedication: 'Opgedragen aan klas 5C van het Spalla',
       colon: ': ',
       comma: ', ',
@@ -852,6 +862,7 @@
       ogLocale: 'pl_PL',
       metaDescription: 'Gra w 100: wpisz liczby od 1 do 100 na planszy 10×10, przeskakując 2 pola w linii prostej lub 1 po skosie. Darmowa łamigłówka bez reklam.',
       title: 'Gra w 100',
+      tagline: 'darmowa łamigłówka liczbowa online',
       dedication: 'Dedykowane klasie 5C ze Spalla',
       colon: ': ',
       comma: ', ',
@@ -938,6 +949,7 @@
       ogLocale: 'ru_RU',
       metaDescription: 'Игра до 100: напишите числа от 1 до 100 на поле 10×10, перепрыгивая 2 клетки по прямой или 1 по диагонали. Бесплатная головоломка без рекламы.',
       title: 'Игра до 100',
+      tagline: 'бесплатная онлайн-головоломка с числами',
       dedication: 'Посвящается классу 5C из «Spalla»',
       colon: ': ',
       comma: ', ',
@@ -1023,6 +1035,7 @@
       ogLocale: 'tr_TR',
       metaDescription: '100 Oyunu: 1’den 100’e kadar sayıları 10×10 ızgaraya yaz; düz giderken 2, çaprazda 1 kare atla. Reklamsız, ücretsiz bir bulmaca.',
       title: '100 Oyunu',
+      tagline: 'ücretsiz çevrimiçi sayı bulmacası',
       dedication: 'Spalla 5C sınıfına ithaf edilmiştir',
       colon: ': ',
       comma: ', ',
@@ -1108,6 +1121,7 @@
       ogLocale: 'id_ID',
       metaDescription: 'Permainan 100: tulis angka 1 sampai 100 di kisi 10×10 dengan melompati 2 kotak lurus atau 1 kotak diagonal. Teka-teki gratis tanpa iklan.',
       title: 'Permainan 100',
+      tagline: 'teka-teki angka online gratis',
       dedication: 'Didedikasikan untuk kelas 5C Spalla',
       colon: ': ',
       comma: ', ',
@@ -1193,6 +1207,7 @@
       ogLocale: 'zh_TW',
       metaDescription: '數到 100：在 10×10 方格中依序寫下 1 到 100，橫直跳過 2 格，斜向跳過 1 格。免費益智遊戲，無廣告。',
       title: '數到 100',
+      tagline: '免費線上數字益智遊戲',
       dedication: '獻給 Spalla 的 5C 班',
       colon: '：',
       comma: '，',
@@ -1279,6 +1294,7 @@
       ogLocale: 'ko_KR',
       metaDescription: '100 게임: 10×10 격자에 1부터 100까지 숫자를 쓰는 퍼즐. 가로세로는 2칸, 대각선은 1칸을 건너뜁니다. 무료, 광고 없음.',
       title: '100 게임',
+      tagline: '무료 온라인 숫자 퍼즐',
       dedication: 'Spalla 5C 반에게 바칩니다',
       colon: ': ',
       comma: ', ',
@@ -1351,8 +1367,9 @@
   // Ordine del selettore: prima l'originale, poi alfabeti latini, poi gli altri.
   var LANGUAGES = ['it', 'en', 'fr', 'es', 'de', 'pt', 'nl', 'pl', 'tr', 'id', 'ru', 'zh', 'zh-Hant', 'ja', 'ko'];
 
-  // Titolo della pagina regole ricavato dal titolo tradotto.
+  // Titoli delle schede (e dei risultati di ricerca) ricavati dal titolo tradotto.
   LANGUAGES.forEach(function (code) {
+    STRINGS[code].docTitle = STRINGS[code].title + ' – ' + STRINGS[code].tagline;
     STRINGS[code].pageTitle = STRINGS[code].rulesTitle + ' — ' + STRINGS[code].title;
   });
 

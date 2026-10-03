@@ -69,6 +69,11 @@ for f in "${FILES[@]}"; do
   cp "$f" "$STAGE/$f"
 done
 sed -i.bak "s/__BUILD__/$BUILD/g" "$STAGE/sw.js" && rm -f "$STAGE/sw.js.bak"
+# Sitemap pubblicata con la data di ultima modifica di ogni pagina (da git).
+# Senza Node resta quella del repository, valida ma senza date.
+if command -v node >/dev/null 2>&1; then
+  node tools/build-pages.js --sitemap-lastmod > "$STAGE/sitemap.xml"
+fi
 
 ARGS=()
 for f in "${FILES[@]}"; do

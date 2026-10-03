@@ -7,7 +7,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const I = require('../i18n.js');
-const { build, pageUrl } = require('../tools/build-pages.js');
+const { build, pageUrl, sitemap, gitLastmod } = require('../tools/build-pages.js');
 
 const ROOT = path.join(__dirname, '..');
 let passed = 0;
@@ -61,7 +61,7 @@ for (const p of PAGES) {
 
     const titles = all(html, /<title[^>]*>([^<]*)<\/title>/g);
     assert.equal(titles.length, 1);
-    assert.equal(unescape(titles[0]), p.page === 'index' ? d.title : d.pageTitle);
+    assert.equal(unescape(titles[0]), p.page === 'index' ? d.docTitle : d.pageTitle);
 
     const desc = unescape(attr(html, /<meta name="description" content="([^"]+)">/));
     assert.ok(desc && [...desc].length >= 40, 'descrizione troppo corta');
@@ -143,6 +143,25 @@ test('sitemap.xml: 32 indirizzi, ognuno con 15 lingue + x-default', () => {
   assert.deepEqual(locs.slice().sort(), PAGES.map((p) => p.url).sort());
   for (const u of urls) assert.equal((u.match(/<xhtml:link /g) || []).length, I.LANGUAGES.length + 1);
   assert.equal((xml.match(/<url>/g) || []).length, (xml.match(/<\/url>/g) || []).length);
+});
+
+test('sitemap pubblicata: <lastmod> per ogni pagina, dal file giusto', () => {
+  // Nel repository niente date (la data di una pagina è quella del suo commit).
+  assert.doesNotMatch(read('sitemap.xml'), /<lastmod>/);
+  const asked = [];
+  const xml = sitemap((file) => { asked.push(file); return file === 'en/rules.html' ? '2026-01-02' : '2026-03-04'; });
+  assert.equal(asked.length, 32);
+  assert.ok(asked.includes('index.html') && asked.includes('zh-hant/index.html'));
+  for (const file of asked) assert.ok(fs.existsSync(path.join(__dirname, '..', file)), file);
+  const urls = xml.split('<url>').slice(1);
+  assert.equal(urls.length, 32);
+  for (const u of urls) assert.match(u, /^\s*<loc>[^<]+<\/loc>\s*<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/);
+  assert.match(xml, new RegExp(`<loc>${pageUrl('en', 'rules')}</loc>\\s*<lastmod>2026-01-02</lastmod>`));
+  // Senza date la sitemap è identica a quella del repository.
+  assert.equal(sitemap(() => null), read('sitemap.xml'));
+  // Da git: una data valida, o null se git non può saperlo (copia shallow).
+  const d = gitLastmod('rules.html');
+  assert.ok(d === null || /^\d{4}-\d{2}-\d{2}$/.test(d), String(d));
 });
 
 test('robots.txt: tutto indicizzabile e sitemap dichiarata', () => {

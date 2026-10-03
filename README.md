@@ -135,11 +135,18 @@ i motori di ricerca possono mostrarla a chi cerca in quella lingua:
 
 - Su `/fr/` vince la lingua dell'indirizzo; la partita salvata è la stessa in
   tutte le lingue.
+- Il titolo della scheda (quello che i motori di ricerca mostrano nei
+  risultati) dice anche cos'è il gioco: "Gioco del 100 – puzzle di numeri
+  online gratis", tradotto, sotto i 60 caratteri. Il titolo visibile nella
+  pagina resta solo il nome.
 - Ogni pagina ha titolo e descrizione tradotti, `canonical`, `hreflang` verso
   tutte le altre lingue, Open Graph (anteprima quando si condivide il link,
   `og-image.png`) e dati strutturati schema.org (`WebApplication`).
 - `sitemap.xml` elenca tutte le 32 pagine con le alternative linguistiche;
   `robots.txt` la dichiara; `not_found.html` è la pagina 404 (non indicizzata).
+  La sitemap pubblicata ha anche `<lastmod>`, la data dell'ultimo commit che
+  ha cambiato ogni pagina: la aggiunge `deploy.sh` (con la storia git
+  completa; nel repository la sitemap è senza date).
 
 Le cartelle delle lingue e la sitemap **si generano** da `index.html` e
 `rules.html` (le sorgenti, da modificare a mano):

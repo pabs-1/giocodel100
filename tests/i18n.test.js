@@ -112,6 +112,11 @@ for (const lang of I.LANGUAGES) {
     assert.match(d.dedication, /5C/);
     assert.match(d.dedication, /Spalla/);
     assert.equal(d.pageTitle, d.rulesTitle + ' — ' + d.title);
+    // Titolo della scheda e dei risultati di ricerca: nome + cosa è, senza
+    // superare i ~60 caratteri che Google mostra prima di troncare.
+    assert.equal(d.docTitle, d.title + ' – ' + d.tagline);
+    assert.ok(d.docTitle.length <= 60, `${lang}: titolo troppo lungo (${d.docTitle.length})`);
+    if (lang !== 'it') assert.notEqual(d.tagline, REF.tagline, 'descrizione breve non tradotta');
     if (lang !== 'it') assert.notEqual(d.title, REF.title, 'titolo non tradotto');
     if (lang !== 'it') assert.notEqual(d.dedication, REF.dedication, 'dedica non tradotta');
   });

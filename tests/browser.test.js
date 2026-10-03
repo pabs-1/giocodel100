@@ -414,7 +414,7 @@ function assertFits(rep) {
       const errs = watchConsole(p);
       await p.goto(base);
       assert.equal(await p.getAttribute('html', 'lang'), T.htmlLang);
-      assert.equal(await p.title(), T.title);
+      assert.equal(await p.title(), T.docTitle);
       assert.equal(await p.textContent('h1.title'), T.title);
       assert.equal(await p.textContent('h1.title .title-num'), '100');
       assert.equal(await p.textContent('.dedica'), T.dedication);
@@ -504,7 +504,7 @@ function assertFits(rep) {
     await p.goto(base + 'fr/');
     const T = I.STRINGS.fr;
     assert.equal(await p.getAttribute('html', 'lang'), 'fr');
-    assert.equal(await p.title(), T.title);
+    assert.equal(await p.title(), T.docTitle);
     assert.equal(await p.textContent('#status'), T.statusReady);
     assertFits(await layoutReport(p)); // stile e script caricati da ../
     const pt = await cellCenter(p, 44);
