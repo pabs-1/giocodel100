@@ -144,9 +144,12 @@ i motori di ricerca possono mostrarla a chi cerca in quella lingua:
   `og-image.png`) e dati strutturati schema.org (`WebApplication`).
 - `sitemap.xml` elenca tutte le 32 pagine con le alternative linguistiche;
   `robots.txt` la dichiara; `not_found.html` è la pagina 404 (non indicizzata).
-  La sitemap pubblicata ha anche `<lastmod>`, la data dell'ultimo commit che
-  ha cambiato ogni pagina: la aggiunge `deploy.sh` (con la storia git
-  completa; nel repository la sitemap è senza date).
+  **Da ottobre 2026 Neocities non accetta più sitemap dai siti gratuiti**
+  (errore `invalid_file_type`, "supporter required"): `deploy.sh` quindi non
+  la carica. Resta online quella caricata a settembre, identica a questa;
+  se un giorno le pagine cambiano indirizzo, va aggiornata a mano (serve un
+  account supporter). I motori di ricerca trovano comunque le lingue grazie
+  agli `hreflang` dentro ogni pagina.
 
 Le cartelle delle lingue e la sitemap **si generano** da `index.html` e
 `rules.html` (le sorgenti, da modificare a mano):

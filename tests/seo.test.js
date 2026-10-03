@@ -7,7 +7,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const I = require('../i18n.js');
-const { build, pageUrl, sitemap, gitLastmod } = require('../tools/build-pages.js');
+const { build, pageUrl } = require('../tools/build-pages.js');
 
 const ROOT = path.join(__dirname, '..');
 let passed = 0;
@@ -145,25 +145,6 @@ test('sitemap.xml: 32 indirizzi, ognuno con 15 lingue + x-default', () => {
   assert.equal((xml.match(/<url>/g) || []).length, (xml.match(/<\/url>/g) || []).length);
 });
 
-test('sitemap pubblicata: <lastmod> per ogni pagina, dal file giusto', () => {
-  // Nel repository niente date (la data di una pagina è quella del suo commit).
-  assert.doesNotMatch(read('sitemap.xml'), /<lastmod>/);
-  const asked = [];
-  const xml = sitemap((file) => { asked.push(file); return file === 'en/rules.html' ? '2026-01-02' : '2026-03-04'; });
-  assert.equal(asked.length, 32);
-  assert.ok(asked.includes('index.html') && asked.includes('zh-hant/index.html'));
-  for (const file of asked) assert.ok(fs.existsSync(path.join(__dirname, '..', file)), file);
-  const urls = xml.split('<url>').slice(1);
-  assert.equal(urls.length, 32);
-  for (const u of urls) assert.match(u, /^\s*<loc>[^<]+<\/loc>\s*<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/);
-  assert.match(xml, new RegExp(`<loc>${pageUrl('en', 'rules')}</loc>\\s*<lastmod>2026-01-02</lastmod>`));
-  // Senza date la sitemap è identica a quella del repository.
-  assert.equal(sitemap(() => null), read('sitemap.xml'));
-  // Da git: una data valida, o null se git non può saperlo (copia shallow).
-  const d = gitLastmod('rules.html');
-  assert.ok(d === null || /^\d{4}-\d{2}-\d{2}$/.test(d), String(d));
-});
-
 test('robots.txt: tutto indicizzabile e sitemap dichiarata', () => {
   const txt = read('robots.txt');
   assert.match(txt, /^User-agent: \*$/m);
@@ -186,11 +167,14 @@ test('og-image.png: PNG 1200×630', () => {
   assert.ok(buf.length < 300 * 1024, 'immagine troppo pesante');
 });
 
-test('deploy.sh carica sitemap, robots, 404, anteprima e cartelle delle lingue', () => {
+test('deploy.sh carica robots, 404, anteprima e cartelle delle lingue (non la sitemap)', () => {
   const sh = read('deploy.sh');
-  for (const f of ['sitemap.xml', 'robots.txt', 'not_found.html', 'og-image.png', '*/index.html', '*/rules.html']) {
+  for (const f of ['robots.txt', 'not_found.html', 'og-image.png', '*/index.html', '*/rules.html']) {
     assert.ok(sh.includes(f), f);
   }
+  // Neocities rifiuta le sitemap dei siti gratuiti e l'errore blocca tutto.
+  const files = sh.match(/^FILES=\(([\s\S]*?)^\)/m)[1].replace(/#.*$/gm, '');
+  assert.doesNotMatch(files, /sitemap/);
 });
 
 console.log(`\n${passed} passati, ${failed} falliti`);
