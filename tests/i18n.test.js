@@ -167,6 +167,15 @@ test('avviso di licenza in ogni lingua: link al sorgente, AGPLv3, CC BY-SA 4.0 e
   }
 });
 
+test('privacy in ogni lingua: indirizzo IP e link all’informativa di Neocities', () => {
+  for (const lang of I.LANGUAGES) {
+    const n = I.STRINGS[lang].privacy;
+    assert.equal((n.match(/<a href="https:\/\/neocities\.org\/privacy">[^<]+<\/a>/g) || []).length, 1, lang);
+    assert.match(n, /IP/, lang);
+    assert.doesNotMatch(n, /\{|\}/, `${lang}: segnaposto rimasto`);
+  }
+});
+
 test('avviso sull’uso dell’IA in ogni lingua, con link alle segnalazioni', () => {
   for (const lang of I.LANGUAGES) {
     const n = I.STRINGS[lang].aiNotice;

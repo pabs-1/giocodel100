@@ -57,6 +57,12 @@
       .replace('{bsd}', '<a href="https://opensource.org/license/bsd-2-clause" rel="license">BSD-2-Clause</a>');
   }
 
+  // Privacy: {np:testo} diventa il link all'informativa di Neocities, che
+  // ospita il sito (e quindi riceve le richieste dei visitatori).
+  function privacyNotice(template) {
+    return template.replace(/\{np:([^}]+)\}/, '<a href="https://neocities.org/privacy">$1</a>');
+  }
+
   // Trasparenza: il gioco è fatto con l'assistenza dell'IA. {issues:testo}
   // diventa il link alle segnalazioni del repository.
   function aiNotice(template) {
@@ -151,7 +157,7 @@
       winH: 'Si può sempre vincere?',
       win: 'Sì: da qualunque cella parta l’1 esiste almeno un percorso che arriva a 100. Trovarlo è un’altra storia.',
       privacyH: 'Privacy',
-      privacy: 'Nessun cookie, nessun tracciamento, nessuno script o servizio di terzi. La partita, il record e le tue preferenze restano solo in questo browser. La lingua dipende dall’indirizzo della pagina o dalle impostazioni del browser e viene scelta sul tuo dispositivo. Il sito è ospitato su Neocities che, come ogni server web, riceve le normali richieste del browser.'
+      privacy: privacyNotice('Nessun cookie, nessun tracciamento, nessuno script o servizio di terzi. La partita, il record e le tue preferenze restano solo in questo browser. La lingua dipende dall’indirizzo della pagina o dalle impostazioni del browser e viene scelta sul tuo dispositivo. Il sito è ospitato su Neocities che, come ogni server web, riceve le normali richieste del browser (compreso l’indirizzo IP) e conta le visite: vedi la sua {np:informativa sulla privacy}.')
     },
 
     en: {
@@ -237,7 +243,7 @@
       winH: 'Can you always win?',
       win: 'Yes: wherever the 1 starts, there is at least one path that reaches 100. Finding it is another story.',
       privacyH: 'Privacy',
-      privacy: 'No cookies, no tracking, no third-party scripts or services. Your game, best score and preferences stay in this browser only. The language comes from the page address or your browser settings and is picked on your device. The site is hosted on Neocities, which, like any web server, receives your browser’s normal requests.'
+      privacy: privacyNotice('No cookies, no tracking, no third-party scripts or services. Your game, best score and preferences stay in this browser only. The language comes from the page address or your browser settings and is picked on your device. The site is hosted on Neocities, which, like any web server, receives your browser’s normal requests (including your IP address) and counts visits: see its {np:privacy policy}.')
     },
 
     fr: {
@@ -323,7 +329,7 @@
       winH: 'Peut-on toujours gagner ?',
       win: 'Oui : quelle que soit la case du 1, il existe au moins un parcours jusqu’à 100. Le trouver, c’est une autre histoire.',
       privacyH: 'Confidentialité',
-      privacy: 'Aucun cookie, aucun pistage, aucun script ni service tiers. Votre partie, votre record et vos préférences restent uniquement dans ce navigateur. La langue dépend de l’adresse de la page ou des réglages de votre navigateur et est choisie sur votre appareil. Le site est hébergé par Neocities qui, comme tout serveur web, reçoit les requêtes habituelles du navigateur.'
+      privacy: privacyNotice('Aucun cookie, aucun pistage, aucun script ni service tiers. Votre partie, votre record et vos préférences restent uniquement dans ce navigateur. La langue dépend de l’adresse de la page ou des réglages de votre navigateur et est choisie sur votre appareil. Le site est hébergé par Neocities qui, comme tout serveur web, reçoit les requêtes habituelles du navigateur (y compris l’adresse IP) et compte les visites : voir sa {np:politique de confidentialité}.')
     },
 
     es: {
@@ -409,7 +415,7 @@
       winH: '¿Se puede ganar siempre?',
       win: 'Sí: empiece donde empiece el 1, existe al menos un recorrido que llega al 100. Encontrarlo es otra historia.',
       privacyH: 'Privacidad',
-      privacy: 'Sin cookies, sin rastreo, sin scripts ni servicios de terceros. Tu partida, tu récord y tus preferencias se quedan solo en este navegador. El idioma depende de la dirección de la página o de la configuración del navegador y se elige en tu dispositivo. El sitio está alojado en Neocities, que, como cualquier servidor web, recibe las solicitudes normales del navegador.'
+      privacy: privacyNotice('Sin cookies, sin rastreo, sin scripts ni servicios de terceros. Tu partida, tu récord y tus preferencias se quedan solo en este navegador. El idioma depende de la dirección de la página o de la configuración del navegador y se elige en tu dispositivo. El sitio está alojado en Neocities, que, como cualquier servidor web, recibe las solicitudes normales del navegador (incluida la dirección IP) y cuenta las visitas: consulta su {np:política de privacidad}.')
     },
 
     de: {
@@ -496,7 +502,7 @@
       winH: 'Kann man immer gewinnen?',
       win: 'Ja: Egal, wo die 1 steht, es gibt mindestens einen Weg bis zur 100. Ihn zu finden, ist eine andere Sache.',
       privacyH: 'Datenschutz',
-      privacy: 'Keine Cookies, kein Tracking, keine Skripte oder Dienste von Dritten. Dein Spiel, dein Rekord und deine Einstellungen bleiben nur in diesem Browser. Die Sprache ergibt sich aus der Seitenadresse oder deinen Browsereinstellungen und wird auf deinem Gerät gewählt. Die Seite liegt bei Neocities, das wie jeder Webserver die üblichen Anfragen des Browsers erhält.'
+      privacy: privacyNotice('Keine Cookies, kein Tracking, keine Skripte oder Dienste von Dritten. Dein Spiel, dein Rekord und deine Einstellungen bleiben nur in diesem Browser. Die Sprache ergibt sich aus der Seitenadresse oder deinen Browsereinstellungen und wird auf deinem Gerät gewählt. Die Seite liegt bei Neocities, das wie jeder Webserver die üblichen Anfragen des Browsers erhält (einschließlich der IP-Adresse) und Besuche zählt: siehe die {np:Datenschutzerklärung} von Neocities.')
     },
 
     pt: {
@@ -582,7 +588,7 @@
       winH: 'Dá sempre para ganhar?',
       win: 'Sim: seja qual for a casa do 1, existe pelo menos um percurso que chega ao 100. Encontrá-lo é outra história.',
       privacyH: 'Privacidade',
-      privacy: 'Sem cookies, sem rastreamento, sem scripts ou serviços de terceiros. O jogo, o recorde e as suas preferências ficam apenas neste navegador. O idioma depende do endereço da página ou das preferências do navegador e é escolhido no seu dispositivo. O site está hospedado no Neocities, que, como qualquer servidor web, recebe as solicitações normais do navegador.'
+      privacy: privacyNotice('Sem cookies, sem rastreamento, sem scripts ou serviços de terceiros. O jogo, o recorde e as suas preferências ficam apenas neste navegador. O idioma depende do endereço da página ou das preferências do navegador e é escolhido no seu dispositivo. O site está hospedado no Neocities, que, como qualquer servidor web, recebe as solicitações normais do navegador (incluindo o endereço IP) e conta as visitas: veja a sua {np:política de privacidade}.')
     },
 
     zh: {
@@ -668,7 +674,7 @@
       winH: '总能赢吗？',
       win: '能：无论 1 写在哪里，至少有一条路径能写到 100。至于能不能找到，那就是另一回事了。',
       privacyH: '隐私',
-      privacy: '没有 Cookie，没有跟踪，没有第三方脚本或服务。你的游戏进度、最佳成绩和偏好设置只保存在这个浏览器中。语言由页面地址或浏览器设置决定，在你的设备上选择。本网站托管在 Neocities 上，它和所有网站服务器一样，会收到浏览器的常规请求。'
+      privacy: privacyNotice('没有 Cookie，没有跟踪，没有第三方脚本或服务。你的游戏进度、最佳成绩和偏好设置只保存在这个浏览器中。语言由页面地址或浏览器设置决定，在你的设备上选择。本网站托管在 Neocities 上，它和所有网站服务器一样，会收到浏览器的常规请求（包括 IP 地址）并统计访问量：请参阅其{np:隐私政策}。')
     },
 
     ja: {
@@ -754,7 +760,7 @@
       winH: 'いつでも勝てるの？',
       win: 'はい。1 をどこに書いても、100 まで到達できる道が少なくとも 1 つあります。見つけられるかどうかは別の話です。',
       privacyH: 'プライバシー',
-      privacy: 'Cookie なし、トラッキングなし、第三者のスクリプトやサービスなし。ゲームの進行、最高記録、設定はこのブラウザーの中だけに保存されます。言語はページのアドレスまたはブラウザーの設定で決まり、端末上で選ばれます。サイトは Neocities でホストされており、ほかのウェブサーバーと同じく、ブラウザーからの通常のリクエストを受け取ります。'
+      privacy: privacyNotice('Cookie なし、トラッキングなし、第三者のスクリプトやサービスなし。ゲームの進行、最高記録、設定はこのブラウザーの中だけに保存されます。言語はページのアドレスまたはブラウザーの設定で決まり、端末上で選ばれます。サイトは Neocities でホストされており、ほかのウェブサーバーと同じく、ブラウザーからの通常のリクエスト（IP アドレスを含む）を受け取り、訪問数を数えます。詳しくは Neocities の{np:プライバシーポリシー}をご覧ください。')
     },
 
     nl: {
@@ -840,7 +846,7 @@
       winH: 'Kun je altijd winnen?',
       win: 'Ja: waar de 1 ook staat, er is altijd minstens één route tot 100. Die vinden is een ander verhaal.',
       privacyH: 'Privacy',
-      privacy: 'Geen cookies, geen tracking, geen scripts of diensten van derden. Je spel, je record en je voorkeuren blijven alleen in deze browser. De taal hangt af van het adres van de pagina of je browserinstellingen en wordt op je apparaat gekozen. De site wordt gehost door Neocities, dat zoals elke webserver de gewone verzoeken van je browser ontvangt.'
+      privacy: privacyNotice('Geen cookies, geen tracking, geen scripts of diensten van derden. Je spel, je record en je voorkeuren blijven alleen in deze browser. De taal hangt af van het adres van de pagina of je browserinstellingen en wordt op je apparaat gekozen. De site wordt gehost door Neocities, dat zoals elke webserver de gewone verzoeken van je browser ontvangt (inclusief je IP-adres) en bezoeken telt: zie het {np:privacybeleid} van Neocities.')
     },
 
     pl: {
@@ -927,7 +933,7 @@
       winH: 'Czy zawsze da się wygrać?',
       win: 'Tak: niezależnie od tego, gdzie stoi 1, istnieje co najmniej jedna droga do 100. Znalezienie jej to już inna sprawa.',
       privacyH: 'Prywatność',
-      privacy: 'Bez plików cookie, bez śledzenia, bez skryptów i usług firm trzecich. Twoja gra, rekord i ustawienia zostają tylko w tej przeglądarce. Język zależy od adresu strony lub ustawień przeglądarki i jest wybierany na Twoim urządzeniu. Strona jest hostowana na Neocities, który jak każdy serwer WWW otrzymuje zwykłe żądania przeglądarki.'
+      privacy: privacyNotice('Bez plików cookie, bez śledzenia, bez skryptów i usług firm trzecich. Twoja gra, rekord i ustawienia zostają tylko w tej przeglądarce. Język zależy od adresu strony lub ustawień przeglądarki i jest wybierany na Twoim urządzeniu. Strona jest hostowana na Neocities, który jak każdy serwer WWW otrzymuje zwykłe żądania przeglądarki (w tym adres IP) i liczy odwiedziny: zobacz jego {np:politykę prywatności}.')
     },
 
     ru: {
@@ -1013,7 +1019,7 @@
       winH: 'Можно ли выиграть всегда?',
       win: 'Да: с какой бы клетки ни начиналась 1, существует хотя бы один путь до 100. Найти его — другое дело.',
       privacyH: 'Конфиденциальность',
-      privacy: 'Никаких cookie, отслеживания, сторонних скриптов и сервисов. Ваша игра, рекорд и настройки хранятся только в этом браузере. Язык определяется адресом страницы или настройками браузера и выбирается на вашем устройстве. Сайт размещён на Neocities, который, как любой веб-сервер, получает обычные запросы браузера.'
+      privacy: privacyNotice('Никаких cookie, отслеживания, сторонних скриптов и сервисов. Ваша игра, рекорд и настройки хранятся только в этом браузере. Язык определяется адресом страницы или настройками браузера и выбирается на вашем устройстве. Сайт размещён на Neocities, который, как любой веб-сервер, получает обычные запросы браузера (включая IP-адрес) и считает посещения: см. его {np:политику конфиденциальности}.')
     },
 
     tr: {
@@ -1099,7 +1105,7 @@
       winH: 'Her zaman kazanılabilir mi?',
       win: 'Evet: 1 nereden başlarsa başlasın, 100’e ulaşan en az bir yol vardır. Onu bulmak ise başka bir hikâye.',
       privacyH: 'Gizlilik',
-      privacy: 'Çerez yok, takip yok, üçüncü taraf betik ya da hizmet yok. Oyunun, rekorun ve tercihlerin yalnızca bu tarayıcıda kalır. Dil, sayfanın adresine ya da tarayıcı ayarlarına göre cihazında seçilir. Site Neocities’te barındırılır; her web sunucusu gibi o da tarayıcının olağan isteklerini alır.'
+      privacy: privacyNotice('Çerez yok, takip yok, üçüncü taraf betik ya da hizmet yok. Oyunun, rekorun ve tercihlerin yalnızca bu tarayıcıda kalır. Dil, sayfanın adresine ya da tarayıcı ayarlarına göre cihazında seçilir. Site Neocities’te barındırılır; her web sunucusu gibi o da tarayıcının olağan isteklerini (IP adresi dahil) alır ve ziyaretleri sayar: {np:gizlilik politikasına} bakın.')
     },
 
     id: {
@@ -1185,7 +1191,7 @@
       winH: 'Apakah selalu bisa menang?',
       win: 'Ya: dari kotak mana pun angka 1 dimulai, selalu ada setidaknya satu jalur sampai 100. Menemukannya, itu cerita lain.',
       privacyH: 'Privasi',
-      privacy: 'Tanpa cookie, tanpa pelacakan, tanpa skrip atau layanan pihak ketiga. Permainan, rekor, dan preferensimu hanya tersimpan di browser ini. Bahasa ditentukan oleh alamat halaman atau pengaturan browser dan dipilih di perangkatmu. Situs ini di-hosting di Neocities, yang seperti server web lainnya menerima permintaan biasa dari browser.'
+      privacy: privacyNotice('Tanpa cookie, tanpa pelacakan, tanpa skrip atau layanan pihak ketiga. Permainan, rekor, dan preferensimu hanya tersimpan di browser ini. Bahasa ditentukan oleh alamat halaman atau pengaturan browser dan dipilih di perangkatmu. Situs ini di-hosting di Neocities, yang seperti server web lainnya menerima permintaan biasa dari browser (termasuk alamat IP) dan menghitung kunjungan: lihat {np:kebijakan privasinya}.')
     },
 
     'zh-Hant': {
@@ -1272,7 +1278,7 @@
       winH: '總是能贏嗎？',
       win: '能：無論 1 寫在哪裡，至少有一條路徑能寫到 100。至於能不能找到，那就是另一回事了。',
       privacyH: '隱私',
-      privacy: '沒有 Cookie，沒有追蹤，沒有第三方指令碼或服務。你的遊戲進度、最佳成績和偏好設定只儲存在這個瀏覽器中。語言由頁面網址或瀏覽器設定決定，在你的裝置上選擇。本網站託管於 Neocities，它和所有網站伺服器一樣，會收到瀏覽器的一般請求。'
+      privacy: privacyNotice('沒有 Cookie，沒有追蹤，沒有第三方指令碼或服務。你的遊戲進度、最佳成績和偏好設定只儲存在這個瀏覽器中。語言由頁面網址或瀏覽器設定決定，在你的裝置上選擇。本網站託管於 Neocities，它和所有網站伺服器一樣，會收到瀏覽器的一般請求（包括 IP 位址）並統計造訪次數：請參閱其{np:隱私權政策}。')
     },
 
     ko: {
@@ -1359,7 +1365,7 @@
       winH: '항상 이길 수 있나요?',
       win: '네. 1을 어디에 쓰든 100까지 가는 길이 적어도 하나 있습니다. 찾는 건 또 다른 문제지만요.',
       privacyH: '개인정보',
-      privacy: '쿠키, 추적, 제3자 스크립트나 서비스가 없습니다. 게임 진행, 최고 기록, 설정은 이 브라우저에만 저장됩니다. 언어는 페이지 주소나 브라우저 설정에 따라 기기에서 선택됩니다. 이 사이트는 Neocities에서 호스팅되며, 다른 웹 서버와 마찬가지로 브라우저의 일반적인 요청을 받습니다.'
+      privacy: privacyNotice('쿠키, 추적, 제3자 스크립트나 서비스가 없습니다. 게임 진행, 최고 기록, 설정은 이 브라우저에만 저장됩니다. 언어는 페이지 주소나 브라우저 설정에 따라 기기에서 선택됩니다. 이 사이트는 Neocities에서 호스팅되며, 다른 웹 서버와 마찬가지로 브라우저의 일반적인 요청(IP 주소 포함)을 받고 방문 수를 집계합니다. 자세한 내용은 Neocities의 {np:개인정보처리방침}을 참고하세요.')
     }
 
   };

@@ -119,8 +119,15 @@ che il dizionario abbia tutte le chiavi, e che i testi italiani scritti in
 
 Il browser, come con qualunque sito, comunica comunque al server la propria
 lingua preferita (intestazione `Accept-Language`) e il server di Neocities
-riceve le normali richieste: il gioco non aggiunge nulla a questo, e la
-pagina "?" lo dice in chiaro.
+riceve le normali richieste, compreso l'indirizzo IP, e conta le visite
+(vedi la [privacy policy di Neocities](https://neocities.org/privacy)): il
+gioco non aggiunge nulla a questo, e la pagina "?" lo dice in chiaro, con il
+link alla loro informativa.
+
+Niente banner dei cookie: il sito non usa cookie, e la partita, il record e
+la lingua scelta stanno in `localStorage` solo perché li chiede chi gioca
+(salvataggio e preferenze), senza mai uscire dal dispositivo. Il service
+worker conserva nel browser una copia dei file del sito per il gioco offline.
 
 ## Motori di ricerca
 
