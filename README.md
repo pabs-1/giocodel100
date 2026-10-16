@@ -175,8 +175,13 @@ esattamente il sito pubblicato.
   query, con fallback su `min(100vw, 100dvh)`), senza scroll orizzontale;
   `100dvh` evita che le barre di Safari la coprano, `env(safe-area-inset-*)`
   gestisce notch e home indicator.
-- `touch-action: manipulation` + meta viewport contro doppio-tap-zoom e ritardo
-  di 300 ms; niente menu da long-press né selezione del testo sulla griglia.
+- `touch-action: manipulation` contro doppio-tap-zoom e ritardo di 300 ms;
+  niente menu da long-press né selezione del testo sulla griglia. Lo zoom con
+  due dita resta permesso ovunque (accessibilità, WCAG 1.4.4): il viewport
+  non ha `user-scalable=no` né `maximum-scale`.
+- Offline, una pagina mai aperta (per esempio `/en/rules.html`) rimanda alla
+  stessa pagina della radice, che è sempre in cache, nella lingua scelta o
+  in quella del browser.
 - Input con Pointer Events (fallback a `click` solo dove mancano), quindi un
   tocco non genera mai due mosse. Il tocco si aggancia alla mossa legale più
   vicina: le celle su un telefono sono ~33 px, ma il bersaglio effettivo di

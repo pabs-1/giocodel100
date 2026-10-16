@@ -26,6 +26,12 @@ const TYPES = {
 
 function serve() {
   const server = http.createServer((req, res) => {
+    // Offline "vero": in Chromium setOffline() non ferma le richieste fatte
+    // dal service worker, quindi i test che ne hanno bisogno spengono il server.
+    if (server.offline) {
+      req.socket.destroy();
+      return;
+    }
     let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
     if (p.endsWith('/')) p += 'index.html';
     const file = path.join(ROOT, path.normalize(p));
@@ -571,6 +577,38 @@ function assertFits(rep) {
     await c.close();
   });
 
+  await test('offline, pagine mai aperte: rimando alla pagina della radice in cache, con stile e script', async () => {
+    const c = await newContext({ locale: 'it-IT' });
+    const p = await c.newPage();
+    const errs = watchConsole(p);
+    await p.goto(localhost + 'es/');
+    await p.evaluate(() => navigator.serviceWorker.ready);
+    await p.reload(); // ora la pagina è controllata dal SW
+    await c.setOffline(true);
+    server.offline = true;
+    try {
+      // "?" da /es/ porta a /es/rules.html, mai visitata: arrivano le regole
+      // della radice (nella lingua del browser), complete di stile e script.
+      await p.click('a[href="rules.html"]');
+      await p.waitForLoadState();
+      assert.equal(new URL(p.url()).pathname, '/rules.html');
+      assert.equal(await p.textContent('h1'), I.STRINGS.it.rulesH1);
+      assert.notEqual(await p.evaluate(() => getComputedStyle(document.body).backgroundColor), 'rgba(0, 0, 0, 0)', 'pagina senza stile');
+      assert.equal(await p.locator('#lang-select option').count(), I.LANGUAGES.length + 1, 'pagina senza JavaScript');
+      // Gioco in un'altra lingua, mai visitato: arriva il gioco della radice.
+      await p.goto(localhost + 'fr/');
+      assert.equal(new URL(p.url()).pathname, '/');
+      assert.equal(await p.locator('[role=gridcell]').count(), 100);
+      await p.goto(localhost + 'de/rules');
+      assert.equal(new URL(p.url()).pathname, '/rules.html');
+    } finally {
+      server.offline = false;
+    }
+    await c.setOffline(false);
+    assert.deepEqual(errs, []);
+    await c.close();
+  });
+
   await test('pagina 404: tradotta, con link al gioco', async () => {
     const c = await newContext({ locale: 'pl-PL' });
     const p = await c.newPage();
@@ -659,15 +697,17 @@ function assertFits(rep) {
     await c.close();
   });
 
-  await test('pagina regole: zoom permesso (solo il gioco lo blocca)', async () => {
+  await test('zoom permesso su tutte le pagine (WCAG 1.4.4); niente zoom da doppio tocco', async () => {
     const c = await newContext();
     const p = await c.newPage();
-    for (const url of ['rules.html', 'fr/rules.html']) {
+    for (const url of ['', 'rules.html', 'fr/', 'fr/rules.html']) {
       await p.goto(base + url);
-      assert.doesNotMatch(await p.getAttribute('meta[name=viewport]', 'content'), /user-scalable=no|maximum-scale/);
+      assert.doesNotMatch(await p.getAttribute('meta[name=viewport]', 'content'), /user-scalable|maximum-scale/, url || '/');
     }
+    // Il doppio tocco non ingrandisce: ci pensa touch-action, non il viewport.
     await p.goto(base);
-    assert.match(await p.getAttribute('meta[name=viewport]', 'content'), /user-scalable=no/);
+    assert.equal(await p.evaluate(() => getComputedStyle(document.body).touchAction), 'manipulation');
+    assert.equal(await p.evaluate(() => getComputedStyle(document.querySelector('.cell')).touchAction), 'manipulation');
     await c.close();
   });
 

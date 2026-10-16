@@ -71,9 +71,14 @@ self.addEventListener('fetch', function (event) {
         }
         return res;
       }).catch(function () {
-        // Offline e risorsa non in cache: per le pagine mostra il gioco.
-        if (req.mode === 'navigate') return caches.match('index.html');
-        return Response.error();
+        if (req.mode !== 'navigate') return Response.error();
+        // Offline e pagina non in cache (per esempio /en/rules.html mai
+        // aperta): si rimanda alla pagina corrispondente della radice, che
+        // è sempre in cache. Servirla a quell'indirizzo non va: i suoi
+        // percorsi relativi (style.css, game.js) punterebbero a /en/style.css.
+        var target = new URL(/\/rules(\.html)?$/.test(url.pathname) ? 'rules.html' : './', self.registration.scope);
+        if (target.pathname !== url.pathname) return Response.redirect(target.href, 302);
+        return caches.match('index.html');
       });
     })
   );
